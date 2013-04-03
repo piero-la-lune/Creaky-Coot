@@ -45,7 +45,8 @@ label {
   display: block;
   margin: 12px 0 0 8px;
 }
-input {
+input,
+select {
   display: block;
   font-size: 16px;
   font-weight: normal;
@@ -57,23 +58,26 @@ input {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  border: 1px solid #DDD;
+  border: 3px solid #DDD;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
-input:focus {
-  border-color: #BBB;
+input:focus,
+select:focus {
+  border-color: #444;
+}
+input {
+  -webkit-appearance: none;
 }
 input[type="submit"] {
   display: inline;
   width: auto;
-  background: #EEE;
+  background: #fafafa;
   cursor: pointer;
 }
 input[type="submit"]:hover {
-  background: #DDD;
-  border-color: #BBB;
+  border-color: #444;
 }
 .p-submit {
   text-align: center;

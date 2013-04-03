@@ -103,7 +103,7 @@ label {
 	display: block;
 	margin: 12px 0 0 8px;
 }
-input {
+input, select {
 	display: block;
 	font-size: @font-size;
 	font-weight: normal;
@@ -113,17 +113,19 @@ input {
 	width: 100%;
 	max-width: 400px;
 	.box-sizing(border-box);
-	border: 1px solid #DDD;
-	&:focus { border-color: #BBB; }
+	border: 3px solid #DDD;
+	&:focus { border-color: #444; }
 	.border-radius(2px);
+}
+input {
+	-webkit-appearance: none;
 }
 input[type="submit"] {
 	display: inline;
 	width: auto;
-	background: #EEE;
+	background: #fafafa;
 	&:hover {
-		background: #DDD;
-		border-color: #BBB;
+		border-color: #444;
 	}
 	cursor: pointer;
 }

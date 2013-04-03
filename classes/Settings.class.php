@@ -10,7 +10,7 @@ class Settings {
 		$this->config = $config;
 	}
 
-	protected function save() {
+	public function save() {
 		global $config;
 		$sav = $this->config;
 		$sav['last_update'] = time();
@@ -129,6 +129,21 @@ class Settings {
 		$this->save();
 	}
 
+	public function add_cookie($uid) {
+		$this->config['user']['cookie'][] = $uid;
+		$this->save();
+	}
+
+	public function check_cookie($uid) {
+		$k = array_search($uid, $this->config['user']['cookie']);
+		if ($k !== false) {
+			unset($this->config['user']['cookie'][$k]);
+			$this->save();
+			return true;
+		}
+		return false;
+	}
+
 	public static function get_default_config($language = DEFAULT_LANGUAGE) {
 		return array(
 			'title' => 'Creaky Coot',
@@ -140,7 +155,8 @@ class Settings {
 			'user' => array(
 				'login' => 'admin',
 				'password' => 'admin',
-				'wait' => array()
+				'wait' => array(),
+				'cookie' => array(),
 			),
 			'salt' => Text::randomKey(40),
 			'version' => VERSION,

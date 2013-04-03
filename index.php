@@ -24,7 +24,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 define('NAME', 'Creaky Coot');
-define('VERSION', '0.1');
+define('VERSION', '0.2.0');
 define('AUTHOR', 'Pierre Monchalin');
 define('URL', 'http://creaky-coot.derivoile.fr');
 
@@ -35,6 +35,7 @@ define('DEFAULT_LANGUAGE', 'fr'); # Used only during installation
 ### Standart settings
 define('SALT', 'How are you doing, pumpkin?');
 define('TIMEOUT', 3600); # 1 hour
+define('TIMEOUT_COOKIE', 3600*24*365); # 1 year
 
 ### Directories and files
 define('DIR_CURRENT', dirname(__FILE__).'/');
@@ -108,56 +109,83 @@ function getIPs() {
 }
 
 ### Authentification
-function logout() {
+$settings = new Settings();
+function logout($cookie = false) {
 	if (isset($_SESSION['uid'])) {
 		unset($_SESSION['uid']);
 		unset($_SESSION['login']);
 		unset($_SESSION['ip']);
 		unset($_SESSION['expires_on']);
-		return true;
 	}
-	return false;
+	if ($cookie && isset($_COOKIE['login'])) {
+		setcookie('login', NULL, time()-3600);
+		unset($_COOKIE['login']);
+	}
+	return true;
 }
-if (isset($_POST['action']) && $_POST['action'] == 'login') {
-	logout();
+function login($post, $bypass = false) {
+	global $config, $page, $settings;
 	$wait = $config['user']['wait'];
-	if (isset($wait[getIPs()])
-		&& $wait[getIPs()]['time'] > time()
-	) {
+	if (isset($wait[getIPs()]) && $wait[getIPs()]['time'] > time()) {
 		$page->addAlert(str_replace(
 			array('%duration%', '%period%'),
 			Text::timeDiff($wait[getIPs()]['time'], time()),
 			Trad::A_ERROR_LOGIN_WAIT
 		));
+		return false;
 	}
-	elseif (isset($_POST['login']) && isset($_POST['password'])) {
-		if ($_POST['login'] == $config['user']['login']
-			&& Text::getHash($_POST['password']) == $config['user']['password']
-		) {
-			$_SESSION['uid'] = Text::randomKey(40);
-			$_SESSION['login'] = $config['user']['login'];
-			$_SESSION['ip'] = getIPs();
-			$_SESSION['expires_on'] = time()+TIMEOUT;
-				# 0 means "When browser closes"
-			session_set_cookie_params(0, Text::dir($_SERVER["SCRIPT_NAME"]));
-			session_regenerate_id(true);
+	if (!$bypass) {
+		if (!isset($post['login']) || !isset($post['password'])) {
+			return false;
 		}
-		else {
-			$settings = New Settings();
+		if ($post['login'] != $config['user']['login']
+			|| Text::getHash($post['password']) != $config['user']['password']
+		) {
 			$settings->login_failed();
 			$page->addAlert(Trad::A_ERROR_LOGIN);
+			return false;
 		}
 	}
+	$uid = Text::randomKey(40);
+	$_SESSION['uid'] = $uid;
+	$_SESSION['login'] = $config['user']['login'];
+	$_SESSION['ip'] = getIPs();
+	$_SESSION['expires_on'] = time()+TIMEOUT;
+		# 0 means "When browser closes"
+	session_set_cookie_params(0, Text::dir($_SERVER["SCRIPT_NAME"]));
+	session_regenerate_id(true);
+	if (isset($post['cookie']) && $post['cookie'] == 'true') {
+		$settings->add_cookie($uid);
+		setcookie(
+			'login',
+			$uid,
+			time()+TIMEOUT_COOKIE,
+			Text::dir($_SERVER["SCRIPT_NAME"])
+		);
+	}
+	return true;
+}
+if (isset($_POST['action']) && $_POST['action'] == 'login') {
+	logout(true);
+	login($_POST);
 }
 elseif (isset($_POST['action']) && $_POST['action'] == 'logout') {
-	logout();
+	logout(true);
 }
 if (!isset($_SESSION['uid']) || empty($_SESSION['uid'])
 	|| $_SESSION['ip'] != getIPs()
 	|| time() > $_SESSION['expires_on']
 ) {
 	logout();
-	$loggedin = false;
+	if (isset($_COOKIE['login'])
+		&& $settings->check_cookie($_COOKIE['login'])
+		&& login(array('cookie' => 'true'), true)
+	) {
+		$loggedin = true;
+	}
+	else {
+		$loggedin = false;
+	}
 }
 else {
 	$_SESSION['expires_on'] = time()+TIMEOUT;

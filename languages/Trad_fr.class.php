@@ -65,6 +65,9 @@ class Trad {
 	const F_LINKS_PER_PAGE = 'Nombre d\'articles par page :';
 	const F_URL_REWRITING = 'URL rewriting';
 	const F_OPML_FILE = 'Fichier OPML :';
+	const F_COOKIE = 'Type de connexion :';
+	const F_COOKIE_FALSE = 'Ordinateur public';
+	const F_COOKIE_TRUE = 'Ordinateur privé (rester connecté)';
 
 	const F_TIP_PASSWORD = 'Laissez vide pour ne pas le changer.';
 	const F_TIP_URL_REWRITING = 'Laissez vide pour désactiver l\'URL rewriting. Sinon, indiquez le chemin du dossier de Creaky Coot (en commençant et terminant par un "/") par rapport au nom de domaine.';
