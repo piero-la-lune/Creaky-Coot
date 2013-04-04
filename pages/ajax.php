@@ -71,7 +71,7 @@ if (isset($_POST['action'])) {
 	}
 	if ($_POST['action'] == 'clear_feed' && isset($_POST['feed'])) {
 		$manager = Manager::getInstance();
-		$ans = $manager->clear_feed($_POST['feed']);
+		$ans = $manager->clearFeed($_POST['feed']);
 		if ($ans === true) {
 			die(json_encode(array('status' => 'success')));
 		}
@@ -79,7 +79,7 @@ if (isset($_POST['action'])) {
 	}
 	if ($_POST['action'] == 'delete_feed' && isset($_POST['feed'])) {
 		$manager = Manager::getInstance();
-		$ans = $manager->delete_feed($_POST['feed']);
+		$ans = $manager->deleteFeed($_POST['feed']);
 		if ($ans === true) {
 			die(json_encode(array('status' => 'success')));
 		}
@@ -91,7 +91,7 @@ if (isset($_POST['action'])) {
 	) {
 		$manager = Manager::getInstance();
 		$feed = ($_POST['feed'] == 'false') ? NULL : intval($_POST['feed']);
-		$ans = $manager->refresh($feed);
+		$ans = $manager->refreshFeed($feed);
 		if (!empty($ans)) {
 			$ans = Manager::sort($ans);
 			$html = Manager::previewList($ans, $_POST['page']);

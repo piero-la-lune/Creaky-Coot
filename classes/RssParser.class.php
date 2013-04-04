@@ -8,17 +8,11 @@ class RssParser {
 		$this->filter = new Filter();
 	}
 
-	public function readFeed($url) {
-
-		if (!filter_var($url, FILTER_VALIDATE_URL)) { return false; }
+	public function readFeed($content, $url) {
 
 			# Do not display errors
 		$errors = libxml_use_internal_errors();
 		libxml_use_internal_errors(true);
-
-			# Download document
-		$content = @file_get_contents($url);
-		if (!$content) { return false; }
 
 			# Load document
 		$d = new DOMDocument();

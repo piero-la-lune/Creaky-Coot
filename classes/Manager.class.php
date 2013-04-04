@@ -5,11 +5,12 @@ class Manager {
 	private static $instance;
 	protected $feeds = array();
 	protected $links = array();
+	protected $done = array();
 
 	public function __construct() {
 		global $config;
 		$this->feeds = Text::unhash(get_file(FILE_FEEDS));
-		$this->links = Text::unhash(get_file(FILE_LINKS)); //echo count($this->links);
+		$this->links = Text::unhash(get_file(FILE_LINKS));
 	}
 
 	public static function getInstance($project = NULL) {
@@ -22,6 +23,20 @@ class Manager {
 	protected function save() {
 		update_file(FILE_FEEDS, Text::hash($this->feeds));
 		update_file(FILE_LINKS, Text::hash($this->links));
+	}
+
+	protected function createNewFeed($url = '') {
+		$id = Manager::newKey($this->feeds);
+		$this->feeds[$id] = array(
+			'title' => '',
+			'url' => $url,
+			'link' => '',
+			'unread' => array(),
+			'read' => array(),
+			'archived' => array(),
+			'deleted' => array()
+		);
+		return $id;
 	}
 
 	public function getFeeds() {
@@ -78,114 +93,19 @@ class Manager {
 				return Trad::A_ERROR_EXISTING_FEED;
 			}
 		}
-		$parser = new RssParser();
-		$ans = $parser->readFeed($post['url']);
-		if ($ans === false) {
+		$id = $this->createNewFeed($post['url']);
+		$this->update(array($id));
+		if (!isset($this->done[$id]) || $this->done[$id] === false) {
+			unset($this->feeds[$id]);
+			$this->done = array();
 			return Trad::A_ERROR_BAD_FEED;
 		}
-		$unread = array();
-		foreach ($ans['items'] as $i) {
-			$id = md5($i['link']);
-			$unread[] = $id;
-			$this->links[$id] = array(
-				'type' => 'unread',
-				'title' => $i['title'],
-				'content' => $i['content'],
-				'date' => $i['date'],
-				'link' => $i['link']
-			);
-		}
-		$this->feeds[] = array(
-			'title' => $ans['title'],
-			'url' => $ans['url'],
-			'link' => $ans['link'],
-			'unread' => $unread,
-			'read' => array(),
-			'archived' => array(),
-			'deleted' => array()
-		);
+		$this->feeds[$id]['title'] = $this->done[$id]['title'];
+		$this->feeds[$id]['url'] = $this->done[$id]['url'];
+		$this->feeds[$id]['link'] = $this->done[$id]['link'];
 		$this->save();
+		$this->done = array();
 		return true;
-	}
-
-	public function import($file) {
-		if (!isset($file['error'])
-			|| $file['error'] > 0
-			|| !isset($file['tmp_name'])
-			|| !isset($file['name'])
-		) {
-			return Trad::A_ERROR_UPLOAD;
-		}
-		$parser = new RssParser();
-		$urls = $parser->importOPML(file_get_contents($file['tmp_name']));
-		if ($urls === false) {
-			return Trad::A_ERROR_IMPORT;
-		}
-		foreach ($urls as $u) {
-			$this->addFeed($u);
-			foreach ($this->feeds as $k => $f) {
-				if ($f['url'] == $u['url']) {
-					if (!empty($u['title'])) {
-						$this->feeds[$k]['title'] = Text::chars($u['title']);
-					}
-					if (!empty($u['link'])
-						&& filter_var($u['link'], FILTER_VALIDATE_URL)
-					) {
-						$this->feeds[$k]['link'] = $u['link'];
-					}
-				}
-			}
-		}
-		$this->save();
-		return true;
-	}
-
-	public function export() {
-		$urls = array();
-		foreach ($this->feeds as $f) {
-			$urls[] = array(
-				'title' => $f['title'],
-				'url' => $f['url'],
-				'link' => $f['link']
-			);
-		}
-		$parser = new RssParser();
-		$xml = $parser->exportOPML($urls);
-		header('Content-Description: File Transfer');
-		header('Content-Type: application/octet-stream');
-		header('Content-Disposition: attachment; filename="export.opml"');
-		header('Content-Transfer-Encoding: binary');
-		header('Expires: 0');
-		header('Cache-Control: must-revalidate');
-		header('Pragma: public');
-		header('Content-Length: '.mb_strlen($xml));
-		echo $xml;
-		exit;
-	}
-
-	public function refresh($feed = NULL) {
-		$ans = array();
-		$before = array_keys($this->links);
-		if ($feed === NULL || !isset($this->feeds[$feed])) {
-			foreach ($this->feeds as $i => $f) {
-				$this->refreshFeed($i);
-				foreach ($this->feeds[$i]['unread'] as $v) {
-					if (!in_array($v, $before)) {
-						$ans[$v] = $this->links[$v];
-					}
-				}
-			}
-		}
-		else {
-			$this->refreshFeed($feed);
-			foreach ($this->feeds[$feed]['unread'] as $v) {
-				if (!in_array($v, $before)) {
-					$ans[$v] = $this->links[$v];
-				}
-			}
-		}
-		$this->save();
-		return $ans;
 	}
 
 	public function editFeed($post, $id) {
@@ -206,19 +126,38 @@ class Manager {
 			htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8');
 		$this->feeds[$id]['url'] = $post['url'];
 		$this->feeds[$id]['link'] = $post['link'];
-		$ans = $this->refreshFeed($id);
-		if ($ans !== true) {
+		$this->update(array($id));
+		if (!isset($this->done[$id]) || $this->done[$id] === false) {
 			$this->feeds[$id] = $oldfeed;
-			$this->save();
-			return $ans;
+			$this->done = array();
+			return Trad::A_ERROR_BAD_FEED;
 		}
 		$this->save();
+		$this->done = array();
 		return true;
 	}
 
-	public function clear_feed($id) {
-		if (!isset($this->feeds[$id])) { return Trad::A_ERROR_UNKNOWN_FEED; }
+	public function refreshFeed($feed = NULL) {
+		$added = array();
+		$ids = array($feed);
+		if ($feed === NULL || !isset($this->feeds[$feed])) {
+			$ids = array_keys($this->feeds);
+		}
+		$this->update($ids);
+		foreach ($this->done as $d) {
+			if ($d !== false) {
+				foreach ($d['added'] as $id) {
+					$added[] = $this->links[$id];
+				}
+			}
+		}
+		$this->save();
+		$this->done = array();
+		return $added;
+	}
 
+	public function clearFeed($id) {
+		if (!isset($this->feeds[$id])) { return Trad::A_ERROR_UNKNOWN_FEED; }
 		foreach ($this->feeds[$id]['unread'] as $l) {
 			unset($this->links[$l]);
 			$this->feeds[$id]['deleted'][] = $l;
@@ -230,13 +169,11 @@ class Manager {
 		}
 		$this->feeds[$id]['read'] = array();
 		$this->save();
-
 		return true;
 	}
 
-	public function delete_feed($id) {
+	public function deleteFeed($id) {
 		if (!isset($this->feeds[$id])) { return Trad::A_ERROR_UNKNOWN_FEED; }
-
 		foreach ($this->feeds[$id]['unread'] as $l) {
 			unset($this->links[$l]);
 		}
@@ -245,19 +182,21 @@ class Manager {
 		}
 		unset($this->feeds[$id]);
 		$this->save();
-
 		return true;
 	}
 
-	public function refreshFeed($id) {
-		if (!isset($this->feeds[$id])) { return Trad::A_ERROR_UNKNOWN_FEED; }
-
-		$parser = new RssParser();
-		$ans = $parser->readFeed($this->feeds[$id]['url']);
-		if ($ans === false) {
-			return Trad::A_ERROR_BAD_FEED;
+	public function callback_update($header, $content, $id) {
+		if (!isset($header['http_code']) || $header['http_code'] !== 200) {
+			$this->done[$id] = false;
+			return false;
 		}
-
+		$parser = new RssParser();
+		$ans = $parser->readFeed($content, $header['url']);
+		if ($ans === false) {
+			$this->done[$id] = false;
+			return false;
+		}
+		$added = array();
 		foreach ($ans['items'] as $i) {
 			$id2 = md5($i['link']);
 			if (!isset($this->links[$id2])
@@ -271,9 +210,28 @@ class Manager {
 					'date' => $i['date'],
 					'link' => $i['link']
 				);
+				$added[] = $id2;
 			}
 		}
+		$this->done[$id] = array(
+			'title' => $ans['title'],
+			'url' => $ans['url'],
+			'link' => $ans['link'],
+			'added' => $added
+		);
 		return true;
+	}
+
+	public function update($ids) {
+		$curlManager = new Curl_Multi();
+		foreach ($ids as $id) {
+				# We assume all given ids correspond to existing feeds
+			$request = curl_init($this->feeds[$id]['url']);
+			curl_setopt($request, CURLOPT_FOLLOWLOCATION, true); # Follow redirects
+			curl_setopt($request, CURLOPT_MAXREDIRS, 4);
+			$curlManager->addHandle($request, array($this, 'callback_update'), $id);
+		}
+		$curlManager->finish();
 	}
 
 	public function markRead($id) {
@@ -344,6 +302,75 @@ class Manager {
 		return true;
 	}
 
+	public function import($file) {
+		if (!isset($file['error'])
+			|| $file['error'] > 0
+			|| !isset($file['tmp_name'])
+			|| !isset($file['name'])
+		) {
+			return Trad::A_ERROR_UPLOAD;
+		}
+		$parser = new RssParser();
+		$feeds = $parser->importOPML(file_get_contents($file['tmp_name']));
+		if ($feeds === false) {
+			return Trad::A_ERROR_IMPORT;
+		}
+		$ids = array();
+		foreach ($feeds as $k => $f) {
+			$ids[$k] = $this->createNewFeed($f['url']);
+		}
+		$this->update($ids);
+		foreach ($feeds as $k => $f) {
+			if (!isset($this->done[$ids[$k]])
+				|| $this->done[$ids[$k]] === false
+			) {
+				unset($this->feeds[$ids[$k]]);
+				continue;
+			}
+			$this->feeds[$ids[$k]]['url'] = $this->done[$ids[$k]]['url'];
+			if (!empty($f['title'])) {
+				$this->feeds[$ids[$k]]['title'] = Text::chars($f['title']);
+			}
+			else {
+				$this->feeds[$ids[$k]]['title'] = $this->done[$ids[$k]]['title'];
+			}
+			if (!empty($f['link'])
+				&& filter_var($f['link'], FILTER_VALIDATE_URL)
+			) {
+				$this->feeds[$ids[$k]]['link'] = $f['link'];
+			}
+			else {
+				$this->feeds[$ids[$k]]['title'] = $this->done[$ids[$k]]['link'];
+			}
+		}
+		$this->save();
+		$this->done = array();
+		return true;
+	}
+
+	public function export() {
+		$urls = array();
+		foreach ($this->feeds as $f) {
+			$urls[] = array(
+				'title' => $f['title'],
+				'url' => $f['url'],
+				'link' => $f['link']
+			);
+		}
+		$parser = new RssParser();
+		$xml = $parser->exportOPML($urls);
+		header('Content-Description: File Transfer');
+		header('Content-Type: application/octet-stream');
+		header('Content-Disposition: attachment; filename="export.opml"');
+		header('Content-Transfer-Encoding: binary');
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate');
+		header('Pragma: public');
+		header('Content-Length: '.mb_strlen($xml));
+		echo $xml;
+		exit;
+	}
+
 	public static function previewList($links, $page = 'links') {
 		$html = '';
 		foreach ($links as $id => $l) {
@@ -390,6 +417,11 @@ class Manager {
 			return 1;
 		});
 		return $a;
+	}
+
+	public static function newKey($a) {
+		if (empty($a)) { return 0; }
+		return max(array_keys($a))+1;
 	}
 
 }
