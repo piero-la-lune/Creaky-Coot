@@ -41,6 +41,21 @@ a:hover {
   color: #5c85d6;
   text-decoration: underline;
 }
+pre,
+blockquote {
+  border-left: 3px solid #444;
+  margin-left: 12px;
+  padding-left: 8px;
+  background: #fafafa;
+}
+pre {
+  overflow: auto;
+}
+img {
+  display: block;
+  max-width: 100%;
+  margin: auto;
+}
 label {
   display: block;
   margin: 12px 0 0 8px;
@@ -134,6 +149,7 @@ article p {
 .div-link h2 {
   margin: 0;
   padding: 0;
+  line-height: 1em;
 }
 .div-feed h2 a:before,
 .div-link h2 a:before {
@@ -268,4 +284,11 @@ article p {
 }
 .alert-success {
   background: #8dd69d;
+}
+@media screen and (max-width: 549px) {
+  article,
+  .div-feed,
+  .div-link {
+    text-align: left;
+  }
 }

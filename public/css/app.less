@@ -99,6 +99,22 @@ a {
 	}
 }
 
+pre, blockquote {
+	border-left: 3px solid #444;
+	margin-left: 12px;
+	padding-left: 8px;
+	background: #fafafa;
+}
+pre {
+	overflow: auto;
+}
+
+img {
+	display: block;
+	max-width: 100%;
+	margin: auto;
+}
+
 label {
 	display: block;
 	margin: 12px 0 0 8px;
@@ -185,6 +201,7 @@ article {
 	h2 {
 		margin: 0;
 		padding: 0;
+		line-height: 1em;
 		a:before {
 			content: "";
 			display: inline-block;
@@ -270,4 +287,10 @@ article {
 }
 .alert-success {
 	background: @green;
+}
+
+@media screen and (max-width: 549px) {
+	article, .div-feed, .div-link {
+		text-align: left;
+	}
 }
