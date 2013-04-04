@@ -107,7 +107,7 @@ class Text {
 
 	public static function intro($text, $length, $quote = true, $find = NULL) {
 		$text = ' '.strip_tags($text).' ';
-		$text = Text::remove_blanks($text);
+		$text = Text::remove_blanks($text, ' ');
 		$text = str_replace('  ', ' ', $text);
 		if ($find) {
 			$start = strpos($text, $find);
