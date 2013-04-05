@@ -88,7 +88,8 @@ class Settings {
 				$this->config['user'] = array(
 					'login' => $post['login'],
 					'password' => Text::getHash($post['password']),
-					'wait' => array()
+					'wait' => array(),
+					'cookie' => array()
 				);
 			}
 		}
