@@ -241,26 +241,29 @@ else {
 
 $pagename = $page->getPageName();
 
-$menu = ''
-	.'<a href="'.Url::parse('home').'"'
-		.($pagename == 'home' ? 'class="selected"' : '').'>'
-		.mb_strtolower(Trad::T_UNREAD)
-	.'</a>'
-	.'<a href="'.Url::parse('links').'"'
-		.($pagename == 'links' ? 'class="selected"' : '').'>'
-		.mb_strtolower(Trad::T_ALL)
-	.'</a>'
-	.'<a href="'.Url::parse('feeds').'"'
-		.($pagename == 'feeds' ? 'class="selected"' : '').'>'
-		.mb_strtolower(Trad::T_FEEDS)
-	.'</a>'
-	.'<a href="'.Url::parse('settings').'"'
-		.($pagename == 'settings' ? 'class="selected"' : '').'>'
-		.mb_strtolower(Trad::T_SETTINGS)
-	.'</a>'
-	.'<a href="#" '.Text::click('logout').'>'
-		.mb_strtolower(Trad::T_LOGOUT)
-	.'</a>';
+$menu = '';
+if ($pagename != 'login' && $pagename != 'add') {
+	$menu .= ''
+		.'<a href="'.Url::parse('home').'"'
+			.($pagename == 'home' ? 'class="selected"' : '').'>'
+			.mb_strtolower(Trad::T_UNREAD)
+		.'</a>'
+		.'<a href="'.Url::parse('links').'"'
+			.($pagename == 'links' ? 'class="selected"' : '').'>'
+			.mb_strtolower(Trad::T_ALL)
+		.'</a>'
+		.'<a href="'.Url::parse('feeds').'"'
+			.($pagename == 'feeds' ? 'class="selected"' : '').'>'
+			.mb_strtolower(Trad::T_FEEDS)
+		.'</a>'
+		.'<a href="'.Url::parse('settings').'"'
+			.($pagename == 'settings' ? 'class="selected"' : '').'>'
+			.mb_strtolower(Trad::T_SETTINGS)
+		.'</a>'
+		.'<a href="#" '.Text::click('logout').'>'
+			.mb_strtolower(Trad::T_LOGOUT)
+		.'</a>';
+}
 
 ?>
 

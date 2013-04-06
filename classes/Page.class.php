@@ -14,6 +14,7 @@ class Page {
 		'error/404',
 		'feeds',
 		'links',
+		'add',
 		'settings',
 		'ajax'
 	);

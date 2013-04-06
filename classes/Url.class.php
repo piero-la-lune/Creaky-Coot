@@ -44,6 +44,10 @@ class Url {
 			'redirect' => 'index.php?page=links&id=$1'
 		),
 		array(
+			'rule' => '^add$',
+			'redirect' => 'index.php?page=add'
+		),
+		array(
 			'rule' => '^feeds/([0-9]+)/edit$',
 			'redirect' => 'index.php?page=feeds&id=$1&action=edit'
 		),

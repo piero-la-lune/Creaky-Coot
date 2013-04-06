@@ -36,6 +36,7 @@ class Trad {
 	const S_NO_LINK = 'Aucun article non lu...';
 	const S_LOAD_MORE = 'Charger plus d\'articles...';
 	const S_NO_MORE_LINK = 'Il n\'y a plus d\'articles à afficher...';
+	const S_ADD_POPUP = 'Favori pour sauvegarder des articles...';
 
 		# Verbes
 
@@ -68,6 +69,8 @@ class Trad {
 	const F_COOKIE = 'Type de connexion :';
 	const F_COOKIE_FALSE = 'Ordinateur public';
 	const F_COOKIE_TRUE = 'Ordinateur privé (rester connecté)';
+	const F_COMMENT = 'Commentaire :';
+	const F_TAGS = 'Tags :';
 
 	const F_TIP_PASSWORD = 'Laissez vide pour ne pas le changer.';
 	const F_TIP_URL_REWRITING = 'Laissez vide pour désactiver l\'URL rewriting. Sinon, indiquez le chemin du dossier de Creaky Coot (en commençant et terminant par un "/") par rapport au nom de domaine.';
@@ -85,6 +88,7 @@ class Trad {
 	const T_LOGOUT = 'Déconnexion';
 	const T_IMPORT_OPML = 'Importer';
 	const T_EXPORT_OPML = 'Exporter';
+	const T_ADD = 'Sauvegarder cette page';
 
 		# Alertes
 
@@ -107,6 +111,8 @@ class Trad {
 	const A_CONFIRM_DELETE_FEED = 'Tous les articles non archivés de ce flux seront effacés. Voulez-vous vraiment continuer ?';
 	const A_CONFIRM_CLEAR = 'Tous les articles non archivés de cette page seront effacés. Voulez-vous vraiment continuer ?';
 	const A_CONFIRM_CLEAR_FEED = 'Tous les articles non archivés de ce flux seront effacés. Voulez-vous vraiment continuer ?';
+
+	const A_ADD_POPUP = 'Glissez-déposez ce lien sur votre barre de favoris, ou choisissez « Ajouter aux favoris... » après un clique-droit sur ce lien.';
 
 	public static $settings = array(
 		'validate_url' => 'L\'url n\'est pas valide.'

@@ -6,7 +6,7 @@
 
 <h1>Connexion</h1>
 
-<form action="'.Url::parse('home').'" method="post">
+<form action="" method="post">
 	<label for="login">'.Trad::F_USERNAME.'</label>
 	<input type="text" name="login" id="login" />
 	<label for="password">'.Trad::F_PASSWORD.'</label>

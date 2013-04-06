@@ -61,7 +61,8 @@ label {
   margin: 12px 0 0 8px;
 }
 input,
-select {
+select,
+textarea {
   display: block;
   font-size: 16px;
   font-weight: normal;
@@ -79,7 +80,8 @@ select {
   border-radius: 2px;
 }
 input:focus,
-select:focus {
+select:focus,
+textarea:focus {
   border-color: #444;
 }
 input {
