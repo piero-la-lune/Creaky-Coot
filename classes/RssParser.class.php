@@ -1,5 +1,15 @@
 <?php
 
+# RSS 1.0
+#    specifications: http://www.scriptol.fr/rss/RSS-1.0.html
+#    example: http://planete-jquery.fr/feed.php?type=rss
+# RSS 2.0
+#    specifications: http://www.scriptol.fr/rss/RSS-2.0.html
+#    example: http://wordpress.org/news/feed/
+# Atom
+#    specifications: http://www.ietf.org/rfc/rfc4287
+#    example: http://feeds.feedburner.com/blogspot/MKuf
+
 class RssParser {
 
 	protected $filter;

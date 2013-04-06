@@ -3,22 +3,16 @@
 # Adaptation of a class named “Filter” taken from PicoFeed
 # PicoFeed : http://github.com/fguillot/picoFeed
 
-# RSS 1.0
-#    specifications: http://www.scriptol.fr/rss/RSS-1.0.html
-#    example: http://planete-jquery.fr/feed.php?type=rss
-# RSS 2.0
-#    specifications: http://www.scriptol.fr/rss/RSS-2.0.html
-#    example: http://wordpress.org/news/feed/
-# Atom
-#    specifications: http://www.ietf.org/rfc/rfc4287
-#    example: http://feeds.feedburner.com/blogspot/MKuf
-
 class Filter {
 
 	protected $input;
-	protected $url;
+	protected $url_base;
+	protected $url_folders;
 	protected $data;
+	protected $title;
+	protected $removed_tag = array();
 	protected $empty_tag = array();
+	protected $pre_tag = array();
 
 	protected $allowed_tags = array(
 		'dt' => array(),
@@ -53,8 +47,69 @@ class Filter {
 		'figcaption' => array(),
 		'cite' => array(),
 		'time' => array('datetime'),
-		'abbr' => array('title')
+		'abbr' => array('title'),
+		'hr' => array()
 	);
+
+	protected $forbidden_tags = array(
+		'head',
+		'script',
+		'style',
+		'header',
+		'footer',
+		'aside',
+		'form',
+		'button',
+		'textarea',
+		'menu',
+		'object',
+		'iframe',
+		'h1'
+	);
+
+	protected $self_closing_tags = array(
+		'br',
+		'img',
+		'hr'
+	);
+
+	protected $useless_words = array(
+		'ad-break',
+		'ads(-| |$)',
+		'agegate',
+		'combx',
+		'comment',
+		'community',
+		'disqus',
+		'down(-| |$)',
+		'extra',
+		'foot',
+		'head',
+		'links',
+		'menu',
+		'meta',
+		'nav',
+		'pager',
+		'pagination',
+		'popup',
+		'promo',
+		'related',
+		'remark',
+		'rss',
+		'scroll',
+		'share',
+		'sharing',
+		'shopping',
+		'shoutbox',
+		'sidebar',
+		'social',
+		'sponsor',
+		'tool',
+		'tweet',
+		'twitter',
+		'widget'
+	);
+	protected $words_regex;
 
 	protected $allowed_protocols = array(
 		'http://',
@@ -63,7 +118,7 @@ class Filter {
 		'mailto://'
 	);
 
-	protected $protocol_attributes = array(
+	protected $protocol_attrs = array(
 		'src',
 		'href'
 	);
@@ -76,23 +131,66 @@ class Filter {
 		'stats.wordpress.com'
 	);
 
-	protected $required_attributes = array(
+	protected $required_attrs = array(
 		'a' => array('href'),
 		'img' => array('src')
 	);
 
+	public function __construct() {
+		$this->words_regex = '#'.implode('|', $this->useless_words).'#i';
+	}
+
 	public function execute($data, $url) {
-		$data = preg_replace_callback('#<pre>(.*)</pre>#isU', function($m) {
-			return '<pre>'.htmlspecialchars($m[1], ENT_QUOTES, 'UTF-8').'</pre>';
-		}, $data);
+
+		# Convert to UTF-8
+		$data = mb_convert_encoding($data, 'UTF-8', mb_detect_encoding($data));
 
 		# Convert bad formatted documents to XML
 		$d = new DOMDocument();
 		@$d->loadHTML('<?xml encoding="UTF-8">'.$data);
 
 		$this->input = $d->saveXML($d->getElementsByTagName('body')->item(0));
-		$this->url = dirname($url).'/';
 		$this->data = '';
+
+		# Get path of folder for relative ressources
+		$path = parse_url($url);
+		if (is_array($path) && isset($path['scheme']) && isset($path['host'])) {
+			$this->url_base = $path['scheme'].'://'.$path['host'];
+			if (isset($path['path'])) {
+				$folder = explode('/', $path['path']);
+				if (count($folder) > 2) {
+					unset($folder[count($folder)-1]);
+					$this->url_folders = implode('/', $folder).'/';
+				}
+				else {
+					$this->url_folders = '/';
+				}
+			}
+			else {
+				$this->url_folders = '/';
+			}
+		}
+		else {
+			$this->url_base = $url;
+			$this->url_folders = '';
+		}
+
+		# Find title
+		$title = $d->getElementsByTagName('h1')->item(0);
+		if ($title) {
+			$this->title =
+				htmlentities($title->nodeValue, ENT_QUOTES, 'UTF-8', false);
+		}
+		else {
+			$title = $d->getElementsByTagName('title')->item(0);
+			if ($title) {
+				$this->title =
+					htmlentities($title->nodeValue, ENT_QUOTES, 'UTF-8', false);
+			}
+			else {
+				$this->title = $this->url_base.$this->url_folders;
+			}
+		}
 
 		$parser = xml_parser_create();
 		xml_set_object($parser, $this);
@@ -106,82 +204,128 @@ class Filter {
 
 		xml_parser_free($parser);
 
-		$this->data = str_replace('<p>&nbsp;</p>', '', $this->data);
-
 		return $this->data;
+
 	}
 
+	public function getTitle() { return $this->title; }
 
 	public function startTag($parser, $name, $attributes) {
-		$empty_tag = false;
+		array_push($this->pre_tag, ($name == 'pre') ? true : false);
+
+		# Useless tags
+		if (end($this->empty_tag) || $this->isForbiddenTag($name)) {
+			array_push($this->removed_tag, false);
+			array_push($this->empty_tag, true);
+			return true;
+		}
+
+		# Useless tag because of class name
+		if ($this->isUselessTag($attributes)) {
+			array_push($this->removed_tag, false);
+			array_push($this->empty_tag, true);
+			return true;
+		}
 
 		# Useless image
 		if ($this->isPixelTracker($name, $attributes)) {
-			$empty_tag = true;
+			array_push($this->removed_tag, true);
+			array_push($this->empty_tag, false);
+			return true;
 		}
-		else if ($this->isAllowedTag($name)) {
-			$attr_data = '';
-			$used_attributes = array();
 
-			foreach ($attributes as $attribute => $value) {
-				if ($this->isAllowedAttribute($name, $attribute)) {
-					if ($this->isResource($attribute)) {
-						if (strpos($value, '://') === false) {
-							$attr_data .= ' '.$attribute.'="'.$this->url.$value.'"';
-							$used_attributes[] = $attribute;
-						}
-						if ($this->isAllowedProtocol($value)
-							&& !$this->isBlacklistMedia($value)
-						) {
-							$attr_data .= ' '.$attribute.'="'.$value.'"';
-							$used_attributes[] = $attribute;
-						}
+		# Not allowed tag
+		if (!$this->isAllowedTag($name)) {
+			array_push($this->removed_tag, true);
+			array_push($this->empty_tag, false);
+			return true;
+		}
+
+		# Clean up attributes
+		$attrs = array();
+		foreach ($attributes as $a => $v) {
+			if (empty($v) || !$this->isAllowedAttribute($name, $a)) {
+				continue;
+			}
+			if ($this->isResource($a)) {
+				if (strpos($v, '://') === false) {
+					if (strpos($v, '/') === 0) {
+						$attrs[$a] = $a.'="'.$this->url_base.$v.'"';
 					}
 					else {
-						$attr_data .= ' '.$attribute.'="'.$value.'"';
-						$used_attributes[] = $attribute;
+						$v = preg_replace('#^./#', '', $v);
+						$attrs[$a] = $a.'="'.$this->url_base
+							.$this->url_folders.$v.'"';
 					}
 				}
-			}
-
-			if (isset($this->required_attributes[$name])) {
-				foreach ($this->required_attributes[$name] as $required_attribute) {
-					if (!in_array($required_attribute, $used_attributes)) {
-						$empty_tag = true;
-						break;
-					}
+				elseif ($this->isAllowedProtocol($v)
+					&& !$this->isBlacklistMedia($v)
+				) {
+					$attrs[$a] = $a.'="'.$v.'"';
 				}
 			}
-
-			if (!$empty_tag) {
-				$this->data .= '<'.$name.$attr_data;
-				if ($name !== 'img' && $name !== 'br') { $this->data .= '>'; }
+			else {
+				$attrs[$a] = $a.'="'.$v.'"';
 			}
 		}
-		else {
-			$empty_tag = true;
+
+		# Check for required attributes
+		if (isset($this->required_attrs[$name])) {
+			foreach ($this->required_attrs[$name] as $a) {
+				if (!isset($attrs[$a])) {
+					array_push($this->removed_tag, true);
+					array_push($this->empty_tag, false);
+					return true;
+				}
+			}
 		}
-		array_push($this->empty_tag, $empty_tag);
+
+		$this->data .= '<'.$name;
+		if (!empty($attrs)) { $this->data .= ' '.implode(' ', $attrs); }
+		if (!$this->isSelfClosingTag($name)) {
+			$this->data .= '>';
+		}
+
+		array_push($this->removed_tag, false);
+		array_push($this->empty_tag, false);
+		return true;
 	}
 
 	public function endTag($parser, $name) {
-		if (!end($this->empty_tag)) {
-			if ($name !== 'img' && $name !== 'br') {
-				$this->data .= '</'.$name.'>';
-			}
-			else {
+		if (!end($this->removed_tag) && !end($this->empty_tag)) {
+			if ($this->isSelfClosingTag($name)) {
 				$this->data .= '/>';
 			}
+			else {
+				$this->data .= '</'.$name.'>';
+			}
 		}
+		array_pop($this->pre_tag);
+		array_pop($this->removed_tag);
 		array_pop($this->empty_tag);
+		return true;
 	}
 
 	public function dataTag($parser, $content) {
-		$this->data .= htmlentities($content, ENT_QUOTES, 'UTF-8', false);
+		if (!end($this->empty_tag)) {
+			if (!end($this->pre_tag)) {
+				$content = str_replace(array("\t", "\n", "\r"), '', $content);
+			}
+			$this->data .= htmlentities($content, ENT_QUOTES, 'UTF-8', false);
+		}
+		return true;
 	}
 
 	public function isAllowedTag($name) {
 		return isset($this->allowed_tags[$name]);
+	}
+
+	public function isForbiddenTag($name) {
+		return in_array($name, $this->forbidden_tags);
+	}
+
+	public function isSelfClosingTag($name) {
+		return in_array($name, $this->self_closing_tags);
 	}
 
 	public function isAllowedAttribute($tag, $attribute) {
@@ -189,7 +333,7 @@ class Filter {
 	}
 
 	public function isResource($attribute) {
-		return in_array($attribute, $this->protocol_attributes);
+		return in_array($attribute, $this->protocol_attrs);
 	}
 
 	public function isAllowedProtocol($value) {
@@ -213,10 +357,21 @@ class Filter {
 	# Return true if this is an useless image
 	public function isPixelTracker($tag, $attributes) {
 		return $tag === 'img'
-			&& isset($attributes['height'])
-			&& isset($attributes['width'])
-			&& $attributes['height'] == 1
-			&& $attributes['width'] == 1;
+			&& ((
+				isset($attributes['height'])
+					&& isset($attributes['width'])
+					&& $attributes['height'] == 1
+					&& $attributes['width'] == 1)
+				|| (isset($attributes['src'])
+					&& strpos($attributes['src'], 'piwik'))
+			);
+	}
+
+	public function isUselessTag($attrs) {
+		$search = '';
+		if (isset($attrs['class'])) { $search .= $attrs['class']; }
+		if (isset($attrs['id'])) { $search .= $attrs['id']; }
+		return preg_match($this->words_regex, $search);
 	}
 }
 
