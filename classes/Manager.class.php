@@ -208,7 +208,9 @@ class Manager {
 					'title' => $i['title'],
 					'content' => $i['content'],
 					'date' => $i['date'],
-					'link' => $i['link']
+					'link' => $i['link'],
+					'comment' => NULL,
+					'tags' => array()
 				);
 				$added[] = $id2;
 			}
