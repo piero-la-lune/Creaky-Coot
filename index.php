@@ -305,6 +305,64 @@ var loader = document.createElement("span");
 loader.className = 'loading';
 loader.innerHTML = '<i class="n1"></i><i class="n2"></i><i class="n3"></i>';
 
+function edit_link(id) {
+	var title = document.querySelector('h1');
+	var old_title = title.innerHTML;
+	var content = document.querySelector('.div-content');
+	var old_content = content.innerHTML;
+	var comment = document.querySelector('.div-comment');
+	var tags = document.querySelector('.tags');
+	var p_url = document.querySelector('.p-url');
+	var comment_input = document.getElementById('comment');
+	var tags_input = document.getElementById('tags');
+	var actions = document.querySelectorAll('.div-actions');
+	var save = actions[1].querySelectorAll('a')[0];
+	var cancel = actions[1].querySelectorAll('a')[1];
+	title.setAttribute('contenteditable', true);
+	content.setAttribute('contenteditable', true);
+	comment.style = 'display:none';
+	tags.style = 'display:none';
+	p_url.style = 'display:none';
+	comment_input.style = 'display:block';
+	tags_input.style = 'display:block';
+	actions[0].style = 'display:none';
+	actions[1].style = 'display:block';
+	save.onclick = function() {
+		save.parentNode.replaceChild(loader, save);
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', '<?php echo Url::parse('ajax'); ?>');
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		xhr.send('action=edit&id='+id+'&comment='+encodeURIComponent(comment_input.value)+'&tags='+encodeURIComponent(tags_input.value)+'&content='+encodeURIComponent(content.innerHTML)+'&title='+encodeURIComponent(title.innerHTML));
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == xhr.DONE && xhr.status == 200) { alert(xhr.responseText);
+				var ans = JSON.parse(xhr.responseText);
+				if (ans['status'] == 'success') {
+					old_title = ans['title'];
+					old_content = ans['content'];
+					cancel.click();
+					comment.innerHTML = ans['comment'];
+					tags.innerHTML = ans['tags_list'];
+					comment_input.value = ans['comment'];
+					tags_input.value = ans['tags'].join(', ');
+				}
+				loader.parentNode.replaceChild(save, loader);
+			}
+		};
+	};
+	cancel.onclick = function() {
+		title.setAttribute('contenteditable', false);
+		content.setAttribute('contenteditable', false);
+		title.innerHTML = old_title;
+		content.innerHTML = old_content;
+		comment.style = 'display:block';
+		tags.style = 'display:inline';
+		p_url.style = 'display:block';
+		comment_input.style = 'display:none';
+		tags_input.style = 'display:none';
+		actions[0].style = 'display:block';
+		actions[1].style = 'display:none';
+	};
+}
 function mark_read_link(id, preview) {
 	var xhr = new XMLHttpRequest();
 	xhr.open('POST', '<?php echo Url::parse('ajax'); ?>');

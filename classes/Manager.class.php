@@ -236,6 +236,110 @@ class Manager {
 		$curlManager->finish();
 	}
 
+	public function callback_add($header, $content, $id) {
+		if (!isset($header['http_code'])
+			|| $header['http_code'] !== 200
+			|| !isset($header['content_type'])
+			|| strpos($header['content_type'], 'text/html') === false
+		) {
+			$this->done[$id] = false;
+			return false;
+		}
+		$filter = new Filter();
+		$ans = $filter->execute($content, $header['url']);
+		if (!$ans || empty($ans)) {
+			$this->done[$id] = false;
+			return false;
+		}
+		$this->done[$id] = array(
+			'title' => $filter->getTitle(),
+			'link' => $header['url'],
+			'content' => $ans
+		);
+		return true;
+	}
+
+	public function add($post) {
+		global $config;
+		if (!isset($post['url'])
+			|| !isset($post['title'])
+			|| !isset($post['comment'])
+			|| !isset($post['tags'])
+		) {
+			return Trad::A_ERROR_FORM;
+		}
+		if (!filter_var($post['url'], FILTER_VALIDATE_URL)) {
+			return Trad::$settings['validate_url'];
+		}
+
+		$id = md5($post['url']);
+		if (isset($this->links[$id])) {
+			return Trad::A_ERROR_EXISTING_LINK;
+		}
+
+		$curlManager = new Curl_Multi();
+		$request = curl_init($post['url']);
+		curl_setopt($request, CURLOPT_FOLLOWLOCATION, true); # Follow redirects
+		curl_setopt($request, CURLOPT_MAXREDIRS, 4);
+		$curlManager->addHandle($request, array($this, 'callback_add'), $id);
+		$curlManager->finish();
+
+		if (!isset($this->done[$id]) || !$this->done[$id]) {
+			unset($this->done[$id]);
+			return Trad::A_ERROR_BAD_LINK;
+		}
+
+		$tags = array();
+		foreach (explode(',', $post['tags']) as $t) {
+			$t = Text::purge($t);
+			if (!empty($t)) { $tags[] = $t; }
+		}
+
+		$filter = new Filter();
+		$this->links[$id] = array(
+			'type' => 'archived',
+			'title' => $this->done[$id]['title'],
+			'content' => $this->done[$id]['content'],
+			'date' => time(),
+			'link' => $this->done[$id]['link'],
+			'comment' => $filter->execute($post['comment'], $config['url']),
+			'tags' => $tags
+		);
+		$this->save();
+		return true;
+	}
+
+	public function edit($post) {
+		global $config;
+		if (!isset($post['id'])
+			|| !isset($post['comment'])
+			|| !isset($post['tags'])
+			|| !isset($post['content'])
+			|| !isset($post['title'])
+			|| !isset($this->links[$post['id']])
+		) {
+			return Trad::A_ERROR_FORM;
+		}
+		$id = $post['id'];
+		$parser = new Filter();
+		$this->links[$id]['comment'] = $parser->execute(
+			$post['comment'],
+			$config['url']
+		);
+		$this->links[$id]['tags'] = array();
+		foreach (explode(',', $post['tags']) as $t) {
+			$t = Text::purge($t);
+			if (!empty($t)) { $this->links[$id]['tags'][] = $t; }
+		}
+		$this->links[$id]['content'] = $parser->execute(
+			$post['content'],
+			$this->links[$id]['link']
+		);
+		$this->links[$id]['title'] = Text::chars($post['title']);
+		$this->save();
+		return true;
+	}
+
 	public function markRead($id) {
 		if (!isset($this->links[$id])
 			|| $this->links[$id]['type'] != 'unread'
@@ -410,6 +514,14 @@ class Manager {
 		.'</a>'
 	.'</div>'
 .'</div>';
+	}
+
+	public static function tagsList($tags) {
+		$html = '';
+		foreach ($tags as $t) {
+			$html .= '<a href="'.Url::parse('tag').'" class="tag">'.$t.'</a>';
+		}
+		return $html;
 	}
 
 	public static function sort($a) {

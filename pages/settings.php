@@ -30,7 +30,7 @@
 		.'window.open('
 			.'\''.$url_add.'\','
 			.'\'_blank\','
-			.'\'menubar=no,height=400,width=424,toolbar=no,'
+			.'\'menubar=no,height=440,width=424,toolbar=no,'
 				.'scrollbars=no,status=no,dialog=1\''
 		.');'
 	.'})();';

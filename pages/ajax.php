@@ -1,6 +1,22 @@
 <?php
 
 if (isset($_POST['action'])) {
+	if ($_POST['action'] == 'edit') {
+		$manager = Manager::getInstance();
+		$ans = $manager->edit($_POST);
+		if ($ans === true) {
+			$link = $manager->getLink($_POST['id']);
+			die(json_encode(array(
+				'status' => 'success',
+				'comment' => $link['comment'],
+				'tags' => $link['tags'],
+				'tags_list' => Manager::tagsList($link['tags']),
+				'title' => $link['title'],
+				'content' => $link['content']
+			)));
+		}
+		die(json_encode(array('status' => 'error')));
+	}
 	if ($_POST['action'] == 'mark_read' && isset($_POST['id'])) {
 		$manager = Manager::getInstance();
 		$ans = $manager->markRead($_POST['id']);

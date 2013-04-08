@@ -47,8 +47,7 @@ class Filter {
 		'figcaption' => array(),
 		'cite' => array(),
 		'time' => array('datetime'),
-		'abbr' => array('title'),
-		'hr' => array()
+		'abbr' => array('title')
 	);
 
 	protected $forbidden_tags = array(
@@ -104,6 +103,7 @@ class Filter {
 		'sidebar',
 		'social',
 		'sponsor',
+		'tag',
 		'tool',
 		'tweet',
 		'twitter',

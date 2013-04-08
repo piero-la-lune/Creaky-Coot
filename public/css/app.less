@@ -189,10 +189,42 @@ article {
 		margin: 1em 0;
 	}
 }
+.div-infos {
+	border: 3px solid #DDD;
+	.border-radius(2px);
+	background: #fafafa;
+	padding: 6px;
+	margin-bottom: 32px;
+	.p { margin: 0 0 0.2em 0; }
+}
+.div-comment {
+	p:first-child { margin-top: 0; }
+	p:last-child { margin-bottom: 0; }
+}
+.div-hr-light {
+	border-bottom: 3px solid #DDD;
+	margin: 6px -6px;
+}
 .infos {
 	margin-top: 32px;
 	padding-top: 8px;
 	border-top: 3px solid #444;
+}
+
+.tag {
+	display: inline-block;
+	padding: 0 3px;
+	margin: 2px;
+	font-weight: 900;
+	font-size: 0.9em;
+	color: #fff;
+	background: #444;
+	.border-radius(2px);
+	&:hover {
+		color: #fff;
+		background: #000;
+		text-decoration: none;
+	}
 }
 
 .div-feed, .div-link {
