@@ -133,6 +133,7 @@ header a.selected {
 }
 article {
   text-align: justify;
+  word-wrap: break-word;
 }
 article p {
   margin: 1em 0;
@@ -158,11 +159,6 @@ article p {
 .div-hr-light {
   border-bottom: 3px solid #DDD;
   margin: 6px -6px;
-}
-.infos {
-  margin-top: 32px;
-  padding-top: 8px;
-  border-top: 3px solid #444;
 }
 .tag {
   display: inline-block;
