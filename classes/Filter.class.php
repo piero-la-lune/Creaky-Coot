@@ -125,10 +125,23 @@ class Filter {
 
 	protected $blacklist_media = array(
 		'feeds.feedburner.com',
-		'feedsportal.com',
+		'da.feedsportal.com',
+		'rss.feedsportal.com',
+		'res.feedsportal.com',
+		'pi.feedsportal.com',
 		'rss.nytimes.com',
 		'feeds.wordpress.com',
-		'stats.wordpress.com'
+		'stats.wordpress.com',
+		'rss.cnn.com',
+		'twitter.com/home?status=',
+		'twitter.com/share',
+		'twitter_icon_large.png',
+		'www.facebook.com/sharer.php',
+		'facebook_icon_large.png',
+		'plus.google.com/share',
+		'www.gstatic.com/images/icons/gplus-16.png',
+		'www.gstatic.com/images/icons/gplus-32.png',
+		'www.gstatic.com/images/icons/gplus-64.png'
 	);
 
 	protected $required_attrs = array(
