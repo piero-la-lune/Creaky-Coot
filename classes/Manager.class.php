@@ -147,7 +147,7 @@ class Manager {
 		foreach ($this->done as $d) {
 			if ($d !== false) {
 				foreach ($d['added'] as $id) {
-					$added[] = $this->links[$id];
+					$added[$id] = $this->links[$id];
 				}
 			}
 		}
