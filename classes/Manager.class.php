@@ -26,6 +26,9 @@ class Manager {
 	}
 
 	protected function createNewFeed($url = '') {
+		foreach ($this->feeds as $f) {
+			if ($f['url'] == $url) { return false; }
+		}
 		$id = Manager::newKey($this->feeds);
 		$this->feeds[$id] = array(
 			'title' => '',
@@ -103,12 +106,9 @@ class Manager {
 		) {
 			return Trad::$settings['validate_url'];
 		}
-		foreach ($this->feeds as $f) {
-			if ($f['url'] == $post['url']) {
-				return Trad::A_ERROR_EXISTING_FEED;
-			}
+		if (($id = $this->createNewFeed($post['url'])) === false) {
+			return Trad::A_ERROR_EXISTING_FEED;
 		}
-		$id = $this->createNewFeed($post['url']);
 		$this->update(array($id));
 		if (!isset($this->done[$id]) || $this->done[$id] === false) {
 			unset($this->feeds[$id]);
@@ -438,7 +438,12 @@ class Manager {
 		}
 		$ids = array();
 		foreach ($feeds as $k => $f) {
-			$ids[$k] = $this->createNewFeed($f['url']);
+			if (($id = $this->createNewFeed($f['url'])) !== false) {
+				$ids[$k] = $id;
+			}
+			else {
+				unset($feeds[$k]);
+			}
 		}
 		$this->update($ids);
 		foreach ($feeds as $k => $f) {
