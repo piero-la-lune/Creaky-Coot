@@ -177,6 +177,14 @@ article p {
   background: #000;
   text-decoration: none;
 }
+.p-list-tags {
+  text-align: center;
+}
+.p-list-tags .tag {
+  font-size: 1.2em;
+  padding: 2px 6px;
+  margin: 6px;
+}
 .div-feed,
 .div-link {
   margin-top: 24px;
@@ -258,50 +266,33 @@ article p {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
-  background: #444;
   margin: 2px;
-  -moz-animation-name: loader;
-  -moz-animation-duration: 2s;
-  -moz-animation-iteration-count: infinite;
-  -moz-animation-direction: linear;
-  -webkit-animation-name: loader;
-  -webkit-animation-duration: 2s;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-direction: linear;
-  -ms-animation-name: loader;
-  -ms-animation-duration: 2s;
-  -ms-animation-iteration-count: infinite;
-  -ms-animation-direction: linear;
-  -o-animation-name: loader;
-  -o-animation-duration: 2s;
-  -o-animation-iteration-count: infinite;
-  -o-animation-direction: linear;
-  animation-name: loader;
-  animation-duration: 2s;
-  animation-iteration-count: infinite;
-  animation-direction: linear;
+  -moz-animation: loader 2s infinite linear;
+  -webkit-animation: loader 2s infinite linear;
+  -o-animation: loader 2s infinite linear;
+  animation: loader 2s infinite linear;
   vertical-align: middle;
 }
 .loading .n1 {
   -moz-animation-delay: 0s;
   -webkit-animation-delay: 0s;
-  -ms-animation-delay: 0s;
   -o-animation-delay: 0s;
   animation-delay: 0s;
+  background: #ddd;
 }
 .loading .n2 {
   -moz-animation-delay: 0.3s;
   -webkit-animation-delay: 0.3s;
-  -ms-animation-delay: 0.3s;
   -o-animation-delay: 0.3s;
   animation-delay: 0.3s;
+  background: #999;
 }
 .loading .n3 {
   -moz-animation-delay: 0.6s;
   -webkit-animation-delay: 0.6s;
-  -ms-animation-delay: 0.6s;
   -o-animation-delay: 0.6s;
   animation-delay: 0.6s;
+  background: #444;
 }
 .div-hr {
   border-top: 3px solid #444;

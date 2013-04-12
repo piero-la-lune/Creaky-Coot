@@ -4,25 +4,23 @@
 
 if (isset($_GET['id']) && $feed = $manager->getFeed($_GET['id'])) {
 
-	if (isset($_GET['action']) && $_GET['action'] == 'edit') {
-
-		if (isset($_POST['action']) && $_GET['action'] == 'edit') {
-			$ans = $manager->editFeed($_POST, $_GET['id']);
-			if ($ans === true) {
-				$_SESSION['alert'] = array(
-					'text' => Trad::A_SUCCESS_EDIT_FEED,
-					'type' => 'alert-success'
-				);
-				header('Location: '.Url::parse('feeds'));
-				exit;
-			}
-			else {
-				$this->addAlert($ans);
-			}
+	if (isset($_POST['action']) && $_GET['action'] == 'edit') {
+		$ans = $manager->editFeed($_POST, $_GET['id']);
+		if ($ans === true) {
+			$_SESSION['alert'] = array(
+				'text' => Trad::A_SUCCESS_EDIT_FEED,
+				'type' => 'alert-success'
+			);
+			header('Location: '.Url::parse('feeds'));
+			exit;
 		}
+		else {
+			$this->addAlert($ans);
+		}
+	}
 
-		$title = $feed['title'];
-		$content = '
+	$title = $feed['title'];
+	$content = '
 
 <h1 class="center">'.$feed['title'].'</h1>
 
@@ -40,49 +38,12 @@ if (isset($_GET['id']) && $feed = $manager->getFeed($_GET['id'])) {
 	<input type="hidden" name="action" value="edit" />
 </form>
 
-		';
+	';
 
-	}
-	else {
+}
+elseif (isset($_GET['id'])) {
 
-		$title = $feed['title'];
-
-		$content = '<h1 class="center">'.$feed['title'].'</h1>
-
-			<div class="div-actions-top">
-				<a href="#" '
-					.Text::click('refresh', 'this', 'links', $_GET['id'])
-				.'>'
-					.mb_strtolower(Trad::V_REFRESH)
-				.'</a>
-				<a href="#" '.Text::click('mark_read_all', 'this', 'links').'>'
-					.mb_strtolower(Trad::V_MARK_READ_ALL)
-				.'</a>
-				<a href="#" '.Text::click('clear_all', 'this').'>'
-					.mb_strtolower(Trad::V_CLEAR)
-				.'</a>
-			</div>
-
-		';
-
-		$links = $manager->getLinks(array('feed' => $_GET['id']));
-		$html = Manager::previewList($links, 'links');
-
-		if (empty($html)) {
-			$content .= '<p class="p-more"><span>'.Trad::S_NO_LINK.'</span></p>';
-		}
-		else {
-			$content .= $html
-			.'<p class="p-more">'
-				.'<a href="#" '
-					.Text::click('load', 'this', 'links', 'false', $_GET['id'])
-				.'>'
-					.Trad::S_LOAD_MORE
-				.'</a>'
-			.'</p>';
-		}
-
-	}
+	$load = 'error/404';
 
 }
 else {
@@ -131,10 +92,10 @@ else {
 					.'<a href="'.Url::parse('feeds/'.$k.'/edit').'">'
 						.mb_strtolower(Trad::V_EDIT)
 					.'</a>'
-					.'<a href="#" '.Text::click('clear_feed', 'this', $k).'>'
+					.'<a href="#" '.Text::click('clear_feed', array('id' => $k)).'>'
 						.mb_strtolower(Trad::V_CLEAR)
 					.'</a>'
-					.'<a href="#" '.Text::click('delete_feed', 'this', $k).'>'
+					.'<a href="#" '.Text::click('delete_feed', array('id' => $k)).'>'
 						.mb_strtolower(Trad::V_DELETE)
 					.'</a>'
 				.'</div>'

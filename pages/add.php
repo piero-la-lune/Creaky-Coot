@@ -1,7 +1,7 @@
 <?php
 
 	if (isset($_POST['action']) && $_POST['action'] == 'add') {
-		$manager = new Manager();
+		$manager = Manager::getInstance();
 		$ans = $manager->add($_POST);
 		if ($ans === true) {
 			$this->addAlert(Trad::A_SUCCESS_ADD, 'alert-success');

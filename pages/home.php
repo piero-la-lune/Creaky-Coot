@@ -5,13 +5,13 @@
 	$content = '
 
 <div class="div-actions-top">
-	<a href="#" '.Text::click('refresh', 'this', 'unread').'>'
+	<a href="#" '.Text::click('refresh').'>'
 		.mb_strtolower(Trad::V_REFRESH)
 	.'</a>
-	<a href="#" '.Text::click('mark_read_all', 'this', 'unread').'>'
+	<a href="#" '.Text::click('allRead').'>'
 		.mb_strtolower(Trad::V_MARK_READ_ALL)
 	.'</a>
-	<a href="#" '.Text::click('clear_all', 'this').'>'
+	<a href="#" '.Text::click('allClear').'>'
 		.mb_strtolower(Trad::V_CLEAR)
 	.'</a>
 </div>
@@ -29,7 +29,7 @@
 	else {
 		$content .= $html
 		.'<p class="p-more">'
-			.'<a href="#" '.Text::click('load', 'this', 'unread', 'unread').'>'
+			.'<a href="#" '.Text::click('load', array('type' => 'unread')).'>'
 				.Trad::S_LOAD_MORE
 			.'</a>'
 		.'</p>';

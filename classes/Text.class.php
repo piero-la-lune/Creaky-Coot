@@ -184,18 +184,14 @@ class Text {
 		return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
 	}
 
-	public static function click($fun) {
-		$params = array();
-		for ($i=1; $i < func_num_args(); $i++) {
-			$val = func_get_arg($i);
-			if ($val == 'this' || $val == 'false' || $val == 'true') {
-				$params[] = $val;
-			}
-			else {
-				$params[] = '\''.$val.'\'';
-			}
-		}
-		return 'onclick="'.$fun.'('.implode(', ', $params).');return false;"';
+	public static function js_str($string) {
+		return str_replace("'", "\\'", $string);
+	}
+
+	public static function click($fun, $params = array()) {
+		$t = str_replace('"', '&quot;', json_encode($params));
+		return 'class="a-'.$fun.'" '
+			.'onclick="onclick_'.$fun.'(this, '.$t.');return false;"';
 	}
 
 }

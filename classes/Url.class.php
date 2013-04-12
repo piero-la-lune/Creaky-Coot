@@ -33,6 +33,10 @@ class Url {
 		),
 		array(
 			'rule' => '^feeds/([0-9]+)$',
+			'redirect' => 'index.php?page=links&feed=$1'
+		),
+		array(
+			'rule' => '^feeds/([0-9]+)/edit$',
 			'redirect' => 'index.php?page=feeds&id=$1'
 		),
 		array(
@@ -41,15 +45,19 @@ class Url {
 		),
 		array(
 			'rule' => '^links/([a-z0-9]{32})$',
-			'redirect' => 'index.php?page=links&id=$1'
+			'redirect' => 'index.php?page=link&id=$1'
 		),
 		array(
 			'rule' => '^add$',
 			'redirect' => 'index.php?page=add'
 		),
 		array(
-			'rule' => '^feeds/([0-9]+)/edit$',
-			'redirect' => 'index.php?page=feeds&id=$1&action=edit'
+			'rule' => '^tags$',
+			'redirect' => 'index.php?page=tags'
+		),
+		array(
+			'rule' => '^tags/([a-z0-9-]+)$',
+			'redirect' => 'index.php?page=links&tag=$1'
 		),
 		array(
 			'rule' => '^settings$',

@@ -58,6 +58,11 @@ class Manager {
 			foreach ($feed['read'] as $v) { $links[$v] = $this->links[$v]; }
 			foreach ($feed['archived'] as $v) { $links[$v] = $this->links[$v]; }
 		}
+		elseif (isset($filter['tag'])) {
+			foreach ($this->links as $id => $l) {
+				if (in_array($filter['tag'], $l['tags'])) { $links[$id] = $l; }
+			}
+		}
 		else {
 			$links = $this->links;
 		}
@@ -80,6 +85,16 @@ class Manager {
 	public function getLink($id) {
 		if (isset($this->links[$id])) { return $this->links[$id]; }
 		return false;
+	}
+
+	public function getTags() {
+		$tags = array();
+		foreach ($this->links as $l) {
+			foreach ($l['tags'] as $t) {
+				if (!in_array($t, $tags)) { $tags[] = $t; }
+			}
+		}
+		return $tags;
 	}
 
 	public function addFeed($post) {
@@ -500,16 +515,16 @@ class Manager {
 		.'<a href="'.$l['link'].'">'
 			.mb_strtolower(Trad::V_LINK)
 		.'</a>'
-		.'<a href="#" '.Text::click('mark_read_link', $id, $page).$read.'>'
+		.'<a href="#" '.Text::click('read', array('id' => $id)).$read.'>'
 			.mb_strtolower(Trad::V_MARK_READ)
 		.'</a>'
-		.'<a href="#" '.Text::click('mark_unread_link', $id, $page).$unread.'>'
+		.'<a href="#" '.Text::click('unread', array('id' => $id)).$unread.'>'
 			.mb_strtolower(Trad::V_MARK_UNREAD)
 		.'</a>'
-		.'<a href="#" '.Text::click('archive_link', $id, $page).$archived.'>'
+		.'<a href="#" '.Text::click('archive', array('id' => $id)).$archived.'>'
 			.mb_strtolower(Trad::V_ARCHIVE)
 		.'</a>'
-		.'<a href="#" '.Text::click('delete_link', $id, $page).'>'
+		.'<a href="#" '.Text::click('delete', array('id' => $id)).'>'
 			.mb_strtolower(Trad::V_DELETE)
 		.'</a>'
 	.'</div>'
@@ -519,8 +534,9 @@ class Manager {
 	public static function tagsList($tags) {
 		$html = '';
 		foreach ($tags as $t) {
-			$html .= '<a href="'.Url::parse('tag').'" class="tag">'.$t.'</a>';
+			$html .= '<a href="'.Url::parse('tags/'.$t).'" class="tag">'.$t.'</a>';
 		}
+		if (empty($html)) { $html = '<i>'.Trad::W_EMPTY.'</i>'; }
 		return $html;
 	}
 

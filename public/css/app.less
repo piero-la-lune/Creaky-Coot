@@ -21,32 +21,15 @@
 	-moz-box-sizing: @boxmodel;
 	box-sizing: @boxmodel;
 }
-.animation(@name, @duration, @count: infinite, @direction: linear) {
-	-moz-animation-name: @name;
-	-moz-animation-duration: @duration;
-	-moz-animation-iteration-count: @count;
-	-moz-animation-direction: @direction;
-	-webkit-animation-name: @name;
-	-webkit-animation-duration: @duration;
-	-webkit-animation-iteration-count: @count;
-	-webkit-animation-direction: @direction;
-	-ms-animation-name: @name;
-	-ms-animation-duration: @duration;
-	-ms-animation-iteration-count: @count;
-	-ms-animation-direction: @direction;
-	-o-animation-name: @name;
-	-o-animation-duration: @duration;
-	-o-animation-iteration-count: @count;
-	-o-animation-direction: @direction;
-	animation-name: @name;
-	animation-duration: @duration;
-	animation-iteration-count: @count;
-	animation-direction: @direction;
+.animation(@animation) {
+	-moz-animation: @animation;
+	-webkit-animation: @animation;
+	-o-animation: @animation;
+	animation: @animation;
 }
 .delay(@delay) {
 	-moz-animation-delay: @delay;
 	-webkit-animation-delay: @delay;
-	-ms-animation-delay: @delay;
 	-o-animation-delay: @delay;
 	animation-delay: @delay;
 }
@@ -222,6 +205,14 @@ article {
 		text-decoration: none;
 	}
 }
+.p-list-tags {
+	text-align: center;
+	.tag {
+		font-size: 1.2em;
+		padding: 2px 6px;
+		margin: 6px;
+	}
+}
 
 .div-feed, .div-link {
 	margin-top: 24px;
@@ -287,14 +278,22 @@ article {
 		width: 10px;
 		height: 10px;
 		.border-radius(5px);
-		background: #444;
 		margin: 2px;
-		.animation(loader, 2s);
+		.animation(loader 2s infinite linear);
 		vertical-align: middle;
 	}
-	.n1 { .delay(0s); }
-	.n2 { .delay(.3s); }
-	.n3 { .delay(.6s); }
+	.n1 {
+		.delay(0s);
+		background: #ddd;
+	}
+	.n2 {
+		.delay(.3s);
+		background: #999;
+	}
+	.n3 {
+		.delay(.6s);
+		background: #444;
+	}
 	display: inline-block;
 }
 

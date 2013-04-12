@@ -20,6 +20,7 @@ class Trad {
 	const W_MONTH_P = 'mois';
 	const W_YEAR_P = 'années';
 	const W_DECADE_P = 'décennies';
+	const W_EMPTY = 'aucun';
 
 	const W_PREVIOUS = 'Précédente';
 	const W_NEXT = 'Suivante';
@@ -37,6 +38,8 @@ class Trad {
 	const S_LOAD_MORE = 'Charger plus d\'articles...';
 	const S_NO_MORE_LINK = 'Il n\'y a plus d\'articles à afficher...';
 	const S_ADD_POPUP = 'Favori pour sauvegarder des articles...';
+	const S_FILTER_TAG = 'Filtrage par tag : %tag%.';
+	const S_FILTER_FEED = 'Filtrage par flux : %feed%.';
 
 		# Verbes
 
@@ -91,6 +94,7 @@ class Trad {
 	const T_IMPORT_OPML = 'Importer';
 	const T_EXPORT_OPML = 'Exporter';
 	const T_ADD = 'Sauvegarder cette page';
+	const T_TAGS = 'Tags';
 
 		# Alertes
 
@@ -104,6 +108,7 @@ class Trad {
 	const A_ERROR_IMPORT = 'Le fichier n\'a pas pu être lu. Êtes-vous certain que c\'est un fichier OPML ?';
 	const A_ERROR_BAD_LINK = 'Impossible de lire l\'article. Êtes-vous sûr de l\'URL ?';
 	const A_ERROR_EXISTING_LINK = 'Cet article est déjà sauvegardé.';
+	const A_ERROR_AJAX = 'Une erreur est survenue. Merci de réessayer.';
 
 	const A_SUCCESS_INSTALL = 'Creaky Coot est maintenant correctement installé. Connectez-vous pour commencer à l\'utiliser.';
 	const A_SUCCESS_ADD_FEED = 'Le flux a bien été ajouté.';

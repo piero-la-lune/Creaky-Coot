@@ -14,6 +14,8 @@ class Page {
 		'error/404',
 		'feeds',
 		'links',
+		'link',
+		'tags',
 		'add',
 		'settings',
 		'ajax'
@@ -28,8 +30,11 @@ class Page {
 			$path = dirname(__FILE__).'/../pages/error/404.php';
 		}
 		include($path);
-		$this->title = $title;
-		$this->content = $content;
+		if (isset($load)) { $this->load($load); }
+		else {
+			$this->title = $title;
+			$this->content = $content;
+		}
 	}
 
 	public function getPageName() {
