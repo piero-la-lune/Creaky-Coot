@@ -13,7 +13,7 @@ function strict_lower($a, $b) {
 	return false;
 }
 
-if (strict_lower($config['version'], '0.3')) {
+if (strict_lower($config['version'], '1.0')) {
 
 	$config['user']['cookie'] = array();
 	$config['auto_tag'] = true;
