@@ -25,7 +25,7 @@ if (isset($_GET['id']) && $feed = $manager->getFeed($_GET['id'])) {
 <h1>'.$feed['title'].'</h1>
 
 <form action="'
-	.Url::parse('feeds/'.$_GET['id'], array('action' => 'edit'))
+	.Url::parse('feeds/'.$_GET['id'].'/edit', array('action' => 'edit'))
 	.'" method="post">
 	<label for="title">'.Trad::F_TITLE.'</label>
 	<input type="text" name="title" id="title" value="'.$feed['title'].'" />
