@@ -28,6 +28,7 @@ if (strict_lower($config['version'], '1.0')) {
 }
 
 $settings = new Settings();
+if ($config['url_rewriting']) { $settings->url_rewriting(); }
 $settings->save();
 
 header('Content-Type: text/html; charset=utf-8');

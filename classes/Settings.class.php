@@ -58,21 +58,7 @@ class Settings {
 					$post['url_rewriting'],
 					FILTER_SANITIZE_URL
 				);
-				if ($rewriting = Url::getRules()) {
-					$base = $this->config['url_rewriting'];
-					$text = 'ErrorDocument 404 '.$base.'error/404'."\n\n"
-						.'RewriteEngine on'."\n"
-						.'RewriteBase '.$base."\n\n";
-					foreach ($rewriting as $r) {
-						if (isset($r['condition'])
-							&& $r['condition'] == 'file_doesnt_exist'
-						) {
-							$text .= "\n".'RewriteCond %{REQUEST_FILENAME} !-f'."\n";
-						}
-						$text .= 'RewriteRule '.$r['rule'].' '.$r['redirect'].' [QSA,L]'."\n";
-					}
-					file_put_contents('.htaccess', $text);
-				}
+				$this->url_rewriting();
 			}
 		}
 	}
@@ -112,6 +98,24 @@ class Settings {
 			if (isset($post['password']) && !empty($post['password'])) {
 				$this->config['user']['password'] = Text::getHash($post['password']);
 			}
+		}
+	}
+
+	public function url_rewriting() {
+		if ($rewriting = Url::getRules()) {
+			$base = $this->config['url_rewriting'];
+			$text = 'ErrorDocument 404 '.$base.'error/404'."\n\n"
+				.'RewriteEngine on'."\n"
+				.'RewriteBase '.$base."\n\n";
+			foreach ($rewriting as $r) {
+				if (isset($r['condition'])
+					&& $r['condition'] == 'file_doesnt_exist'
+				) {
+					$text .= "\n".'RewriteCond %{REQUEST_FILENAME} !-f'."\n";
+				}
+				$text .= 'RewriteRule '.$r['rule'].' '.$r['redirect'].' [QSA,L]'."\n";
+			}
+			file_put_contents('.htaccess', $text);
 		}
 	}
 
