@@ -52,12 +52,16 @@ class Url {
 			'redirect' => 'index.php?page=add'
 		),
 		array(
-			'rule' => '^tags$',
-			'redirect' => 'index.php?page=tags'
+			'rule' => '^filter$',
+			'redirect' => 'index.php?page=filter'
 		),
 		array(
 			'rule' => '^tags/([a-z0-9-]+)$',
 			'redirect' => 'index.php?page=links&tag=$1'
+		),
+		array(
+			'rule' => '^search/(.*)$',
+			'redirect' => 'index.php?page=links&q=$1'
 		),
 		array(
 			'rule' => '^settings$',

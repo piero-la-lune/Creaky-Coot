@@ -47,6 +47,17 @@ class Text {
 		return $txt;
 	}
 
+	public static function keywords($str) {
+		$str = str_replace(self::$accents, self::$without_accent, $str);
+		$str = strtolower($str);
+		$words = array();
+		foreach (explode(' ', $str) as $w) {
+			$w = preg_replace('/[^a-zA-Z0-9-]/', '', $w);
+			if (strlen($w) > 2) { $words[] = $w; }
+		}
+		return $words;
+	}
+
 	public static function randomKey($length = 8) {
 		return substr(
 			sha1(uniqid('', true).'_'.mt_rand().SALT),

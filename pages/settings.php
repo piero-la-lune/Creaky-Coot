@@ -70,10 +70,6 @@
 	<input type="password" name="password" id="password" />
 	<p class="p-tip">'.Trad::F_TIP_PASSWORD.'</p>
 
-	
-
-
-
 	<p class="p-submit"><input type="submit" value="'.Trad::V_EDIT.'" /></p>
 	<input type="hidden" name="action" value="edit" />
 </form>

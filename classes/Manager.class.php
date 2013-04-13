@@ -54,20 +54,34 @@ class Manager {
 	public function getLinks($filter = array(), $idStart = NULL, $limit = NULL) {
 		global $config;
 		if (!$limit) { $limit = $config['links_per_page']; }
-		$links = array();
 		if (isset($filter['feed']) && isset($this->feeds[$filter['feed']])) {
+			$links = array();
 			$feed = $this->feeds[$filter['feed']];
 			foreach ($feed['unread'] as $v) { $links[$v] = $this->links[$v]; }
 			foreach ($feed['read'] as $v) { $links[$v] = $this->links[$v]; }
 			foreach ($feed['archived'] as $v) { $links[$v] = $this->links[$v]; }
 		}
-		elseif (isset($filter['tag'])) {
-			foreach ($this->links as $id => $l) {
-				if (in_array($filter['tag'], $l['tags'])) { $links[$id] = $l; }
-			}
-		}
 		else {
 			$links = $this->links;
+		}
+		if (isset($filter['tag'])) {
+			foreach ($links as $id => $l) {
+				if (!in_array($filter['tag'], $l['tags'])) {
+					unset($links[$id]);
+				}
+			}
+		}
+		if (isset($filter['q'])) {
+			foreach ($links as $id => $l) {
+				foreach ($filter['q'] as $q) {
+					if (strpos($l['title'], $q) === false
+						&& strpos($l['content'], $q) === false
+						&& strpos($l['comment'], $q) === false
+					) {
+						unset($links[$id]);
+					}
+				}
+			}
 		}
 		if (isset($filter['type'])) {
 			foreach ($links as $id => $l) {

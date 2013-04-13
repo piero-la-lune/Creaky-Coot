@@ -252,9 +252,9 @@ if ($pagename != 'login' && $pagename != 'add') {
 			.($pagename == 'links' ? 'class="selected"' : '').'>'
 			.mb_strtolower(Trad::T_ALL)
 		.'</a>'
-		.'<a href="'.Url::parse('tags').'"'
-			.($pagename == 'tags' ? 'class="selected"' : '').'>'
-			.mb_strtolower(Trad::T_TAGS)
+		.'<a href="'.Url::parse('filter').'"'
+			.($pagename == 'filter' ? 'class="selected"' : '').'>'
+			.mb_strtolower(Trad::T_FILTER)
 		.'</a>'
 		.'<a href="'.Url::parse('feeds').'"'
 			.($pagename == 'feeds' ? 'class="selected"' : '').'>'
@@ -315,6 +315,7 @@ echo "var m_confirm_delete_f = '".Text::js_str(Trad::A_CONFIRM_DELETE_FEED)."';"
 echo             "var page = '".Text::js_str($_GET['page'])."';";
 if (isset($_GET['feed'])) { echo "var feed = ".intval($_GET['feed']).";"; }
 if (isset($_GET['tag'])) { echo "var tag = '".Text::js_str($_GET['tag'])."';"; }
+if (isset($_GET['q'])) { echo "var q = '".Text::js_str($_GET['q'])."';"; }
 	?></script>
 		<script src="<?php echo Url::parse('public/js/app.js'); ?>"></script>
 

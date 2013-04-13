@@ -29,6 +29,17 @@ if (!isset($_GET['feed']) || $feed = $manager->getFeed($_GET['feed'])) {
 		.'</p>';
 		$filter['feed'] = intval($_GET['feed']);
 	}
+	if (isset($_GET['q'])) {
+		$words = Text::keywords(urldecode($_GET['q']));
+		$content .= '<p>'
+			.str_replace(
+				'%q%',
+				'<span class="feed-title">'.implode(' ', $words).'</span>',
+				Trad::S_FILTER_SEARCH
+			)
+		.'</p>';
+		$filter['q'] = $words;
+	}
 
 	$content .= '
 

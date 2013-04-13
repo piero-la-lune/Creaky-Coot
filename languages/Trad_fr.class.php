@@ -40,6 +40,7 @@ class Trad {
 	const S_ADD_POPUP = 'Favori pour sauvegarder des articles...';
 	const S_FILTER_TAG = 'Filtrage par tag : %tag%.';
 	const S_FILTER_FEED = 'Filtrage par flux : %feed%.';
+	const S_FILTER_SEARCH = 'Résultats de la recherche : %q%.';
 
 		# Verbes
 
@@ -59,6 +60,7 @@ class Trad {
 	const V_EXPORT = 'Exporter';
 	const V_SAVE = 'Enregistrer les modifications';
 	const V_CANCEL = 'Annuler';
+	const V_SEARCH = 'Rechercher';
 
 		# Forms
 
@@ -76,6 +78,7 @@ class Trad {
 	const F_COOKIE_TRUE = 'Ordinateur privé (rester connecté)';
 	const F_COMMENT = 'Commentaire :';
 	const F_TAGS = 'Tags :';
+	const F_KEY_WORDS = 'Mots clés :';
 
 	const F_TIP_PASSWORD = 'Laissez vide pour ne pas le changer.';
 	const F_TIP_URL_REWRITING = 'Laissez vide pour désactiver l\'URL rewriting. Sinon, indiquez le chemin du dossier de Creaky Coot (en commençant et terminant par un "/") par rapport au nom de domaine.';
@@ -95,6 +98,8 @@ class Trad {
 	const T_EXPORT_OPML = 'Exporter';
 	const T_ADD = 'Sauvegarder cette page';
 	const T_TAGS = 'Tags';
+	const T_SEARCH = 'Recherche';
+	const T_FILTER = 'Filtres';
 
 		# Alertes
 

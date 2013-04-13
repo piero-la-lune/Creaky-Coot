@@ -16,6 +16,9 @@ if (isset($_POST['action']) && isset($_POST['page'])) {
 		if (isset($_POST['tag'])) {
 			$filter['tag'] = $_POST['tag'];
 		}
+		if (isset($_POST['q'])) {
+			$filter['q'] = Text::keywords(urldecode($_POST['q']));
+		}
 		$ans = $manager->getLinks($filter, $id);
 		if (!empty($ans)) {
 			$html = Manager::previewList($ans, $_POST['page']);

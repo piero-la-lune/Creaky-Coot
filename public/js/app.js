@@ -42,11 +42,14 @@ function Ajax(elm, action) {
 				else {
 					alert(m_error_ajax);
 				}
-				if (ajax.loader) {
-					ajax.loader.parentNode.replaceChild(ajax.elm, ajax.loader);
-				}
+				ajax.cancel();
 			}
 		};
+	}
+	this.cancel = function() {
+		if (this.loader) {
+			this.loader.parentNode.replaceChild(this.elm, this.loader);
+		}
 	}
 }
 
@@ -62,6 +65,7 @@ function onclick_load(elm, pms) {
 	}
 	if (typeof feed != 'undefined') { ajax.addParam('feed', feed); }
 	if (typeof tag != 'undefined') { ajax.addParam('tag', tag); }
+	if (typeof q != 'undefined') { ajax.addParam('q', q); }
 	if (typeof pms.type != 'undefined') { ajax.addParam('type', pms.type); }
 	ajax.send(function(ans) {
 		var div = document.createElement("div");
@@ -76,7 +80,8 @@ function onclick_load(elm, pms) {
 
 function onclick_refresh(elm, pms) {
 	var ajax = new Ajax(elm, 'refresh')
-	if (typeof tag != 'undefined') { return false; }
+	if (typeof tag != 'undefined') { ajax.cancel(); return false; }
+	if (typeof q != 'undefined') { ajax.cancel(); return false; }
 	if (typeof feed != 'undefined') { ajax.addParam('feed', feed); }
 	ajax.send(function(ans) {
 		var div = document.createElement("div");

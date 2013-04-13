@@ -22,7 +22,7 @@ if (isset($_GET['id']) && $feed = $manager->getFeed($_GET['id'])) {
 	$title = $feed['title'];
 	$content = '
 
-<h1 class="center">'.$feed['title'].'</h1>
+<h1>'.$feed['title'].'</h1>
 
 <form action="'
 	.Url::parse('feeds/'.$_GET['id'], array('action' => 'edit'))
@@ -109,7 +109,7 @@ else {
 
 <form action="'.Url::parse('feeds').'" method="post">
 
-	<h2>'.Trad::T_ADD_FEED.'</h2>
+	<h1>'.Trad::T_ADD_FEED.'</h1>
 	<label for="url">'.Trad::F_FEED_URL.'</a>
 	<input type="url" name="url" id="url" />
 
@@ -120,7 +120,7 @@ else {
 
 <form action="'.Url::parse('feeds').'" method="post" enctype="multipart/form-data">
 
-	<h2>'.Trad::T_IMPORT_OPML.'</h2>
+	<h1>'.Trad::T_IMPORT_OPML.'</h1>
 	<label for="file">'.Trad::F_OPML_FILE.'</label>
 	<input type="file" name="file" />
 
@@ -131,7 +131,7 @@ else {
 
 <form action="'.Url::parse('feeds').'" method="post">
 
-	<h2>'.Trad::T_EXPORT_OPML.'</h2>
+	<h1>'.Trad::T_EXPORT_OPML.'</h1>
 
 	<p class="p-submit"><input type="submit" value="'.Trad::V_EXPORT.'" /></p>
 	<input type="hidden" name="action" value="export" />

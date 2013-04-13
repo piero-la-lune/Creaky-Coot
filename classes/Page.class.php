@@ -15,7 +15,7 @@ class Page {
 		'feeds',
 		'links',
 		'link',
-		'tags',
+		'filter',
 		'add',
 		'settings',
 		'ajax'
