@@ -32,6 +32,10 @@ class Settings {
 		return $this->errors;
 	}
 
+	public function set($name, $value) {
+		$this->config[$name] = $value;
+	}
+
 	protected function c_global($post) {
 		if (isset($post['title'])) {
 			$this->config['title'] = Text::chars($post['title']);
@@ -78,6 +82,14 @@ class Settings {
 			$nb = intval($post['links_per_page']);
 			if ($nb > 0) {
 				$this->config['links_per_page'] = $nb;
+			}
+		}
+		if (isset($post['auto_tag'])) {
+			if ($post['auto_tag'] == 'false') {
+				$this->config['auto_tag'] = false;
+			}
+			else {
+				$this->config['auto_tag'] = true;
 			}
 		}
 	}
@@ -153,6 +165,7 @@ class Settings {
 			'url_rewriting' => false,
 			'language' => $language,
 			'links_per_page' => 4,
+			'auto_tag' => true,
 			'user' => array(
 				'login' => 'admin',
 				'password' => 'admin',

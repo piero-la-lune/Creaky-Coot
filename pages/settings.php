@@ -35,6 +35,8 @@
 		.');'
 	.'})();';
 
+	$auto_tag = ($config['auto_tag']) ? 'true' : 'false';
+
 	$content = '
 
 <form action="'.Url::parse('settings').'" method="post">
@@ -59,6 +61,12 @@
 	<label for="links_per_page">'.Trad::F_LINKS_PER_PAGE.'</label>
 	<input type="text" name="links_per_page" id="links_per_page" value="'
 		.$config['links_per_page'].'" />
+	<label for="auto_tag">'.Trad::F_AUTO_TAG.'</label>
+	<select name="auto_tag" id="auto_tag">'.Text::options(
+		array('true' => Trad::W_ENABLED, 'false' => Trad::W_DISABLED),
+		$auto_tag
+	).'</select>
+	<p class="p-tip">'.Trad::F_TIP_AUTO_TAG.'</p>
 
 	<p>&nbsp;</p>
 

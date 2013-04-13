@@ -215,6 +215,7 @@ class Manager {
 	}
 
 	public function callback_update($header, $content, $id) {
+		global $config;
 		if (!isset($header['http_code']) || $header['http_code'] !== 200) {
 			$this->done[$id] = false;
 			return false;
@@ -231,6 +232,12 @@ class Manager {
 			if (!isset($this->links[$id2])
 				&& !in_array($id2, $this->feeds[$id]['deleted'])
 			) {
+				if ($config['auto_tag']) {
+					$tags = array(Text::purge($ans['title']));
+				}
+				else {
+					$tags = array();
+				}
 				$this->feeds[$id]['unread'][] = $id2;
 				$this->links[$id2] = array(
 					'type' => 'unread',
@@ -239,7 +246,7 @@ class Manager {
 					'date' => $i['date'],
 					'link' => $i['link'],
 					'comment' => NULL,
-					'tags' => array()
+					'tags' => $tags
 				);
 				$added[] = $id2;
 			}
@@ -421,15 +428,15 @@ class Manager {
 		foreach ($this->feeds as $k => $f) {
 			if (($key = array_search($id, $f['unread'])) !== false) {
 				unset($this->feeds[$k]['unread'][$key]);
-				//$this->feeds[$k]['deleted'][] = $id;
+				$this->feeds[$k]['deleted'][] = $id;
 			}
 			if (($key = array_search($id, $f['read'])) !== false) {
 				unset($this->feeds[$k]['read'][$key]);
-				//$this->feeds[$k]['deleted'][] = $id;
+				$this->feeds[$k]['deleted'][] = $id;
 			}
 			if (($key = array_search($id, $f['archived'])) !== false) {
 				unset($this->feeds[$k]['archived'][$key]);
-				//$this->feeds[$k]['deleted'][] = $id;
+				$this->feeds[$k]['deleted'][] = $id;
 			}
 		}
 		unset($this->links[$id]);
@@ -522,6 +529,8 @@ class Manager {
 		$unread = ' style="display:none"';
 		$read = ' style="display:none"';
 		$archived = ' style="display:none"';
+		$tags = Manager::tagsList($l['tags'], false);
+		if (!empty($tags)) { $tags = '<p>'.$tags.'</p>'; }
 		if ($l['type'] == 'unread') { $read = ''; $archived = ''; }
 		if ($l['type'] == 'read') { $unread = ''; $archived = ''; }
 		return ''
@@ -530,6 +539,7 @@ class Manager {
 		.'<a href="'.Url::parse('links/'.$id).'">'.$l['title'].'</a>'
 	.'</h2>'
 	.Text::intro($l['content'], 400, false)
+	.$tags
 	.'<div class="div-actions">'
 		.'<a href="'.$l['link'].'">'
 			.mb_strtolower(Trad::V_LINK)
@@ -550,12 +560,12 @@ class Manager {
 .'</div>';
 	}
 
-	public static function tagsList($tags) {
+	public static function tagsList($tags, $empty = true) {
 		$html = '';
 		foreach ($tags as $t) {
 			$html .= '<a href="'.Url::parse('tags/'.$t).'" class="tag">'.$t.'</a>';
 		}
-		if (empty($html)) { $html = '<i>'.Trad::W_EMPTY.'</i>'; }
+		if ($empty && empty($html)) { $html = '<i>'.Trad::W_EMPTY.'</i>'; }
 		return $html;
 	}
 

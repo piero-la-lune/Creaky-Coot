@@ -21,10 +21,8 @@ class Trad {
 	const W_YEAR_P = 'années';
 	const W_DECADE_P = 'décennies';
 	const W_EMPTY = 'aucun';
-
-	const W_PREVIOUS = 'Précédente';
-	const W_NEXT = 'Suivante';
-	const W_CURRENT = 'Page %nb1% sur %nb2%';
+	const W_ENABLED = 'Activé';
+	const W_DISABLED = 'Désactivé';
 
 	const W_SUSPENSION = '…';
 	const W_EXTRACT = '« %text% »';
@@ -79,9 +77,11 @@ class Trad {
 	const F_COMMENT = 'Commentaire :';
 	const F_TAGS = 'Tags :';
 	const F_KEY_WORDS = 'Mots clés :';
+	const F_AUTO_TAG = 'Tags automatiques :';
 
 	const F_TIP_PASSWORD = 'Laissez vide pour ne pas le changer.';
 	const F_TIP_URL_REWRITING = 'Laissez vide pour désactiver l\'URL rewriting. Sinon, indiquez le chemin du dossier de Creaky Coot (en commençant et terminant par un "/") par rapport au nom de domaine.';
+	const F_TIP_AUTO_TAG = 'Les articles provenant d\'un flux recevront automatiquement le nom de ce flux comme tag.';
 
 		# Titres
 
