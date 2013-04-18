@@ -24,7 +24,7 @@
 		array('\'+encodeURIComponent(url)+\'', '\'+encodeURIComponent(title)+\''),
 		$url_add->get()
 	);
-	$js = 'javascript:javascript:(function(){'
+	$js = 'javascript:(function(){'
 		.'var%20url%20=%20location.href;'
 		.'var%20title%20=%20document.title%20||%20url;'
 		.'window.open('
@@ -54,7 +54,9 @@
 
 	<p>&nbsp;</p>
 
-	<p><a onclick="alert(\''.Trad::A_ADD_POPUP.'\');return false;" href="'.$js.'">'.Trad::S_ADD_POPUP.'</a></p>
+	<p><a href="'.$js.'" '.Text::click('js_add').'>'.Trad::S_ADD_POPUP.'</a>
+		<textarea id="js_add" style="display:none">'.Text::chars($js).'</textarea>
+	</p>
 
 	<p>&nbsp;</p>
 

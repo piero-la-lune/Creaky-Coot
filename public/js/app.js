@@ -266,3 +266,8 @@ function onclick_delete_feed(elm, pms) {
 		div.parentNode.removeChild(div);
 	});
 }
+
+function onclick_js_add(elm, pms) {
+	alert(m_add_popup);
+	document.getElementById('js_add').style.display = 'block';
+}

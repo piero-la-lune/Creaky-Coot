@@ -7,6 +7,15 @@ class Manager {
 	protected $links = array();
 	protected $done = array();
 
+	protected $curl_opts = array(
+		CURLOPT_AUTOREFERER => true,
+		CURLOPT_FOLLOWLOCATION => true,
+		CURLOPT_MAXREDIRS => 4,
+		CURLOPT_CONNECTTIMEOUT => 4,
+		CURLOPT_TIMEOUT => 12,
+		CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; WOW64) Gecko/20100101 Firefox/19.0'
+	);
+
 	public function __construct() {
 		global $config;
 		$this->feeds = Text::unhash(get_file(FILE_FEEDS));
@@ -270,8 +279,7 @@ class Manager {
 		foreach ($ids as $id) {
 				# We assume all given ids correspond to existing feeds
 			$request = curl_init($this->feeds[$id]['url']);
-			curl_setopt($request, CURLOPT_FOLLOWLOCATION, true); # Follow redirects
-			curl_setopt($request, CURLOPT_MAXREDIRS, 4);
+			curl_setopt_array($request, $this->curl_opts);
 			$curlManager->addHandle($request, array($this, 'callback_update'), $id);
 		}
 		$curlManager->finish();
@@ -320,8 +328,7 @@ class Manager {
 
 		$curlManager = new Curl_Multi();
 		$request = curl_init($post['url']);
-		curl_setopt($request, CURLOPT_FOLLOWLOCATION, true); # Follow redirects
-		curl_setopt($request, CURLOPT_MAXREDIRS, 4);
+		curl_setopt_array($request, $this->curl_opts);
 		$curlManager->addHandle($request, array($this, 'callback_add'), $id);
 		$curlManager->finish();
 
