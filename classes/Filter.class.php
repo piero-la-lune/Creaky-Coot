@@ -158,7 +158,13 @@ class Filter {
 	public function execute($data, $url) {
 
 		# Convert to UTF-8
-		$data = mb_convert_encoding($data, 'UTF-8', mb_detect_encoding($data));
+		$encoding = mb_detect_encoding(
+			$data,
+			array('ASCII', 'UTF-8', 'Windows-1252', 'ISO-8859-1')
+		);
+		if ($encoding != 'UTF-8') {
+			$data = mb_convert_encoding($data, 'UTF-8', $encoding);
+		}
 
 		# Convert bad formatted documents to XML
 		$d = new DOMDocument();
@@ -324,7 +330,7 @@ class Filter {
 	public function dataTag($parser, $content) {
 		if (!end($this->empty_tag)) {
 			if (!end($this->pre_tag)) {
-				$content = str_replace(array("\t", "\n", "\r"), '', $content);
+				$content = preg_replace('#\s+#u', ' ', $content);
 			}
 			$this->data .= htmlentities($content, ENT_QUOTES, 'UTF-8', false);
 		}
