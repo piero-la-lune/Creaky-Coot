@@ -193,6 +193,7 @@ article p {
 .div-link {
   margin-top: 24px;
   text-align: justify;
+  word-wrap: break-word;
 }
 .div-feed h2,
 .div-link h2 {
