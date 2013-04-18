@@ -125,9 +125,11 @@ class Filter {
 
 	protected $blacklist_media = array(
 		'feeds.feedburner.com',
+		'share.feedsportal.com',
 		'da.feedsportal.com',
 		'rss.feedsportal.com',
 		'res.feedsportal.com',
+		'res3.feedsportal.com',
 		'pi.feedsportal.com',
 		'rss.nytimes.com',
 		'feeds.wordpress.com',

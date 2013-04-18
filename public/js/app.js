@@ -210,13 +210,13 @@ function onclick_edit(elm, pms) {
 	var cancel = obj.actions[1].querySelectorAll('a')[1];
 	obj.title.setAttribute('contenteditable', true);
 	obj.content.setAttribute('contenteditable', true);
-	obj.tags.style = 'display:none';
-	obj.comment.style = 'display:none';
-	obj.url.style = 'display:none';
-	form.comment.style = 'display:block';
-	form.tags.style = 'display:block';
-	obj.actions[0].style = 'display:none';
-	obj.actions[1].style = 'display:block';
+	obj.tags.style.display = 'none';
+	obj.comment.style.display = 'none';
+	obj.url.style.display = 'none';
+	form.comment.style.display = 'block';
+	form.tags.style.display = 'block';
+	obj.actions[0].style.display = 'none';
+	obj.actions[1].style.display = 'block';
 	save.onclick = function() {
 		var ajax = new Ajax(save, 'edit');
 		ajax.addParam('id', pms.id);
@@ -239,13 +239,13 @@ function onclick_edit(elm, pms) {
 		obj.content.setAttribute('contenteditable', false);
 		obj.title.innerHTML = old_title;
 		obj.content.innerHTML = old_content;
-		obj.tags.style = 'display:inline';
-		obj.comment.style = 'display:block';
-		obj.url.style = 'display:block';
-		form.tags.style = 'display:none';
-		form.comment.style = 'display:none';
-		obj.actions[0].style = 'display:block';
-		obj.actions[1].style = 'display:none';
+		obj.tags.style.display = 'inline';
+		obj.comment.style.display = 'block';
+		obj.url.style.display = 'block';
+		form.tags.style.display = 'none';
+		form.comment.style.display = 'none';
+		obj.actions[0].style.display = 'block';
+		obj.actions[1].style.display = 'none';
 	};
 }
 
