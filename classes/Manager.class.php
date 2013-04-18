@@ -233,7 +233,12 @@ class Manager {
 				&& !in_array($id2, $this->feeds[$id]['deleted'])
 			) {
 				if ($config['auto_tag']) {
-					$tags = array(Text::purge($ans['title']));
+					if (empty($this->feeds[$id]['title'])) {
+						$tags = array(Text::purge($ans['title']));
+					}
+					else {
+						$tags = array(Text::purge($this->feeds[$id]['title']));
+					}
 				}
 				else {
 					$tags = array();
