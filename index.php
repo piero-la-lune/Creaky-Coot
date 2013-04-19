@@ -24,7 +24,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 define('NAME', 'Creaky Coot');
-define('VERSION', '1.0.4');
+define('VERSION', '1.1');
 define('AUTHOR', 'Pierre Monchalin');
 define('URL', 'http://creaky-coot.derivoile.fr');
 

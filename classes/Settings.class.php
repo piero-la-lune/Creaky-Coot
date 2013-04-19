@@ -185,6 +185,7 @@ class Settings {
 				'wait' => array(),
 				'cookie' => array(),
 			),
+			'twitter' => NULL,
 			'salt' => Text::randomKey(40),
 			'version' => VERSION,
 			'last_update' => false

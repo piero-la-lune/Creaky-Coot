@@ -27,7 +27,7 @@ if (strict_lower($config['version'], '1.0')) {
 
 }
 
-if (strict_lower($config['version'], '1.0.4')) {
+if (strict_lower($config['version'], '1.1')) {
 
 	$config['twitter'] = NULL;
 	$feeds = Text::unhash(get_file(FILE_FEEDS));
