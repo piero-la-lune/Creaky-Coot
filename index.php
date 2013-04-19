@@ -229,6 +229,14 @@ check_file(FILE_FEEDS, Text::hash(array()));
 check_file(FILE_LINKS, Text::hash(array()));
 check_file('.htaccess', "Allow from none\nDeny from all\n");
 
+### Auto update
+if (isset($auto_update) && $auto_update == true) {
+	$manager = Manager::getInstance();
+	$manager->refreshFeed();
+	echo 'Done.';
+	exit;
+}
+
 ### Load page
 if (!is_file(DIR_DATABASE.FILE_CONFIG)) {
 	$page->load('install');
