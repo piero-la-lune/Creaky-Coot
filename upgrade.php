@@ -1,5 +1,9 @@
 <?php
 
+if (!isset($config)) {
+	exit;
+}
+
 function strict_lower($a, $b) {
 	$ea = explode('.', $a);
 	$eb = explode('.', $b);
