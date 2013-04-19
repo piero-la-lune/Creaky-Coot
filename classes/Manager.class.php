@@ -162,7 +162,7 @@ class Manager {
 		list(, $url, $params) = $check;
 		$oldfeed = $this->feeds[$id];
 		$this->feeds[$id]['title'] =
-			htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8');
+			Text::chars($post['title'], ENT_QUOTES, 'UTF-8');
 		$this->feeds[$id]['url'] = $url;
 		$this->feeds[$id]['params'] = $params;
 		$this->feeds[$id]['link'] = $post['link'];
@@ -273,10 +273,12 @@ class Manager {
 			) {
 				if ($config['auto_tag']) {
 					if (empty($this->feeds[$id]['title'])) {
-						$tags = array(Text::purge($ans['title']));
+						$tags = array(Text::purge(
+							Text::unchars($ans['title'])));
 					}
 					else {
-						$tags = array(Text::purge($this->feeds[$id]['title']));
+						$tags = array(Text::purge(
+							Text::unchars($this->feeds[$id]['title'])));
 					}
 				}
 				else {
@@ -341,7 +343,8 @@ class Manager {
 		foreach ($ans as $id2 => $t) {
 			$tags = array();
 			if ($config['auto_tag'] && !empty($this->feeds[$id]['title'])) {
-				$tags = array(Text::purge($this->feeds[$id]['title']));
+				$tags = array(Text::purge(
+					Text::unchars($this->feeds[$id]['title'])));
 			}
 			$this->feeds[$id]['unread'][] = $id2;
 			$this->links[$id2] = array(

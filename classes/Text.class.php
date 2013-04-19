@@ -189,6 +189,9 @@ class Text {
 	public static function chars($string) {
 		return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
 	}
+	public static function unchars($string) {
+		return htmlspecialchars_decode($string, ENT_QUOTES);
+	}
 
 	public static function js_str($string) {
 		return str_replace("'", "\\'", $string);
