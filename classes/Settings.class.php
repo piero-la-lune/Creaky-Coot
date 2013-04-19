@@ -32,10 +32,6 @@ class Settings {
 		return $this->errors;
 	}
 
-	public function set($name, $value) {
-		$this->config[$name] = $value;
-	}
-
 	protected function c_global($post) {
 		if (isset($post['title'])) {
 			$this->config['title'] = Text::chars($post['title']);
@@ -99,6 +95,19 @@ class Settings {
 				$this->config['user']['password'] = Text::getHash($post['password']);
 			}
 		}
+	}
+
+	public function twitter_auth($post) {
+		if (!isset($post['oauth_token'])
+			|| !isset($post['oauth_token_secret'])) {
+			return false;
+		}
+		$this->config['twitter'] = array(
+			'user_token' => $post['oauth_token'],
+			'user_secret' => $post['oauth_token_secret']
+		);
+		$this->save();
+		return true;
 	}
 
 	public function url_rewriting() {

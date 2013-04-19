@@ -34,14 +34,16 @@ class Manager {
 		update_file(FILE_LINKS, Text::hash($this->links));
 	}
 
-	protected function createNewFeed($url = '') {
+	protected function createNewFeed($url = '', $type = 'rss', $params = array()) {
 		foreach ($this->feeds as $f) {
-			if ($f['url'] == $url) { return false; }
+			if ($f['url'] == $url && $f['params'] == $params) { return false; }
 		}
 		$id = Manager::newKey($this->feeds);
 		$this->feeds[$id] = array(
+			'type' => $type,
 			'title' => '',
 			'url' => $url,
+			'params' => $params,
 			'link' => '',
 			'unread' => array(),
 			'read' => array(),
@@ -124,12 +126,12 @@ class Manager {
 	}
 
 	public function addFeed($post) {
-		if (!isset($post['url'])
-			|| !filter_var($post['url'], FILTER_VALIDATE_URL)
-		) {
+		$check = $this->rss_or_twitter($post);
+		if ($check === false) {
 			return Trad::$settings['validate_url'];
 		}
-		if (($id = $this->createNewFeed($post['url'])) === false) {
+		list($type, $url, $params) = $check;
+		if (($id = $this->createNewFeed($url, $type, $params)) === false) {
 			return Trad::A_ERROR_EXISTING_FEED;
 		}
 		$this->update(array($id));
@@ -149,20 +151,20 @@ class Manager {
 	public function editFeed($post, $id) {
 		if (!isset($this->feeds[$id])
 			|| !isset($post['title'])
-			|| !isset($post['url'])
 			|| !isset($post['link'])
 		) {
 			return Trad::A_ERROR_FORM;
 		}
-		if (!filter_var($post['url'], FILTER_VALIDATE_URL)
-			|| !filter_var($post['link'], FILTER_VALIDATE_URL)
-		) {
+		$check = $this->rss_or_twitter($post);
+		if ($check === false) {
 			return Trad::$settings['validate_url'];
 		}
+		list(, $url, $params) = $check;
 		$oldfeed = $this->feeds[$id];
 		$this->feeds[$id]['title'] =
 			htmlspecialchars($post['title'], ENT_QUOTES, 'UTF-8');
-		$this->feeds[$id]['url'] = $post['url'];
+		$this->feeds[$id]['url'] = $url;
+		$this->feeds[$id]['params'] = $params;
 		$this->feeds[$id]['link'] = $post['link'];
 		$this->update(array($id));
 		if (!isset($this->done[$id]) || $this->done[$id] === false) {
@@ -173,6 +175,34 @@ class Manager {
 		$this->save();
 		$this->done = array();
 		return true;
+	}
+
+	protected function rss_or_twitter($post) {
+		if (isset($post['twitter_url']) && isset($post['params'])) {
+			$type = 'twitter';
+			$url = $post['twitter_url'];
+			$params = array();
+			foreach (explode(',', $post['params']) as $p) {
+				$p = explode('=', $p);
+				if (isset($p[0]) && isset($p[1])
+					&& !empty($p[0]) && !empty($p[1])
+				) {
+					$params[$p[0]] = $p[1];
+				}
+			}
+		}
+		elseif (isset($post['url'])) {
+			if (!filter_var($post['url'], FILTER_VALIDATE_URL)) {
+				return false;
+			}
+			$type = 'rss';
+			$url = $post['url'];
+			$params = array();
+		}
+		else {
+			return false;
+		}
+		return array($type, $url, $params);
 	}
 
 	public function refreshFeed($feed = NULL) {
@@ -277,12 +307,62 @@ class Manager {
 	public function update($ids) {
 		$curlManager = new Curl_Multi();
 		foreach ($ids as $id) {
-				# We assume all given ids correspond to existing feeds
-			$request = curl_init($this->feeds[$id]['url']);
-			curl_setopt_array($request, $this->curl_opts);
-			$curlManager->addHandle($request, array($this, 'callback_update'), $id);
+			# We assume all given ids correspond to existing feeds
+			$feed = $this->feeds[$id];
+			if ($feed['type'] == 'rss') {
+				$request = curl_init($this->feeds[$id]['url']);
+				curl_setopt_array($request, $this->curl_opts);
+				$curlManager->addHandle(
+					$request,
+					array($this, 'callback_update'),
+					$id
+				);
+			}
+			else {
+				$this->update_twitter($id);
+			}
 		}
 		$curlManager->finish();
+	}
+
+	public function update_twitter($id) {
+		global $config;
+		$twitter = new Twitter();
+		$ans = $twitter->get(
+			$this->feeds[$id]['url'],
+			$this->feeds[$id]['params'],
+			$this->feeds[$id]['deleted']
+		);
+		if ($ans === false) {
+			$this->done[$id] = false;
+			return false;
+		}
+		$added = array();
+		foreach ($ans as $id2 => $t) {
+			$tags = array();
+			if ($config['auto_tag'] && !empty($this->feeds[$id]['title'])) {
+				$tags = array(Text::purge($this->feeds[$id]['title']));
+			}
+			$this->feeds[$id]['unread'][] = $id2;
+			$this->links[$id2] = array(
+				'type' => 'unread',
+				'title' => Text::chars('@'.$t['user']),
+				'content' => $t['tweet'],
+				'date' => $t['date'],
+				'link' => $t['url'],
+				'comment' => NULL,
+				'tags' => $tags,
+				'tweet' => array('user_img' => $t['user_img'])
+			);
+			$added[] = $id2;
+		}
+		$this->done[$id] = array(
+			'title' => Text::chars($this->feeds[$id]['url']),
+			'url' => $this->feeds[$id]['url'],
+			'link' => 'http://twitter.com',
+			'added' => $added
+		);
+		return true;
 	}
 
 	public function callback_add($header, $content, $id) {
@@ -440,15 +520,15 @@ class Manager {
 		foreach ($this->feeds as $k => $f) {
 			if (($key = array_search($id, $f['unread'])) !== false) {
 				unset($this->feeds[$k]['unread'][$key]);
-				$this->feeds[$k]['deleted'][] = $id;
+				//$this->feeds[$k]['deleted'][] = $id;
 			}
 			if (($key = array_search($id, $f['read'])) !== false) {
 				unset($this->feeds[$k]['read'][$key]);
-				$this->feeds[$k]['deleted'][] = $id;
+				//$this->feeds[$k]['deleted'][] = $id;
 			}
 			if (($key = array_search($id, $f['archived'])) !== false) {
 				unset($this->feeds[$k]['archived'][$key]);
-				$this->feeds[$k]['deleted'][] = $id;
+				//$this->feeds[$k]['deleted'][] = $id;
 			}
 		}
 		unset($this->links[$id]);
@@ -510,6 +590,7 @@ class Manager {
 	public function export() {
 		$urls = array();
 		foreach ($this->feeds as $f) {
+			if ($f['type'] != 'rss') { continue; }
 			$urls[] = array(
 				'title' => $f['title'],
 				'url' => $f['url'],
@@ -545,13 +626,26 @@ class Manager {
 		if (!empty($tags)) { $tags = '<p>'.$tags.'</p>'; }
 		if ($l['type'] == 'unread') { $read = ''; $archived = ''; }
 		if ($l['type'] == 'read') { $unread = ''; $archived = ''; }
+		if (isset($l['tweet'])) {
+			$text = '<div class="div-table">'
+				.'<div class="div-cell">'
+					.'<img src="'.$l['tweet']['user_img'].'" class="img-tweet" />'
+				.'</div>'
+				.'<div class="div-cell">'
+					.'<p>'.$l['content'].'</p>'
+					.$tags
+				.'</div>'
+			.'</div>';
+		}
+		else {
+			$text = Text::intro($l['content'], 400, false).$tags;
+		}
 		return ''
 .'<div class="div-link" id="link-'.$id.'">'
 	.'<h2'.(($l['type'] == 'unread') ? ' class="unread"' : '').'>'
 		.'<a href="'.Url::parse('links/'.$id).'">'.$l['title'].'</a>'
 	.'</h2>'
-	.Text::intro($l['content'], 400, false)
-	.$tags
+	.$text
 	.'<div class="div-actions">'
 		.'<a href="'.$l['link'].'">'
 			.mb_strtolower(Trad::V_LINK)

@@ -56,6 +56,13 @@ img {
   max-width: 100%;
   margin: auto;
 }
+.img-tweet {
+  float: left;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  margin: 2px 6px 2px 0;
+}
 label {
   display: block;
   margin: 12px 0 0 8px;
@@ -302,6 +309,13 @@ article p {
 .div-hr {
   border-top: 3px solid #444;
   margin: 32px 0;
+}
+.div-table {
+  display: table;
+}
+.div-cell {
+  display: table-cell;
+  vertical-align: middle;
 }
 .alert {
   padding: 12px;

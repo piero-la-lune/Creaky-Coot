@@ -4,7 +4,7 @@
 
 if (isset($_GET['id']) && $feed = $manager->getFeed($_GET['id'])) {
 
-	if (isset($_POST['action']) && $_GET['action'] == 'edit') {
+	if (isset($_POST['action']) && $_POST['action'] == 'edit') {
 		$ans = $manager->editFeed($_POST, $_GET['id']);
 		if ($ans === true) {
 			$_SESSION['alert'] = array(
@@ -29,8 +29,34 @@ if (isset($_GET['id']) && $feed = $manager->getFeed($_GET['id'])) {
 	.'" method="post">
 	<label for="title">'.Trad::F_TITLE.'</label>
 	<input type="text" name="title" id="title" value="'.$feed['title'].'" />
+
+	';
+
+	if ($feed['type'] == 'rss') {
+		$content .= '
+
 	<label for="url">'.Trad::F_FEED_URL.'</label>
 	<input type="text" name="url" id="url" value="'.$feed['url'].'" />
+
+		';
+	}
+	else {
+		$params = array();
+		foreach ($feed['params'] as $k => $v) {
+			$params[] = Text::chars($k).'='.Text::chars($v);
+		}
+		$content .= '
+
+	<label for="twitter_url">'.Trad::F_TWITTER_URL.'</label>
+	<input type="text" name="twitter_url" id="twitter_url" value="'.Text::chars($feed['url']).'" />
+	<label for="params">'.Trad::F_PARAMS.'</label>
+	<input type="text" name="params" id="params" value="'.implode(',', $params).'" />
+
+		';
+	}
+
+	$content .= '
+
 	<label for="link">'.Trad::F_LINK.'</label>
 	<input type="text" name="link" id="link" value="'.$feed['link'].'" />
 
@@ -57,8 +83,7 @@ else {
 			$this->addAlert(Trad::A_SUCCESS_ADD_FEED, 'alert-success');
 		}
 	}
-	elseif (isset($_POST['action'])
-		&& $_POST['action'] == 'import'
+	elseif (isset($_POST['action']) && $_POST['action'] == 'import'
 		&& isset($_FILES['file'])
 	) {
 		$ans = $manager->import($_FILES['file']);
@@ -72,6 +97,16 @@ else {
 	elseif (isset($_POST['action']) && $_POST['action'] == 'export') {
 		$manager->export();
 		exit;
+	}
+	elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'twitter_config') {
+		$twitter = new Twitter();
+		$ans = $twitter->configure();
+		if ($ans !== true) {
+			$this->addAlert($ans);
+		}
+		else {
+			$this->addAlert(Trad::A_SUCCESS_TWITTER, 'alert-success');
+ 		}
 	}
 
 	$title = Trad::T_FEEDS;
@@ -139,6 +174,43 @@ else {
 </form>
 
 	';
+
+	if ($config['twitter'] == NULL) {
+		$content .= '
+
+<form action="'.Url::parse('feeds').'" method="post">
+
+	<h1>'.Trad::T_TWITTER.'</h1>
+
+	<p class="p-submit"><input type="submit" value="'.Trad::V_CONFIGURE.'" /></p>
+	<input type="hidden" name="action" value="twitter_config" />
+
+</form>
+
+		';
+	}
+
+	else {
+		$content .= '
+
+<form action="'.Url::parse('feeds').'" method="post">
+
+	<h1>'.Trad::T_TWITTER.'</h1>
+
+	<label for="twitter_url">'.Trad::F_TWITTER_URL.'</label>
+	<input type="text" name="twitter_url" id="twitter_url" value="statuses/home_timeline" />
+	<label for="params">'.Trad::F_PARAMS.'</label>
+	<input type="text" name="params" id="params" value="" />
+	<p class="p-tip">'.Trad::F_TIP_PARAMS.'</p>
+	<p class="p-submit"><input type="submit" value="'.Trad::V_ADD.'" /></p>
+	<input type="hidden" name="action" value="add_feed" />
+
+	<p>&nbsp;</p>'.Trad::F_TIP_TWITTER.'
+
+</form>
+
+		';
+	}
 
 }
 

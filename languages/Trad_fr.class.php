@@ -59,6 +59,7 @@ class Trad {
 	const V_SAVE = 'Enregistrer les modifications';
 	const V_CANCEL = 'Annuler';
 	const V_SEARCH = 'Rechercher';
+	const V_CONFIGURE = 'Configurer';
 
 		# Forms
 
@@ -78,10 +79,20 @@ class Trad {
 	const F_TAGS = 'Tags :';
 	const F_KEY_WORDS = 'Mots clés :';
 	const F_AUTO_TAG = 'Tags automatiques :';
+	const F_TWITTER_URL = 'URL des tweets à récupérer :';
+	const F_PARAMS = 'Paramètres :';
 
 	const F_TIP_PASSWORD = 'Laissez vide pour ne pas le changer.';
 	const F_TIP_URL_REWRITING = 'Laissez vide pour désactiver l\'URL rewriting. Sinon, indiquez le chemin du dossier de Creaky Coot (en commençant et terminant par un "/") par rapport au nom de domaine.';
 	const F_TIP_AUTO_TAG = 'Les articles provenant d\'un flux recevront automatiquement le nom de ce flux comme tag.';
+	const F_TIP_PARAMS = 'Par exemple : « q=mot recherché,count=4 ».';
+	const F_TIP_TWITTER = '<p>Exemples d\'utilisation :</p>
+		<ul>
+			<li>« statuses/home_timeline » et rien</li>
+			<li>« statuses/user_timeline » et « screen_name=piero_la_lune »</li>
+			<li>« search/tweets » et « q=Creaky Coot »</li>
+		</ul>
+	';
 
 		# Titres
 
@@ -100,6 +111,7 @@ class Trad {
 	const T_TAGS = 'Tags';
 	const T_SEARCH = 'Recherche';
 	const T_FILTER = 'Filtres';
+	const T_TWITTER = 'Twitter';
 
 		# Alertes
 
@@ -114,6 +126,7 @@ class Trad {
 	const A_ERROR_BAD_LINK = 'Impossible de lire l\'article. Êtes-vous sûr de l\'URL ?';
 	const A_ERROR_EXISTING_LINK = 'Cet article est déjà sauvegardé.';
 	const A_ERROR_AJAX = 'Une erreur est survenue. Merci de réessayer.';
+	const A_ERROR_TWITTER = 'Une erreur est survenue lors du dialogue avec Twitter. Merci de réessayer.';
 
 	const A_SUCCESS_INSTALL = 'Creaky Coot est maintenant correctement installé. Connectez-vous pour commencer à l\'utiliser.';
 	const A_SUCCESS_ADD_FEED = 'Le flux a bien été ajouté.';
@@ -121,6 +134,7 @@ class Trad {
 	const A_SUCCESS_SETTINGS = 'Les préférences ont bien été enregistrées.';
 	const A_SUCCESS_IMPORT = 'Les flux ont bien été ajoutés.';
 	const A_SUCCESS_ADD = 'L\'article a bien été sauvegardé.';
+	const A_SUCCESS_TWITTER = 'L\'accès à Twitter est maintenant configuré.';
 
 	const A_CONFIRM_DELETE_LINK = 'Supprimer définitivement cet article ?';
 	const A_CONFIRM_DELETE_FEED = 'Tous les articles non archivés de ce flux seront effacés. Voulez-vous vraiment continuer ?';

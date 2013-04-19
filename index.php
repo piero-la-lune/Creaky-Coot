@@ -24,7 +24,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 define('NAME', 'Creaky Coot');
-define('VERSION', '1.0.1');
+define('VERSION', '1.0.4');
 define('AUTHOR', 'Pierre Monchalin');
 define('URL', 'http://creaky-coot.derivoile.fr');
 
@@ -36,6 +36,10 @@ define('DEFAULT_LANGUAGE', 'fr'); # Used only during installation
 define('SALT', 'How are you doing, pumpkin?');
 define('TIMEOUT', 3600); # 1 hour
 define('TIMEOUT_COOKIE', 3600*24*365); # 1 year
+
+### Twitter integration
+define('TWITTER_CONSUMER_KEY', 'AdxcbjMNjf5kWRo7PHVrg');
+define('TWITTER_CONSUMER_SECRET', 'lwEhMdbc3eBnHbWsNdF1ecUkvM77ozflUhrfLJyuAU');
 
 ### Directories and files
 define('DIR_CURRENT', dirname(__FILE__).'/');

@@ -27,6 +27,18 @@ if (strict_lower($config['version'], '1.0')) {
 
 }
 
+if (strict_lower($config['version'], '1.0.4')) {
+
+	$config['twitter'] = NULL;
+	$feeds = Text::unhash(get_file(FILE_FEEDS));
+	foreach ($feeds as $k => $l) {
+		$feeds[$k]['type'] = 'rss';
+		$feeds[$k]['params'] = array();
+	}
+	update_file(FILE_FEEDS, Text::hash($feeds));
+
+}
+
 $settings = new Settings();
 if ($config['url_rewriting']) { $settings->url_rewriting(); }
 $settings->save();
