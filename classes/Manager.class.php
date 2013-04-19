@@ -85,9 +85,9 @@ class Manager {
 		if (isset($filter['q'])) {
 			foreach ($links as $id => $l) {
 				foreach ($filter['q'] as $q) {
-					if (strpos($l['title'], $q) === false
-						&& strpos($l['content'], $q) === false
-						&& strpos($l['comment'], $q) === false
+					if (stripos($l['title'], $q) === false
+						&& stripos($l['content'], $q) === false
+						&& stripos($l['comment'], $q) === false
 					) {
 						unset($links[$id]);
 					}
