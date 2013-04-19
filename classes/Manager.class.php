@@ -520,15 +520,15 @@ class Manager {
 		foreach ($this->feeds as $k => $f) {
 			if (($key = array_search($id, $f['unread'])) !== false) {
 				unset($this->feeds[$k]['unread'][$key]);
-				//$this->feeds[$k]['deleted'][] = $id;
+				$this->feeds[$k]['deleted'][] = $id;
 			}
 			if (($key = array_search($id, $f['read'])) !== false) {
 				unset($this->feeds[$k]['read'][$key]);
-				//$this->feeds[$k]['deleted'][] = $id;
+				$this->feeds[$k]['deleted'][] = $id;
 			}
 			if (($key = array_search($id, $f['archived'])) !== false) {
 				unset($this->feeds[$k]['archived'][$key]);
-				//$this->feeds[$k]['deleted'][] = $id;
+				$this->feeds[$k]['deleted'][] = $id;
 			}
 		}
 		unset($this->links[$id]);
@@ -628,7 +628,7 @@ class Manager {
 		if ($l['type'] == 'read') { $unread = ''; $archived = ''; }
 		if (isset($l['tweet'])) {
 			$text = '<div class="div-table">'
-				.'<div class="div-cell">'
+				.'<div class="div-cell" style="width:54px">'
 					.'<img src="'.$l['tweet']['user_img'].'" class="img-tweet" />'
 				.'</div>'
 				.'<div class="div-cell">'

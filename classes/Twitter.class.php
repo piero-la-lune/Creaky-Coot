@@ -128,8 +128,7 @@ class Twitter {
 		foreach ($t->entities->urls as $u) {
 			$text = str_replace(
 				$u->url,
-				'<a href="'.$u->expanded_url.'">'
-					.$u->display_url.'</a>',
+				'<a href="'.$u->expanded_url.'">'.$u->display_url.'</a>',
 				$text
 			);
 		}
@@ -148,6 +147,15 @@ class Twitter {
 				'<a href="'.$url.'">#'.$h->text.'</a>',
 				$text
 			);
+		}
+		if (isset($t->entities->media)) {
+			foreach ($t->entities->media as $m) {
+				$text = str_replace(
+					$m->url,
+					'<a href="'.$m->expanded_url.'">'.$m->display_url.'</a>',
+					$text
+				);
+			}
 		}
 		return str_replace("\n", '<br />', $text);
 	}
