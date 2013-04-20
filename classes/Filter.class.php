@@ -232,7 +232,12 @@ class Filter {
 	public function getTitle() { return $this->title; }
 
 	public function startTag($parser, $name, $attributes) {
-		array_push($this->pre_tag, ($name == 'pre') ? true : false);
+		if (end($this->pre_tag) || $name == 'pre') {
+			array_push($this->pre_tag, true);
+		}
+		else {
+			array_push($this->pre_tag, false);
+		}
 
 		# Useless tags
 		if (end($this->empty_tag) || $this->isForbiddenTag($name)) {
