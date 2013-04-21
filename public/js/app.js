@@ -1,9 +1,9 @@
 function isset(elm) {
-	return (typeof(elm) != 'undefined' && elm != null);
+	return (typeof(elm) != 'undefined' && elm !== null);
 }
 
 function Ajax(elm, action) {
-	this.post = new Array();
+	this.post = [];
 	this.elm = undefined;
 	this.loader = undefined;
 	if (elm) {
@@ -17,7 +17,7 @@ function Ajax(elm, action) {
 	this.post.push('page='+page);
 	this.addParam = function(name, value) {
 		this.post.push(name+'='+encodeURIComponent(value));
-	}
+	};
 	this.send = function(callback_success, callback_error) {
 		var ajax = this;
 		var xhr = new XMLHttpRequest();
@@ -45,12 +45,12 @@ function Ajax(elm, action) {
 				ajax.cancel();
 			}
 		};
-	}
+	};
 	this.cancel = function() {
 		if (this.loader) {
 			this.loader.parentNode.replaceChild(this.elm, this.loader);
 		}
-	}
+	};
 }
 
 function onclick_logout() {
@@ -79,7 +79,7 @@ function onclick_load(elm, pms) {
 }
 
 function onclick_refresh(elm, pms) {
-	var ajax = new Ajax(elm, 'refresh')
+	var ajax = new Ajax(elm, 'refresh');
 	if (typeof tag != 'undefined') { ajax.cancel(); return false; }
 	if (typeof q != 'undefined') { ajax.cancel(); return false; }
 	if (typeof feed != 'undefined') { ajax.addParam('feed', feed); }
@@ -87,14 +87,14 @@ function onclick_refresh(elm, pms) {
 		var div = document.createElement("div");
 		div.innerHTML = ans['html'];
 		var first_link = document.querySelector(".div-link");
-		if (!first_link) { var first_link = document.querySelector(".p-more"); }
+		if (!first_link) { first_link = document.querySelector(".p-more"); }
 		first_link.parentNode.insertBefore(div, first_link);
 	});
 }
 
 function onclick_allRead(elm, pms) {
 	var ajax = new Ajax(elm, 'read');
-	var ids = new Array();
+	var ids = [];
 	var links = document.querySelectorAll(".div-link");
 	for (var i = 0; i < links.length; i++) {
 		ids.push(links[i].id.split('-')[1]);
@@ -118,7 +118,7 @@ function onclick_allRead(elm, pms) {
 function onclick_allClear(elm, pms) {
 	if (!confirm(m_confirm_clear)) { return false; }
 	var ajax = new Ajax(elm, 'clear');
-	var ids = new Array();
+	var ids = [];
 	var links = document.querySelectorAll(".div-link");
 	for (var i = 0; i < links.length; i++) {
 		ids.push(links[i].id.split('-')[1]);
