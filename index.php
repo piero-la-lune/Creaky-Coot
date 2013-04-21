@@ -330,7 +330,7 @@ if (isset($_GET['feed'])) { echo "var feed = ".intval($_GET['feed']).";"; }
 if (isset($_GET['tag'])) { echo "var tag = '".Text::js_str($_GET['tag'])."';"; }
 if (isset($_GET['q'])) { echo "var q = '".Text::js_str($_GET['q'])."';"; }
 	?></script>
-		<script src="<?php echo Url::parse('public/js/app.js'); ?>"></script>
+		<script src="<?php echo Url::parse('public/js/app.min.js'); ?>"></script>
 
 	</body>
 
