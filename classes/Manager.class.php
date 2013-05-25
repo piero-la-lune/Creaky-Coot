@@ -412,7 +412,7 @@ class Manager {
 			}
 			$id = Text::randomKey(32);
 			$title = Text::chars($post['title']);
-			$content = '';
+			$content = '<p>&nbsp;</p>';
 			$link = Url::parse('links/'.$id);
 		}
 		else {
