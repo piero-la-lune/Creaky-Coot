@@ -209,7 +209,12 @@ class Filter {
 					htmlentities($title->nodeValue, ENT_QUOTES, 'UTF-8', false);
 			}
 			else {
-				$this->title = $this->url_base.$this->url_folders;
+				$this->title = htmlentities(
+					$this->url_base.$this->url_folders,
+					ENT_QUOTES,
+					'UTF-8',
+					false
+				);
 			}
 		}
 

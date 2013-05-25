@@ -112,6 +112,7 @@ class Trad {
 	const T_SEARCH = 'Recherche';
 	const T_FILTER = 'Filtres';
 	const T_TWITTER = 'Twitter';
+	const T_NEW = 'Nouveau';
 
 		# Alertes
 

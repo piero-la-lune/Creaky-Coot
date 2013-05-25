@@ -254,7 +254,7 @@ else {
 $pagename = $page->getPageName();
 
 $menu = '';
-if ($pagename != 'login' && $pagename != 'add') {
+if ($page->printHeader()) {
 	$menu .= ''
 		.'<a href="'.Url::parse('home').'"'
 			.($pagename == 'home' ? 'class="selected"' : '').'>'
@@ -267,6 +267,10 @@ if ($pagename != 'login' && $pagename != 'add') {
 		.'<a href="'.Url::parse('filter').'"'
 			.($pagename == 'filter' ? 'class="selected"' : '').'>'
 			.mb_strtolower(Trad::T_FILTER)
+		.'</a>'
+		.'<a href="'.Url::parse('add').'"'
+			.($pagename == 'add' ? 'class="selected"' : '').'>'
+			.mb_strtolower(Trad::T_NEW)
 		.'</a>'
 		.'<a href="'.Url::parse('feeds').'"'
 			.($pagename == 'feeds' ? 'class="selected"' : '').'>'

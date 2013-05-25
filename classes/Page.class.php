@@ -34,6 +34,7 @@ class Page {
 		else {
 			$this->title = $title;
 			$this->content = $content;
+			$this->print_header = (isset($print_header)) ? $print_header : true;
 		}
 	}
 
@@ -45,6 +46,10 @@ class Page {
 	}
 	public function getContent() {
 		return $this->content;
+	}
+
+	public function printHeader() {
+		return $this->print_header;
 	}
 
 	public function addAlert($txt, $type = 'alert-error') {

@@ -6,6 +6,7 @@ class Manager {
 	protected $feeds = array();
 	protected $links = array();
 	protected $done = array();
+	protected $last_insert;
 
 	protected $curl_opts = array(
 		CURLOPT_AUTOREFERER => true,
@@ -123,6 +124,10 @@ class Manager {
 			}
 		}
 		return $tags;
+	}
+
+	public function lastInsert() {
+		return $this->last_insert;
 	}
 
 	public function addFeed($post) {
@@ -400,24 +405,39 @@ class Manager {
 		) {
 			return Trad::A_ERROR_FORM;
 		}
-		if (!filter_var($post['url'], FILTER_VALIDATE_URL)) {
-			return Trad::$settings['validate_url'];
+
+		if (empty($post['url'])) {
+			if (empty($post['title'])) {
+				return Trad::A_ERROR_FORM;
+			}
+			$id = Text::randomKey(32);
+			$title = Text::chars($post['title']);
+			$content = '';
+			$link = Url::parse('links/'.$id);
+		}
+		else {
+			if (!filter_var($post['url'], FILTER_VALIDATE_URL)) {
+				return Trad::$settings['validate_url'];
+			}
+			$id = md5($post['url']);
+
+			$curlManager = new Curl_Multi();
+			$request = curl_init($post['url']);
+			curl_setopt_array($request, $this->curl_opts);
+			$curlManager->addHandle($request, array($this, 'callback_add'), $id);
+			$curlManager->finish();
+
+			if (!isset($this->done[$id]) || !$this->done[$id]) {
+				unset($this->done[$id]);
+				return Trad::A_ERROR_BAD_LINK;
+			}
+			$title = $this->done[$id]['title'];
+			$content = $this->done[$id]['content'];
+			$link = $this->done[$id]['link'];
 		}
 
-		$id = md5($post['url']);
 		if (isset($this->links[$id])) {
 			return Trad::A_ERROR_EXISTING_LINK;
-		}
-
-		$curlManager = new Curl_Multi();
-		$request = curl_init($post['url']);
-		curl_setopt_array($request, $this->curl_opts);
-		$curlManager->addHandle($request, array($this, 'callback_add'), $id);
-		$curlManager->finish();
-
-		if (!isset($this->done[$id]) || !$this->done[$id]) {
-			unset($this->done[$id]);
-			return Trad::A_ERROR_BAD_LINK;
 		}
 
 		$tags = array();
@@ -429,13 +449,14 @@ class Manager {
 		$filter = new Filter();
 		$this->links[$id] = array(
 			'type' => 'archived',
-			'title' => $this->done[$id]['title'],
-			'content' => $this->done[$id]['content'],
+			'title' => $title,
+			'content' => $content,
 			'date' => time(),
-			'link' => $this->done[$id]['link'],
+			'link' => $link,
 			'comment' => $filter->execute($post['comment'], $config['url']),
 			'tags' => $tags
 		);
+		$this->last_insert = $id;
 		$this->save();
 		return true;
 	}
@@ -631,7 +652,7 @@ class Manager {
 		if ($l['type'] == 'read') { $unread = ''; $archived = ''; }
 		if (isset($l['tweet'])) {
 			$text = '<div class="div-table">'
-				.'<div class="div-cell" style="width:54px">'
+				.'<div class="div-cell" style="width:54px;min-width:54px">'
 					.'<img src="'.$l['tweet']['user_img'].'" class="img-tweet" />'
 				.'</div>'
 				.'<div class="div-cell">'
