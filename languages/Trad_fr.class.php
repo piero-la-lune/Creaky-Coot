@@ -27,6 +27,25 @@ class Trad {
 	const W_SUSPENSION = '…';
 	const W_EXTRACT = '« %text% »';
 
+	const W_F_REMOVE = 'Supprimer le formatage';
+	const W_F_BOLD = 'Gras';
+	const W_F_ITALIC = 'Italique';
+	const W_F_UNDERLINE = 'Souligné';
+	const W_F_P = 'Paragraphe';
+	const W_F_H2 = 'Titre 1er niveau';
+	const W_F_H3 = 'Titre 2ème niveau';
+	const W_F_H4 = 'Titre 3ème niveau';
+	const W_F_PRE = 'Code';
+	const W_F_QUOTE = 'Citation';
+	const W_F_LEFT = 'À gauche';
+	const W_F_CENTER = 'Centré';
+	const W_F_RIGHT = 'À droite';
+	const W_F_JUSTIFY = 'Justifié';
+	const W_F_LISTU = 'Liste non ordonnée';
+	const W_F_LISTO = 'Liste ordonnée';
+	const W_F_LINK = 'Lien';
+	const W_F_IMAGE = 'Image';
+
 		# Phrases
 
 	const S_AGO = 'il y a %duration% %pediod%';
@@ -143,6 +162,8 @@ class Trad {
 	const A_CONFIRM_CLEAR_FEED = 'Tous les articles non archivés de ce flux seront effacés. Voulez-vous vraiment continuer ?';
 
 	const A_ADD_POPUP = 'Glissez-déposez ce lien sur votre barre de favoris, ou choisissez « Ajouter aux favoris... » après un clique-droit sur ce lien.';
+
+	const A_ENTER_URL = 'Entrez l\'URL :';
 
 	public static $settings = array(
 		'validate_url' => 'L\'url n\'est pas valide.'

@@ -8,7 +8,8 @@ pre{overflow:auto;}
 img{display:block;max-width:100%;margin:auto;}
 .img-tweet{float:left;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;margin:2px 6px 2px 0;max-width:48px;max-height:48px;}
 label{display:block;margin:12px 0 0 8px;}
-input,select,textarea{display:block;font-size:16px;font-weight:normal;font-family:"Source Sans Pro",sans-serif;margin:0;padding:4px;width:100%;max-width:400px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;border:3px solid #DDD;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;}input:focus,select:focus,textarea:focus{border-color:#444;}
+input,select,textarea,button{font-size:16px;font-weight:normal;font-family:"Source Sans Pro",sans-serif;border:3px solid #DDD;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;}input:focus,select:focus,textarea:focus,button:focus{border-color:#444;}
+input,select,textarea{display:block;margin:0;padding:4px;width:100%;max-width:400px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
 input{-webkit-appearance:none;}
 input[type="submit"]{display:inline;width:auto;background:#fafafa;cursor:pointer;}input[type="submit"]:hover{border-color:#444;}
 .p-submit{text-align:center;margin-top:24px;max-width:400px;}
@@ -17,7 +18,7 @@ header{max-width:800px;margin:8px auto;text-align:center;}header a{color:#444;bo
 header a.selected{font-weight:bold;}
 .inner{max-width:800px;margin:auto;padding:12px;}
 article{text-align:justify;word-wrap:break-word;}article p{margin:1em 0;}
-.div-infos{border:3px solid #DDD;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;background:#fafafa;padding:6px;margin-bottom:32px;}.div-infos .p{margin:0 0 0.2em 0;}
+.div-infos{text-align:left;border:3px solid #DDD;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;background:#fafafa;padding:6px;margin-bottom:32px;}.div-infos .p{margin:0 0 0.2em 0;}
 .div-comment p:first-child{margin-top:0;}
 .div-comment p:last-child{margin-bottom:0;}
 .div-hr-light{border-bottom:3px solid #DDD;margin:6px -6px;}
@@ -32,6 +33,15 @@ article{text-align:justify;word-wrap:break-word;}article p{margin:1em 0;}
 .div-actions .loading,.div-actions-top .loading{margin-right:12px;}
 .div-actions a,.div-actions-top a{display:inline-block;margin-right:12px;color:#cc4d33;}.div-actions a:hover,.div-actions-top a:hover{color:#d6705c;}
 .p-more{margin:32px 0;text-align:center;}.p-more span{font-style:italic;}
+.div-edit{text-align:center;}.div-edit button{display:inline-block;cursor:pointer;background:#fafafa;padding:2px 4px;margin:4px;text-align:center;min-width:32px;vertical-align:middle;}.div-edit button:hover{border-color:#444;}
+.div-edit button:nth-child(2),.div-edit button:nth-child(9),.div-edit button:nth-child(10){font-weight:900;}
+.div-edit button:nth-child(3){font-style:italic;}
+.div-edit button:nth-child(4){text-decoration:underline;}
+.div-edit button:nth-child(11),.div-edit button:nth-child(12),.div-edit button:nth-child(13),.div-edit button:nth-child(14){line-height:0.2em;padding:4px;}
+.div-edit button:nth-child(11){text-align:left;}
+.div-edit button:nth-child(13){text-align:right;}
+.div-edit button:nth-child(15){line-height:0.4em;padding:2px 4px 4px 2px;}
+.div-edit button:nth-child(16){line-height:0.35em;}.div-edit button:nth-child(16) i{font-size:0.5em;vertical-align:middle;}
 @keyframes loader{0%{background:#444;} 50%{background:#fff;} 100%{background:#444;}}.loading{display:inline-block;}.loading i{display:inline-block;width:10px;height:10px;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;margin:2px;-moz-animation:loader 2s infinite linear;-webkit-animation:loader 2s infinite linear;-o-animation:loader 2s infinite linear;animation:loader 2s infinite linear;vertical-align:middle;}
 .loading .n1{-moz-animation-delay:0s;-webkit-animation-delay:0s;-o-animation-delay:0s;animation-delay:0s;background:#ddd;}
 .loading .n2{-moz-animation-delay:0.3s;-webkit-animation-delay:0.3s;-o-animation-delay:0.3s;animation-delay:0.3s;background:#999;}

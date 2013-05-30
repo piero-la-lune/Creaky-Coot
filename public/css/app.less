@@ -109,19 +109,21 @@ label {
 	display: block;
 	margin: 12px 0 0 8px;
 }
-input, select, textarea {
-	display: block;
+input, select, textarea, button {
 	font-size: @font-size;
 	font-weight: normal;
 	font-family: @font-family;
+	border: 3px solid #DDD;
+	&:focus { border-color: #444; }
+	.border-radius(2px);
+}
+input, select, textarea {
+	display: block;
 	margin: 0;
 	padding: 4px;
 	width: 100%;
 	max-width: 400px;
 	.box-sizing(border-box);
-	border: 3px solid #DDD;
-	&:focus { border-color: #444; }
-	.border-radius(2px);
 }
 input {
 	-webkit-appearance: none;
@@ -181,6 +183,7 @@ article {
 	}
 }
 .div-infos {
+	text-align: left;
 	border: 3px solid #DDD;
 	.border-radius(2px);
 	background: #fafafa;
@@ -278,6 +281,38 @@ article {
 	margin: 32px 0;
 	text-align: center;
 	span { font-style: italic; }
+}
+
+.div-edit {
+	text-align: center;
+	button {
+		display: inline-block;
+		cursor: pointer;
+		&:hover { border-color: #444; }
+		background: #fafafa;
+		padding: 2px 4px;
+		margin: 4px;
+		text-align: center;
+		min-width: 32px;
+		vertical-align: middle;
+		&:nth-child(2), &:nth-child(9), &:nth-child(10) { font-weight: 900; }
+		&:nth-child(3) { font-style: italic; }
+		&:nth-child(4) { text-decoration: underline; }
+		&:nth-child(11), &:nth-child(12), &:nth-child(13), &:nth-child(14) {
+			line-height: 0.2em;
+			padding: 4px;
+		}
+		&:nth-child(11) { text-align: left; }
+		&:nth-child(13) { text-align: right; }
+		&:nth-child(15) {
+			line-height: 0.4em;
+			padding: 2px 4px 4px 2px;
+		}
+		&:nth-child(16) {
+			line-height: 0.35em;
+			i { font-size: 0.5em; vertical-align: middle; }
+		}
+	}
 }
 
 @keyframes loader {

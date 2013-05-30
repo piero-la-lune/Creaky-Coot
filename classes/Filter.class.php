@@ -25,17 +25,17 @@ class Filter {
 		'td' => array(),
 		'tbody' => array(),
 		'thead' => array(),
-		'h2' => array(),
-		'h3' => array(),
-		'h4' => array(),
-		'h5' => array(),
-		'h6' => array(),
+		'h2' => array('align'),
+		'h3' => array('align'),
+		'h4' => array('align'),
+		'h5' => array('align'),
+		'h6' => array('align'),
 		'strong' => array(),
 		'em' => array(),
 		'code' => array(),
 		'pre' => array(),
 		'blockquote' => array(),
-		'p' => array(),
+		'p' => array('align'),
 		'ul' => array(),
 		'li' => array(),
 		'ol' => array(),
@@ -149,6 +149,10 @@ class Filter {
 	protected $required_attrs = array(
 		'a' => array('href'),
 		'img' => array('src')
+	);
+
+	protected $allowed_css = array(
+		'text-align' => array('left', 'right', 'center', 'justify')
 	);
 
 	public function __construct() {
@@ -278,7 +282,18 @@ class Filter {
 			if (empty($v) || !$this->isAllowedAttribute($name, $a)) {
 				continue;
 			}
-			if ($this->isResource($a)) {
+			if ($a == 'style') {
+				$style = array();
+				foreach (explode($v, ';') as $k) {
+					$p = getProperCssProperty($k);
+					if ($p !== false) {
+						$style[] = $p;
+					}
+				}
+				if (empty($style)) { continue; }
+				$attrs['style'] = 'style="'.implode(';', $style).'"';
+			}
+			elseif ($this->isResource($a)) {
 				if (strpos($v, '://') === false) {
 					if (strpos($v, '/') === 0) {
 						$attrs[$a] = $a.'="'.$this->url_base.$v.'"';
@@ -360,7 +375,8 @@ class Filter {
 	}
 
 	public function isAllowedAttribute($tag, $attribute) {
-		return in_array($attribute, $this->allowed_tags[$tag]);
+		return $attribute == 'style'
+			|| in_array($attribute, $this->allowed_tags[$tag]);
 	}
 
 	public function isResource($attribute) {
@@ -403,6 +419,22 @@ class Filter {
 		if (isset($attrs['class'])) { $search .= $attrs['class']; }
 		if (isset($attrs['id'])) { $search .= $attrs['id']; }
 		return preg_match($this->words_regex, $search);
+	}
+
+	public function getProperCssProperty($string) {
+		if (empty($string)) { return false; }
+		$arr = explode(':', $string);
+		if (count($arr != 2)) { return false; }
+		$property = trim($arr[0]);
+		$value = trim($arr[1]);
+		if (!isset($this->allowed_css[$property])) { return false; }
+		$check = $this->allowed_css[$property];
+		if (is_array($check)) {
+			return in_array($value, $check);
+		}
+		else {
+			return preg_match($check, $value);
+		}
 	}
 }
 

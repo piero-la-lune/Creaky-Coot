@@ -329,6 +329,7 @@ echo   "var m_confirm_delete = '".Text::js_str(Trad::A_CONFIRM_DELETE_LINK)."';"
 echo  "var m_confirm_clear_f = '".Text::js_str(Trad::A_CONFIRM_CLEAR_FEED)."';";
 echo "var m_confirm_delete_f = '".Text::js_str(Trad::A_CONFIRM_DELETE_FEED)."';";
 echo        "var m_add_popup = '".Text::js_str(Trad::A_ADD_POPUP)."';";
+echo        "var m_enter_url = '".Text::js_str(Trad::A_ENTER_URL)."';";
 echo             "var page = '".Text::js_str($_GET['page'])."';";
 if (isset($_GET['feed'])) { echo "var feed = ".intval($_GET['feed']).";"; }
 if (isset($_GET['tag'])) { echo "var tag = '".Text::js_str($_GET['tag'])."';"; }

@@ -202,7 +202,8 @@ function onclick_edit(elm, pms) {
 	};
 	var form = {
 		tags: document.getElementById('tags'),
-		comment: document.getElementById('comment')
+		comment: document.getElementById('comment'),
+		editor: document.querySelector('.div-edit')
 	};
 	var old_title = obj.title.innerHTML;
 	var old_content = obj.content.innerHTML;
@@ -215,6 +216,7 @@ function onclick_edit(elm, pms) {
 	obj.url.style.display = 'none';
 	form.comment.style.display = 'block';
 	form.tags.style.display = 'block';
+	form.editor.style.display = 'block';
 	obj.actions[0].style.display = 'none';
 	obj.actions[1].style.display = 'block';
 	save.onclick = function() {
@@ -244,6 +246,7 @@ function onclick_edit(elm, pms) {
 		obj.url.style.display = 'block';
 		form.tags.style.display = 'none';
 		form.comment.style.display = 'none';
+		form.editor.style.display = 'none';
 		obj.actions[0].style.display = 'block';
 		obj.actions[1].style.display = 'none';
 	};
@@ -270,4 +273,26 @@ function onclick_delete_feed(elm, pms) {
 function onclick_js_add(elm, pms) {
 	alert(m_add_popup);
 	document.getElementById('js_add').style.display = 'block';
+}
+
+function onclick_formate(elm, pms) {
+	if (pms.cmd == 'link') {
+		var link = prompt(m_enter_url, 'http://');
+		if (link && link != 'http://') {
+			return document.execCommand('createlink', false, link);
+		}
+	}
+	if (pms.cmd == 'image') {
+		var img = prompt(m_enter_url, 'http://');
+		if (img && img != 'http://') {
+			return document.execCommand('insertImage', false, img);
+		}
+	}
+	else if (typeof pms.value != "undefined") {
+		return document.execCommand(pms.cmd, false, pms.value);
+	}
+	else {
+		return document.execCommand(pms.cmd, false, null);
+	}
+	return false;
 }
