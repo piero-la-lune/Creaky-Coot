@@ -43,6 +43,18 @@ if (strict_lower($config['version'], '1.1')) {
 
 }
 
+if (strict_lower($config['version'], '1.2')) {
+
+	$feeds = Text::unhash(get_file(FILE_FEEDS));
+	foreach ($feeds as $k => $l) {
+		$feeds[$k]['content'] = Manager::T_RSS;
+		$feeds[$k]['comment'] = Manager::T_EMPTY;
+		$feeds[$k]['filter_html'] = '';
+	}
+	update_file(FILE_FEEDS, Text::hash($feeds));
+
+}
+
 $settings = new Settings();
 if ($config['url_rewriting']) { $settings->url_rewriting(); }
 $settings->save();

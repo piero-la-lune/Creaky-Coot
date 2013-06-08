@@ -14,8 +14,8 @@ class RssParser {
 
 	protected $filter;
 
-	public function __construct() {
-		$this->filter = new Filter();
+	public function __construct($filter) {
+		$this->filter = $filter;
 	}
 
 	public function readFeed($content, $url) {
@@ -264,7 +264,7 @@ class RssParser {
 		return $url;
 	}
 
-	public function importOPML($data) {
+	public static function importOPML($data) {
 
 		$urls = array();
 
@@ -290,7 +290,7 @@ class RssParser {
 		return $urls;
 	}
 
-	public function exportOPML($urls) {
+	public static function exportOPML($urls) {
 
 			# Do not display errors
 		$errors = libxml_use_internal_errors();

@@ -203,6 +203,13 @@ class Text {
 			.'onclick="onclick_'.$fun.'(this, '.$t.');return false;"';
 	}
 
+	public static function compare($elm, $values, $default) {
+		foreach ($values as $v) {
+			if ($elm == $v) { return $v; }
+		}
+		return $default;
+	}
+
 }
 
 ?>

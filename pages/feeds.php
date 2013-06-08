@@ -60,6 +60,30 @@ if (isset($_GET['id']) && $feed = $manager->getFeed($_GET['id'])) {
 	<label for="link">'.Trad::F_LINK.'</label>
 	<input type="text" name="link" id="link" value="'.$feed['link'].'" />
 
+	<p>&nbsp;</p>
+
+	<label for="content">'.Trad::F_P_CONTENT.'</label>
+	<select name="content" id="content">'.Text::options(
+		array(
+			Manager::T_EMPTY => Trad::F_P_EMPTY,
+			Manager::T_RSS => Trad::F_P_RSS,
+			Manager::T_DLOAD => Trad::F_P_DLOAD
+		),
+		$feed['content']
+	).'</select>
+
+	<label for="comment">'.Trad::F_P_COMMENT.'</label>
+	<select name="comment" id="comment">'.Text::options(
+		array(
+			Manager::T_EMPTY => Trad::F_P_EMPTY,
+			Manager::T_RSS => Trad::F_P_RSS
+		),
+		$feed['comment']
+	).'</select>
+
+	<label for="filter_html">'.Trad::F_FILTER_HTML.'</label>
+	<input type="text" name="filter_html" id="filter_html" value="'.Text::chars($feed['filter_html']).'" />
+
 	<p class="p-submit"><input type="submit" value="'.Trad::V_EDIT.'" /></p>
 	<input type="hidden" name="action" value="edit" />
 </form>

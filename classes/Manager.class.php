@@ -8,6 +8,10 @@ class Manager {
 	protected $done = array();
 	protected $last_insert;
 
+	const T_EMPTY = 0;
+	const T_RSS = 1;
+	const T_DLOAD = 2;
+
 	protected $curl_opts = array(
 		CURLOPT_AUTOREFERER => true,
 		CURLOPT_FOLLOWLOCATION => true,
@@ -49,7 +53,10 @@ class Manager {
 			'unread' => array(),
 			'read' => array(),
 			'archived' => array(),
-			'deleted' => array()
+			'deleted' => array(),
+			'content' => self::T_RSS,
+			'comment' => self::T_EMPTY,
+			'filter_html' => ''
 		);
 		return $id;
 	}
@@ -157,6 +164,9 @@ class Manager {
 		if (!isset($this->feeds[$id])
 			|| !isset($post['title'])
 			|| !isset($post['link'])
+			|| !isset($post['content'])
+			|| !isset($post['comment'])
+			|| !isset($post['filter_html'])
 		) {
 			return Trad::A_ERROR_FORM;
 		}
@@ -171,6 +181,17 @@ class Manager {
 		$this->feeds[$id]['url'] = $url;
 		$this->feeds[$id]['params'] = $params;
 		$this->feeds[$id]['link'] = $post['link'];
+		$this->feeds[$id]['content'] = Text::compare(
+			$post['content'],
+			array(self::T_EMPTY, self::T_RSS, self::T_DLOAD),
+			$this->feeds[$id]['content']
+		);
+		$this->feeds[$id]['comment'] = Text::compare(
+			$post['comment'],
+			array(self::T_EMPTY, self::T_RSS),
+			$this->feeds[$id]['comment']
+		);
+		$this->feeds[$id]['filter_html'] = $post['filter_html'];
 		$this->update(array($id));
 		if (!isset($this->done[$id]) || $this->done[$id] === false) {
 			$this->feeds[$id] = $oldfeed;
@@ -264,7 +285,8 @@ class Manager {
 			$this->done[$id] = false;
 			return false;
 		}
-		$parser = new RssParser();
+		$filter = new Filter($this->feeds[$id]['filter_html']);
+		$parser = new RssParser($filter);
 		$ans = $parser->readFeed($content, $header['url']);
 		if ($ans === false) {
 			$this->done[$id] = false;
@@ -290,13 +312,41 @@ class Manager {
 					$tags = array();
 				}
 				$this->feeds[$id]['unread'][] = $id2;
+				$content = '';
+				if ($this->feeds[$id]['content'] == self::T_RSS) {
+					$content = $i['content'];
+				}
+				if ($this->feeds[$id]['content'] == self::T_DLOAD) {
+					$curlManager = new Curl_Multi();
+					$request = curl_init($i['link']);
+					curl_setopt_array($request, $this->curl_opts);
+					$curlManager->addHandle(
+						$request,
+						array($this, 'callback_add'),
+						array(
+							'id' => $id2,
+							'filter_html' => $this->feeds[$id]['filter_html']
+						)
+					);
+					$curlManager->finish();
+					if (!isset($this->done[$id2]) || !$this->done[$id2]) {
+						$content = '';
+					}
+					else {
+						$content = $this->done[$id2]['content'];
+					}
+				}
+				$comment = '';
+				if ($this->feeds[$id]['comment'] == self::T_RSS) {
+					$comment = $i['content'];
+				}
 				$this->links[$id2] = array(
 					'type' => 'unread',
 					'title' => $i['title'],
-					'content' => $i['content'],
+					'content' => $content,
 					'date' => $i['date'],
 					'link' => $i['link'],
-					'comment' => NULL,
+					'comment' => $comment,
 					'tags' => $tags
 				);
 				$added[] = $id2;
@@ -373,7 +423,8 @@ class Manager {
 		return true;
 	}
 
-	public function callback_add($header, $content, $id) {
+	public function callback_add($header, $content, $params) {
+		$id = $params['id'];
 		if (!isset($header['http_code'])
 			|| $header['http_code'] !== 200
 			|| !isset($header['content_type'])
@@ -382,7 +433,7 @@ class Manager {
 			$this->done[$id] = false;
 			return false;
 		}
-		$filter = new Filter();
+		$filter = new Filter($params['filter_html']);
 		$ans = $filter->execute($content, $header['url']);
 		if (!$ans || empty($ans)) {
 			$this->done[$id] = false;
@@ -424,7 +475,11 @@ class Manager {
 			$curlManager = new Curl_Multi();
 			$request = curl_init($post['url']);
 			curl_setopt_array($request, $this->curl_opts);
-			$curlManager->addHandle($request, array($this, 'callback_add'), $id);
+			$curlManager->addHandle(
+				$request,
+				array($this, 'callback_add'),
+				array('id' => $id, 'filter_html' => '')
+			);
 			$curlManager->finish();
 
 			if (!isset($this->done[$id]) || !$this->done[$id]) {
@@ -568,8 +623,7 @@ class Manager {
 		) {
 			return Trad::A_ERROR_UPLOAD;
 		}
-		$parser = new RssParser();
-		$feeds = $parser->importOPML(file_get_contents($file['tmp_name']));
+		$feeds = RssParser::importOPML(file_get_contents($file['tmp_name']));
 		if ($feeds === false) {
 			return Trad::A_ERROR_IMPORT;
 		}
@@ -621,8 +675,7 @@ class Manager {
 				'link' => $f['link']
 			);
 		}
-		$parser = new RssParser();
-		$xml = $parser->exportOPML($urls);
+		$xml = RssParser::exportOPML($urls);
 		header('Content-Description: File Transfer');
 		header('Content-Type: application/octet-stream');
 		header('Content-Disposition: attachment; filename="export.opml"');
@@ -662,7 +715,12 @@ class Manager {
 			.'</div>';
 		}
 		else {
-			$text = Text::intro($l['content'], 400, false).$tags;
+			if (empty($l['comment'])) {
+				$text = Text::intro($l['content'], 400, false).$tags;
+			}
+			else {
+				$text = Text::intro($l['comment'], 400, false).$tags;
+			}
 		}
 		return ''
 .'<div class="div-link" id="link-'.$id.'">'

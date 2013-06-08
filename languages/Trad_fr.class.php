@@ -88,6 +88,12 @@ class Trad {
 	const F_URL = 'URL :';
 	const F_FEED_URL = 'URL du flux :';
 	const F_LINK = 'Articles tirés de :';
+	const F_P_CONTENT = 'Contenu :';
+	const F_P_COMMENT = 'Commentaire :';
+	const F_P_EMPTY = 'Aucun';
+	const F_P_RSS = 'À partir du flux';
+	const F_P_DLOAD = 'À partir de l\'URL fournie par le flux';
+	const F_FILTER_HTML = 'Règles de filtrage HTML :';
 	const F_LINKS_PER_PAGE = 'Nombre d\'articles par page :';
 	const F_URL_REWRITING = 'URL rewriting';
 	const F_OPML_FILE = 'Fichier OPML :';

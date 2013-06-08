@@ -74,13 +74,13 @@ class Filter {
 
 	protected $useless_words = array(
 		'ad-break',
-		'ads(-| |$)',
+		'ads(-|\s|$)',
 		'agegate',
 		'combx',
 		'comment',
 		'community',
 		'disqus',
-		'down(-| |$)',
+		'down(-|\s|$)',
 		'extra',
 		'foot',
 		'head',
@@ -92,6 +92,7 @@ class Filter {
 		'pagination',
 		'popup',
 		'promo',
+		'pub',
 		'related',
 		'remark',
 		'rss',
@@ -155,7 +156,17 @@ class Filter {
 		'text-align' => array('left', 'right', 'center', 'justify')
 	);
 
-	public function __construct() {
+	public function __construct($useless = '') {
+		foreach (explode(',', $useless) as $string) {
+			$string = trim($string);
+			if (!empty($string)) {
+				if (substr($string, 0, 1) == '-') {
+					$string = substr($string, 1);
+					if (empty($string)) { continue; }
+				}
+				$this->useless_words[] = $string;
+			}
+		}
 		$this->words_regex = '#'.implode('|', $this->useless_words).'#i';
 	}
 
@@ -255,7 +266,7 @@ class Filter {
 			return true;
 		}
 
-		# Useless tag because of class name
+		# Useless tag because of class name or id
 		if ($this->isUselessTag($attributes)) {
 			array_push($this->removed_tag, false);
 			array_push($this->empty_tag, true);
@@ -285,7 +296,7 @@ class Filter {
 			if ($a == 'style') {
 				$style = array();
 				foreach (explode($v, ';') as $k) {
-					$p = getProperCssProperty($k);
+					$p = $this->getProperCssProperty($k);
 					if ($p !== false) {
 						$style[] = $p;
 					}
