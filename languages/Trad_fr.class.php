@@ -118,6 +118,7 @@ class Trad {
 			<li>« search/tweets » et « q=Creaky Coot »</li>
 		</ul>
 	';
+	const F_TIP_FILTER_HTML = 'Lorsque le contenu est récupéré à partir de la page pointée par l\'URL du flux, les balises dont l\'attribut « class » ou « id » contient un de ces mots seront totalement supprimées. Précèdez le mot d\'un « - » pour l\'autoriser, séparez les mots par une virgule.';
 
 		# Titres
 

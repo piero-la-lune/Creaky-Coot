@@ -83,6 +83,7 @@ if (isset($_GET['id']) && $feed = $manager->getFeed($_GET['id'])) {
 
 	<label for="filter_html">'.Trad::F_FILTER_HTML.'</label>
 	<input type="text" name="filter_html" id="filter_html" value="'.Text::chars($feed['filter_html']).'" />
+	<p class="p-tip">'.Trad::F_TIP_FILTER_HTML.'</p>
 
 	<p class="p-submit"><input type="submit" value="'.Trad::V_EDIT.'" /></p>
 	<input type="hidden" name="action" value="edit" />
