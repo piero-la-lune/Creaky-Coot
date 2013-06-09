@@ -155,6 +155,7 @@ class Twitter {
 					'<a href="'.$m->expanded_url.'">'.$m->display_url.'</a>',
 					$text
 				);
+				$text .= '<p><img src="'.$m->media_url.'" /></p>';
 			}
 		}
 		return str_replace("\n", '<br />', $text);
