@@ -28,6 +28,7 @@ article{text-align:justify;word-wrap:break-word;}article p{margin:1em 0;}
 .div-feed,.div-link{margin-top:24px;text-align:justify;word-wrap:break-word;}.div-feed h2,.div-link h2{margin:0;padding:0;line-height:1em;}.div-feed h2 a:before,.div-link h2 a:before{content:"";display:inline-block;vertical-align:middle;margin-right:4px;width:12px;height:12px;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;}
 .div-feed h2.unread a:before,.div-link h2.unread a:before{background:#3366cc;}
 .div-feed h2.unread a:hover:before,.div-link h2.unread a:hover:before{background:#5c85d6;}
+.div-feed .twitter-img,.div-link .twitter-img{display:none;}
 .div-actions{margin:2px 0 0 16px;}
 .div-actions-top{padding:4px 0px 8px 4px;border-top:3px solid #444;text-align:right;}
 .div-actions .loading,.div-actions-top .loading{margin-right:12px;}
