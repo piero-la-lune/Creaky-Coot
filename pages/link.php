@@ -33,9 +33,6 @@ if (isset($_GET['id']) && $link = $manager->getLink($_GET['id'])) {
 		.'<article id="link-'.$id.'">'
 			.'<h1 class="center">'.$link['title'].'</h1>'
 			.'<div class="div-infos">'
-				.'<textarea name="comment" id="comment" style="display:none">'
-					.Text::chars($link['comment'])
-				.'</textarea>'
 				.'<div class="div-comment">'
 					.$link['comment']
 				.'</div>'

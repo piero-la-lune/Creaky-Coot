@@ -202,19 +202,18 @@ function onclick_edit(elm, pms) {
 	};
 	var form = {
 		tags: document.getElementById('tags'),
-		comment: document.getElementById('comment'),
 		editor: document.querySelector('.div-edit')
 	};
 	var old_title = obj.title.innerHTML;
 	var old_content = obj.content.innerHTML;
+	var old_comment = obj.comment.innerHTML;
 	var save = obj.actions[1].querySelectorAll('a')[0];
 	var cancel = obj.actions[1].querySelectorAll('a')[1];
 	obj.title.setAttribute('contenteditable', true);
 	obj.content.setAttribute('contenteditable', true);
+	obj.comment.setAttribute('contenteditable', true);
 	obj.tags.style.display = 'none';
-	obj.comment.style.display = 'none';
 	obj.url.style.display = 'none';
-	form.comment.style.display = 'block';
 	form.tags.style.display = 'block';
 	form.editor.style.display = 'block';
 	obj.actions[0].style.display = 'none';
@@ -225,27 +224,26 @@ function onclick_edit(elm, pms) {
 		ajax.addParam('title', obj.title.innerHTML);
 		ajax.addParam('content', obj.content.innerHTML);
 		ajax.addParam('tags', form.tags.value);
-		ajax.addParam('comment', form.comment.value);
+		ajax.addParam('comment', obj.comment.innerHTML);
 		ajax.send(function(ans) {
 			old_title = ans['title'];
 			old_content = ans['content'];
+			old_comment = ans['comment'];
 			cancel.click();
 			obj.tags.innerHTML = ans['tags_list'];
-			obj.comment.innerHTML = ans['comment'];
 			form.tags.value = ans['tags'].join(', ');
-			form.comment.value = ans['comment'];
 		});
 	};
 	cancel.onclick = function() {
 		obj.title.setAttribute('contenteditable', false);
 		obj.content.setAttribute('contenteditable', false);
+		obj.comment.setAttribute('contenteditable', false);
 		obj.title.innerHTML = old_title;
 		obj.content.innerHTML = old_content;
+		obj.comment.innerHTML = old_comment;
 		obj.tags.style.display = 'inline';
-		obj.comment.style.display = 'block';
 		obj.url.style.display = 'block';
 		form.tags.style.display = 'none';
-		form.comment.style.display = 'none';
 		form.editor.style.display = 'none';
 		obj.actions[0].style.display = 'block';
 		obj.actions[1].style.display = 'none';
