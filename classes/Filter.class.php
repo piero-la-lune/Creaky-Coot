@@ -130,6 +130,8 @@ class Filter {
 		'da.feedsportal.com',
 		'rss.feedsportal.com',
 		'res.feedsportal.com',
+		'res1.feedsportal.com',
+		'res2.feedsportal.com',
 		'res3.feedsportal.com',
 		'pi.feedsportal.com',
 		'rss.nytimes.com',
