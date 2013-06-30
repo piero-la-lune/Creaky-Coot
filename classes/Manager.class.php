@@ -615,6 +615,21 @@ class Manager {
 		return true;
 	}
 
+	public function autoDelete($duration) {
+		$date = time()-$duration;
+		foreach ($this->feeds as $k => $f) {
+			foreach ($f['read'] as $key => $id) {
+				if ($this->links[$id]['date'] < $date) {
+					unset($this->feeds[$k]['read'][$key]);
+					unset($this->links[$id]);
+					$this->feeds[$k]['deleted'][] = $id;
+				}
+			}
+		}
+		$this->save();
+		return true;
+	}
+
 	public function import($file) {
 		if (!isset($file['error'])
 			|| $file['error'] > 0

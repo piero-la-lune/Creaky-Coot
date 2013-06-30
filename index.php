@@ -229,11 +229,18 @@ check_file(FILE_FEEDS, Text::hash(array()));
 check_file(FILE_LINKS, Text::hash(array()));
 check_file('.htaccess', "Allow from none\nDeny from all\n");
 
-### Auto update
-if (isset($auto_update) && $auto_update == true) {
+### Cron jobs
+if (isset($cron_job) && $cron_job == true) {
 	$manager = Manager::getInstance();
-	$manager->refreshFeed();
-	echo 'Done.';
+	if (isset($auto_update) && $auto_update == true) {
+		$manager->refreshFeed();
+		echo 'Feeds were updated.'."\n";
+	}
+	if (isset($auto_delete) && $auto_delete == true) {
+		$manager->autoDelete($auto_delete);
+		echo 'Old links were deleted.'."\n";
+	}
+	echo 'Done.'."\n";
 	exit;
 }
 
