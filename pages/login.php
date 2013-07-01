@@ -1,5 +1,7 @@
 <?php
 
+	header('HTTP/1.1 403 Forbidden');
+
 	$title = Trad::T_CONNEXION;
 
 	$content = '

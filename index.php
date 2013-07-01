@@ -330,6 +330,7 @@ if ($page->printHeader()) {
 echo           "var ajax_url = '".Url::parse('ajax')."';";
 echo           "var home_url = '".Url::parse('home')."';";
 echo       "var m_error_ajax = '".Text::js_str(Trad::A_ERROR_AJAX)."';";
+echo      "var m_error_login = '".Text::js_str(Trad::A_ERROR_AJAX_LOGIN)."';";
 echo     "var m_no_more_link = '".Text::js_str(Trad::S_NO_MORE_LINK)."';";
 echo    "var m_confirm_clear = '".Text::js_str(Trad::A_CONFIRM_CLEAR)."';";
 echo   "var m_confirm_delete = '".Text::js_str(Trad::A_CONFIRM_DELETE_LINK)."';";

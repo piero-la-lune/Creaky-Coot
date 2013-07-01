@@ -39,6 +39,9 @@ function Ajax(elm, action) {
 						}
 					}
 				}
+				else if (xhr.status == 403) {
+					alert(m_error_login);
+				}
 				else {
 					alert(m_error_ajax);
 				}

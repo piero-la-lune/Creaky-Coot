@@ -153,6 +153,7 @@ class Trad {
 	const A_ERROR_BAD_LINK = 'Impossible de lire l\'article. Êtes-vous sûr de l\'URL ?';
 	const A_ERROR_EXISTING_LINK = 'Cet article est déjà sauvegardé.';
 	const A_ERROR_AJAX = 'Une erreur est survenue. Merci de réessayer.';
+	const A_ERROR_AJAX_LOGIN = 'Vous êtes déconnecté. Raffraichissez la page, connectez-vous, puis vous pourrez réessayer.';
 	const A_ERROR_TWITTER = 'Une erreur est survenue lors du dialogue avec Twitter. Merci de réessayer.';
 
 	const A_SUCCESS_INSTALL = 'Creaky Coot est maintenant correctement installé. Connectez-vous pour commencer à l\'utiliser.';
