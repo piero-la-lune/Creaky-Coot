@@ -38,69 +38,35 @@ if (isset($_POST['action']) && isset($_POST['page'])) {
 		die(json_encode(array('status' => 'error')));
 	}
 	if ($_POST['action'] == 'read' && isset($_POST['ids'])) {
-		$ids_done = array();
-		foreach (explode(',', $_POST['ids']) as $id) {
-			$ans = $manager->markRead($id);
-			if ($ans === true) {
-				$ids_done[$id] = $id;
-			}
-		}
+		$ids_done = $manager->markRead(explode(',', $_POST['ids']));
 		if (!empty($ids_done)) {
 			die(json_encode(array('status' => 'success', 'ids' => $ids_done)));
 		}
 		die(json_encode(array('status' => 'error')));
 	}
 	if ($_POST['action'] == 'clear' && isset($_POST['ids'])) {
-		$ids_done = array();
-		foreach (explode(',', $_POST['ids']) as $id) {
-			if ($link = $manager->getLink($id)) {
-				if ($link['type'] != 'archived') {
-					$ans = $manager->delete($id);
-					if ($ans === true) {
-						$ids_done[$id] = $id;
-					}
-				}
-			}
-		}
+		$ids_done = $manager->clear(explode(',', $_POST['ids']));
 		if (!empty($ids_done)) {
 			die(json_encode(array('status' => 'success', 'ids' => $ids_done)));
 		}
 		die(json_encode(array('status' => 'error')));
 	}
 	if ($_POST['action'] == 'unread' && isset($_POST['ids'])) {
-		$ids_done = array();
-		foreach (explode(',', $_POST['ids']) as $id) {
-			$ans = $manager->markUnread($id);
-			if ($ans === true) {
-				$ids_done[$id] = $id;
-			}
-		}
+		$ids_done = $manager->markUnread(explode(',', $_POST['ids']));
 		if (!empty($ids_done)) {
 			die(json_encode(array('status' => 'success', 'ids' => $ids_done)));
 		}
 		die(json_encode(array('status' => 'error')));
 	}
 	if ($_POST['action'] == 'archive' && isset($_POST['ids'])) {
-		$ids_done = array();
-		foreach (explode(',', $_POST['ids']) as $id) {
-			$ans = $manager->archive($id);
-			if ($ans === true) {
-				$ids_done[$id] = $id;
-			}
-		}
+		$ids_done = $manager->archive(explode(',', $_POST['ids']));
 		if (!empty($ids_done)) {
 			die(json_encode(array('status' => 'success', 'ids' => $ids_done)));
 		}
 		die(json_encode(array('status' => 'error')));
 	}
 	if ($_POST['action'] == 'delete' && isset($_POST['ids'])) {
-		$ids_done = array();
-		foreach (explode(',', $_POST['ids']) as $id) {
-			$ans = $manager->delete($id);
-			if ($ans === true) {
-				$ids_done[$id] = $id;
-			}
-		}
+		$ids_done = $manager->delete(explode(',', $_POST['ids']));
 		if (!empty($ids_done)) {
 			die(json_encode(array('status' => 'success', 'ids' => $ids_done)));
 		}

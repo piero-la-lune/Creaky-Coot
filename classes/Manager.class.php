@@ -548,72 +548,116 @@ class Manager {
 		return true;
 	}
 
-	public function markRead($id) {
-		if (!isset($this->links[$id])
-			|| $this->links[$id]['type'] != 'unread'
-		) { return false; }
-		foreach ($this->feeds as $k => $f) {
-			if (($key = array_search($id, $f['unread'])) !== false) {
-				unset($this->feeds[$k]['unread'][$key]);
-				$this->feeds[$k]['read'][] = $id;
+	public function markRead($ids) {
+		if (!is_array($ids)) { $ids = array($ids); }
+		$done = array();
+		foreach ($ids as $id) {
+			if (!isset($this->links[$id])
+				|| $this->links[$id]['type'] != 'unread'
+			) { continue; }
+			foreach ($this->feeds as $k => $f) {
+				if (($key = array_search($id, $f['unread'])) !== false) {
+					unset($this->feeds[$k]['unread'][$key]);
+					$this->feeds[$k]['read'][] = $id;
+				}
 			}
+			$this->links[$id]['type'] = 'read';
+			$done[$id] = true;
 		}
-		$this->links[$id]['type'] = 'read';
 		$this->save();
-		return true;
+		return $done;
 	}
 
-	public function markUnread($id) {
-		if (!isset($this->links[$id])
-			|| $this->links[$id]['type'] != 'read'
-		) { return false; }
-		foreach ($this->feeds as $k => $f) {
-			if (($key = array_search($id, $f['read'])) !== false) {
-				unset($this->feeds[$k]['read'][$key]);
-				$this->feeds[$k]['unread'][] = $id;
+	public function markUnread($ids) {
+		if (!is_array($ids)) { $ids = array($ids); }
+		$done = array();
+		foreach ($ids as $id) {
+			if (!isset($this->links[$id])
+				|| $this->links[$id]['type'] != 'read'
+			) { continue; }
+			foreach ($this->feeds as $k => $f) {
+				if (($key = array_search($id, $f['read'])) !== false) {
+					unset($this->feeds[$k]['read'][$key]);
+					$this->feeds[$k]['unread'][] = $id;
+				}
 			}
+			$this->links[$id]['type'] = 'unread';
+			$done[$id] = true;
 		}
-		$this->links[$id]['type'] = 'unread';
 		$this->save();
-		return true;
+		return $done;
 	}
 
-	public function archive($id) {
-		if (!isset($this->links[$id])) { return false; }
-		foreach ($this->feeds as $k => $f) {
-			if (($key = array_search($id, $f['unread'])) !== false) {
-				unset($this->feeds[$k]['unread'][$key]);
-				$this->feeds[$k]['archived'][] = $id;
+	public function archive($ids) {
+		if (!is_array($ids)) { $ids = array($ids); }
+		$done = array();
+		foreach ($ids as $id) {
+			if (!isset($this->links[$id])) { continue; }
+			foreach ($this->feeds as $k => $f) {
+				if (($key = array_search($id, $f['unread'])) !== false) {
+					unset($this->feeds[$k]['unread'][$key]);
+					$this->feeds[$k]['archived'][] = $id;
+				}
+				if (($key = array_search($id, $f['read'])) !== false) {
+					unset($this->feeds[$k]['read'][$key]);
+					$this->feeds[$k]['archived'][] = $id;
+				}
 			}
-			if (($key = array_search($id, $f['read'])) !== false) {
-				unset($this->feeds[$k]['read'][$key]);
-				$this->feeds[$k]['archived'][] = $id;
-			}
+			$this->links[$id]['type'] = 'archived';
+			$done[$id] = true;
 		}
-		$this->links[$id]['type'] = 'archived';
 		$this->save();
-		return true;
+		return $done;
 	}
 
-	public function delete($id) {
-		if (!isset($this->links[$id])) { return false; }
-		foreach ($this->feeds as $k => $f) {
-			if (($key = array_search($id, $f['unread'])) !== false) {
-				unset($this->feeds[$k]['unread'][$key]);
-				$this->feeds[$k]['deleted'][] = $id;
+	public function clear($ids) {
+		if (!is_array($ids)) { $ids = array($ids); }
+		$done = array();
+		foreach ($ids as $id) {
+			if (!isset($this->links[$id])
+				|| $this->links[$id]['type'] == 'archived'
+			) { continue; }
+			foreach ($this->feeds as $k => $f) {
+				if (($key = array_search($id, $f['unread'])) !== false) {
+					unset($this->feeds[$k]['unread'][$key]);
+					$this->feeds[$k]['deleted'][] = $id;
+				}
+				if (($key = array_search($id, $f['read'])) !== false) {
+					unset($this->feeds[$k]['read'][$key]);
+					$this->feeds[$k]['deleted'][] = $id;
+				}
 			}
-			if (($key = array_search($id, $f['read'])) !== false) {
-				unset($this->feeds[$k]['read'][$key]);
-				$this->feeds[$k]['deleted'][] = $id;
-			}
-			if (($key = array_search($id, $f['archived'])) !== false) {
-				unset($this->feeds[$k]['archived'][$key]);
-				$this->feeds[$k]['deleted'][] = $id;
-			}
+			unset($this->links[$id]);
+			$done[$id] = true;
 		}
-		unset($this->links[$id]);
 		$this->save();
-		return true;
+		return $done;
+	}
+
+	public function delete($ids) {
+		if (!is_array($ids)) { $ids = array($ids); }
+		$done = array();
+		foreach ($ids as $id) {
+			if (!isset($this->links[$id])) { continue; }
+			foreach ($this->feeds as $k => $f) {
+				if (($key = array_search($id, $f['unread'])) !== false) {
+					unset($this->feeds[$k]['unread'][$key]);
+					$this->feeds[$k]['deleted'][] = $id;
+				}
+				if (($key = array_search($id, $f['read'])) !== false) {
+					unset($this->feeds[$k]['read'][$key]);
+					$this->feeds[$k]['deleted'][] = $id;
+				}
+				if (($key = array_search($id, $f['archived'])) !== false) {
+					unset($this->feeds[$k]['archived'][$key]);
+					$this->feeds[$k]['deleted'][] = $id;
+				}
+			}
+			unset($this->links[$id]);
+			$done[$id] = true;
+		}
+		$this->save();
+		return $done;
 	}
 
 	public function autoDelete($duration) {
