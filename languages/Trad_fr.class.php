@@ -106,6 +106,7 @@ class Trad {
 	const F_AUTO_TAG = 'Tags automatiques :';
 	const F_TWITTER_URL = 'URL des tweets à récupérer :';
 	const F_PARAMS = 'Paramètres :';
+	const F_OPEN_NEW_TAB = 'Ouvrir les articles dans un nouvel onglet :';
 
 	const F_TIP_PASSWORD = 'Laissez vide pour ne pas le changer.';
 	const F_TIP_URL_REWRITING = 'Laissez vide pour désactiver l\'URL rewriting. Sinon, indiquez le chemin du dossier de Creaky Coot (en commençant et terminant par un "/") par rapport au nom de domaine.';
@@ -119,6 +120,7 @@ class Trad {
 		</ul>
 	';
 	const F_TIP_FILTER_HTML = 'Lorsque le contenu est récupéré à partir de la page pointée par l\'URL du flux, les balises dont l\'attribut « class » ou « id » contient un de ces mots seront totalement supprimées. Précèdez le mot d\'un « - » pour l\'autoriser, séparez les mots par une virgule.';
+	const F_TIP_OPEN_NEW_TAB = 'Seuls les liens dans les listes d\'articles seront impactés.';
 
 		# Titres
 

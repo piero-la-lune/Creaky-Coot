@@ -36,6 +36,7 @@
 	.'})();';
 
 	$auto_tag = ($config['auto_tag']) ? 'true' : 'false';
+	$open_new_tab = ($config['open_new_tab']) ? 'true' : 'false';
 
 	$content = '
 
@@ -69,6 +70,12 @@
 		$auto_tag
 	).'</select>
 	<p class="p-tip">'.Trad::F_TIP_AUTO_TAG.'</p>
+	<label for="open_new_tab">'.Trad::F_OPEN_NEW_TAB.'</label>
+	<select name="open_new_tab" id="open_new_tab">'.Text::options(
+		array('true' => Trad::W_ENABLED, 'false' => Trad::W_DISABLED),
+		$open_new_tab
+	).'</select>
+	<p class="p-tip">'.Trad::F_TIP_OPEN_NEW_TAB.'</p>
 
 	<p>&nbsp;</p>
 

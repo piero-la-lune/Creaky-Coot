@@ -24,7 +24,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 define('NAME', 'Creaky Coot');
-define('VERSION', '1.2');
+define('VERSION', '1.3');
 define('AUTHOR', 'Pierre Monchalin');
 define('URL', 'http://creaky-coot.derivoile.fr');
 
@@ -198,7 +198,7 @@ else {
 
 ### Manage directories and files
 function update_file($filename, $content) {
-	if (file_put_contents(DIR_DATABASE.$filename, $content) === false
+	if (file_put_contents(DIR_DATABASE.$filename, $content, LOCK_EX) === false
 		|| strcmp(file_get_contents(DIR_DATABASE.$filename), $content) != 0)
 	{
 		die('Enable to write file “'. DIR_DATABASE.$filename.'”');

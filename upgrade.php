@@ -55,6 +55,12 @@ if (strict_lower($config['version'], '1.2')) {
 
 }
 
+if (strict_lower($config['version'], '1.3')) {
+
+	$config['open_new_tab'] = false;
+
+}
+
 $settings = new Settings();
 if ($config['url_rewriting']) { $settings->url_rewriting(); }
 $settings->save();

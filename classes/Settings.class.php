@@ -74,6 +74,14 @@ class Settings {
 				$this->config['auto_tag'] = true;
 			}
 		}
+		if (isset($post['open_new_tab'])) {
+			if ($post['open_new_tab'] == 'true') {
+				$this->config['open_new_tab'] = true;
+			}
+			else {
+				$this->config['open_new_tab'] = false;
+			}
+		}
 	}
 
 	protected function c_user($post, $install) {
@@ -179,6 +187,7 @@ class Settings {
 			'language' => $language,
 			'links_per_page' => 4,
 			'auto_tag' => true,
+			'open_new_tab' => false,
 			'user' => array(
 				'login' => 'admin',
 				'password' => 'admin',

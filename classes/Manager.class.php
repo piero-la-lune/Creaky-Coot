@@ -774,6 +774,7 @@ class Manager {
 		return $html;
 	}
 	public static function preview($id, $l, $page = 'links') {
+		global $config;
 		$unread = ' style="display:none"';
 		$read = ' style="display:none"';
 		$archived = ' style="display:none"';
@@ -800,14 +801,17 @@ class Manager {
 				$text = Text::intro($l['comment'], 400, false).$tags;
 			}
 		}
+		$new_tab = ($config['open_new_tab']) ? ' target="_blank"' : '';
 		return ''
 .'<div class="div-link" id="link-'.$id.'">'
 	.'<h2'.(($l['type'] == 'unread') ? ' class="unread"' : '').'>'
-		.'<a href="'.Url::parse('links/'.$id).'">'.$l['title'].'</a>'
+		.'<a href="'.Url::parse('links/'.$id).'"'.$new_tab.'>'
+			.$l['title']
+		.'</a>'
 	.'</h2>'
 	.$text
 	.'<div class="div-actions">'
-		.'<a href="'.$l['link'].'">'
+		.'<a href="'.$l['link'].'"'.$new_tab.'>'
 			.mb_strtolower(Trad::V_LINK)
 		.'</a>'
 		.'<a href="#" '.Text::click('read', array('id' => $id)).$read.'>'
