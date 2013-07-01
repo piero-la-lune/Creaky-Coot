@@ -29,7 +29,7 @@ define('AUTHOR', 'Pierre Monchalin');
 define('URL', 'http://creaky-coot.derivoile.fr');
 
 ### Languages
-define('LANGUAGES', 'fr'); # Separated by a comma
+define('LANGUAGES', 'fr,en'); # Separated by a comma
 define('DEFAULT_LANGUAGE', 'fr'); # Used only during installation
 
 ### Standart settings

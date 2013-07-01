@@ -57,6 +57,11 @@ class Settings {
 				$this->url_rewriting();
 			}
 		}
+		if (isset($post['language'])
+			&& Text::check_language($post['language'])
+		) {
+			$this->config['language'] = $post['language'];
+		}
 	}
 
 	protected function c_links($post) {
@@ -185,7 +190,7 @@ class Settings {
 				.Text::dir($_SERVER["SCRIPT_NAME"]),
 			'url_rewriting' => false,
 			'language' => $language,
-			'links_per_page' => 4,
+			'links_per_page' => 8,
 			'auto_tag' => true,
 			'open_new_tab' => false,
 			'user' => array(

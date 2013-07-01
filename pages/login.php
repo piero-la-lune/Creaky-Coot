@@ -2,11 +2,11 @@
 
 	header('HTTP/1.1 403 Forbidden');
 
-	$title = Trad::T_CONNEXION;
+	$title = Trad::T_LOGIN;
 
 	$content = '
 
-<h1>Connexion</h1>
+<h1>'.Trad::T_LOGIN.'</h1>
 
 <form action="" method="post">
 	<label for="login">'.Trad::F_USERNAME.'</label>

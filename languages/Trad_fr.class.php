@@ -50,11 +50,11 @@ class Trad {
 
 	const S_AGO = 'il y a %duration% %pediod%';
 	const S_PUBLISHED = 'Sauvegardé %time% depuis %url%.';
-	const S_NOTFOUND = 'La page que vous recherchez n\'existe pas...';
-	const S_NO_LINK = 'Aucun article non lu...';
-	const S_LOAD_MORE = 'Charger plus d\'articles...';
-	const S_NO_MORE_LINK = 'Il n\'y a plus d\'articles à afficher...';
-	const S_ADD_POPUP = 'Favori pour sauvegarder des articles...';
+	const S_NOTFOUND = 'La page que vous recherchez n\'existe pas…';
+	const S_NO_LINK = 'Aucun article non lu…';
+	const S_LOAD_MORE = 'Charger plus d\'articles…';
+	const S_NO_MORE_LINK = 'Il n\'y a plus d\'articles à afficher…';
+	const S_ADD_POPUP = 'Favori pour sauvegarder des articles…';
 	const S_FILTER_TAG = 'Filtrage par tag : %tag%.';
 	const S_FILTER_FEED = 'Filtrage par flux : %feed%.';
 	const S_FILTER_SEARCH = 'Résultats de la recherche : %q%.';
@@ -95,7 +95,7 @@ class Trad {
 	const F_P_DLOAD = 'À partir de l\'URL fournie par le flux';
 	const F_FILTER_HTML = 'Règles de filtrage HTML :';
 	const F_LINKS_PER_PAGE = 'Nombre d\'articles par page :';
-	const F_URL_REWRITING = 'URL rewriting';
+	const F_URL_REWRITING = 'URL rewriting :';
 	const F_OPML_FILE = 'Fichier OPML :';
 	const F_COOKIE = 'Type de connexion :';
 	const F_COOKIE_FALSE = 'Ordinateur public';
@@ -107,6 +107,7 @@ class Trad {
 	const F_TWITTER_URL = 'URL des tweets à récupérer :';
 	const F_PARAMS = 'Paramètres :';
 	const F_OPEN_NEW_TAB = 'Ouvrir les articles dans un nouvel onglet :';
+	const F_LANGUAGE = 'Langue :';
 
 	const F_TIP_PASSWORD = 'Laissez vide pour ne pas le changer.';
 	const F_TIP_URL_REWRITING = 'Laissez vide pour désactiver l\'URL rewriting. Sinon, indiquez le chemin du dossier de Creaky Coot (en commençant et terminant par un "/") par rapport au nom de domaine.';
@@ -119,13 +120,13 @@ class Trad {
 			<li>« search/tweets » et « q=Creaky Coot »</li>
 		</ul>
 	';
-	const F_TIP_FILTER_HTML = 'Lorsque le contenu est récupéré à partir de la page pointée par l\'URL du flux, les balises dont l\'attribut « class » ou « id » contient un de ces mots seront totalement supprimées. Précèdez le mot d\'un « - » pour l\'autoriser, séparez les mots par une virgule.';
+	const F_TIP_FILTER_HTML = 'Lorsque le contenu est récupéré à partir de la page pointée par l\'URL du flux, les balises dont l\'attribut « class » ou « id » contient un de ces mots seront totalement supprimées. Précèdez le mot d\'un « - » pour l\'autoriser (certains sont interdits par défaut). Séparez les mots par une virgule.';
 	const F_TIP_OPEN_NEW_TAB = 'Seuls les liens dans les listes d\'articles seront impactés.';
 
 		# Titres
 
 	const T_404 = 'Erreur 404 – Page non trouvée';
-	const T_CONNEXION = 'Connexion';
+	const T_LOGIN = 'Log in';
 	const T_INSTALLATION = 'Installation';
 	const T_UNREAD = 'Non lus';
 	const T_ALL = 'Tous';
@@ -141,6 +142,9 @@ class Trad {
 	const T_FILTER = 'Filtres';
 	const T_TWITTER = 'Twitter';
 	const T_NEW = 'Nouveau';
+	const T_GLOBAL_SETTINGS = 'Réglages généraux';
+	const T_ARTICLES_SETTINGS = 'Articles';
+	const T_USER_SETTINGS = 'Utilisateur';
 
 		# Alertes
 
@@ -171,7 +175,7 @@ class Trad {
 	const A_CONFIRM_CLEAR = 'Tous les articles non archivés de cette page seront effacés. Voulez-vous vraiment continuer ?';
 	const A_CONFIRM_CLEAR_FEED = 'Tous les articles non archivés de ce flux seront effacés. Voulez-vous vraiment continuer ?';
 
-	const A_ADD_POPUP = 'Glissez-déposez ce lien sur votre barre de favoris, ou choisissez « Ajouter aux favoris... » après un clique-droit sur ce lien.';
+	const A_ADD_POPUP = 'Glissez-déposez ce lien sur votre barre de favoris, ou choisissez « Ajouter aux favoris… » après un clique-droit sur ce lien.';
 
 	const A_ENTER_URL = 'Entrez l\'URL :';
 

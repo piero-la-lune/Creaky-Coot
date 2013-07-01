@@ -1,5 +1,6 @@
 <?php
 
+	$language = $config['language'];
 	if (isset($_POST['action']) && $_POST['action'] == 'edit') {
 		$settings = new Settings();
 		$ans = $settings->changes($_POST);
@@ -10,6 +11,14 @@
 		}
 		else {
 			$this->addAlert(Trad::A_SUCCESS_SETTINGS, 'alert-success');
+			if ($config['language'] != $language) {
+				$_SESSION['alert'] = array(
+					'text' => Trad::A_SUCCESS_SETTINGS,
+					'type' => 'alert-success'
+				);
+				header('Location: '.Url::parse('settings'));
+				exit;
+			}
 		}
 	}
 
@@ -37,10 +46,16 @@
 
 	$auto_tag = ($config['auto_tag']) ? 'true' : 'false';
 	$open_new_tab = ($config['open_new_tab']) ? 'true' : 'false';
+	$languages = array();
+	foreach (explode(',', LANGUAGES) as $v) {
+		$languages[$v] = $v;
+	}
 
 	$content = '
 
 <form action="'.Url::parse('settings').'" method="post">
+
+	<h2>'.Trad::T_GLOBAL_SETTINGS.'</h2>
 
 	<label for="title">'.Trad::F_TITLE.'</label>
 	<input type="text" name="title" id="title" value="'
@@ -52,8 +67,13 @@
 	<input type="text" name="url_rewriting" id="url_rewriting" value="'
 		.(($config['url_rewriting']) ? $config['url_rewriting'] : '').'" />
 	<p class="p-tip">'.Trad::F_TIP_URL_REWRITING.'</p>
+	<label for="language">'.Trad::F_LANGUAGE.'</label>
+	<select id="language" name="language">
+		'.Text::options($languages, $config['language']).'
+	</select>
 
 	<p>&nbsp;</p>
+	<h2>'.Trad::T_ARTICLES_SETTINGS.'</h2>
 
 	<p><a href="'.$js.'" '.Text::click('js_add').'>'.Trad::S_ADD_POPUP.'</a>
 		<textarea id="js_add" style="display:none">'.Text::chars($js).'</textarea>
@@ -78,6 +98,7 @@
 	<p class="p-tip">'.Trad::F_TIP_OPEN_NEW_TAB.'</p>
 
 	<p>&nbsp;</p>
+	<h2>'.Trad::T_USER_SETTINGS.'</h2>
 
 	<label for="login">'.Trad::F_USERNAME.'</label>
 	<input type="text" name="login" id="login" value="'
@@ -87,7 +108,7 @@
 	<input type="password" name="password" id="password" />
 	<p class="p-tip">'.Trad::F_TIP_PASSWORD.'</p>
 
-	<p class="p-submit"><input type="submit" value="'.Trad::V_EDIT.'" /></p>
+	<p class="p-submit"><input type="submit" value="'.Trad::V_SAVE.'" /></p>
 	<input type="hidden" name="action" value="edit" />
 </form>
 
