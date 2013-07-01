@@ -186,8 +186,8 @@ class Text {
 		return str_replace(array("\n", "\t"), $replace, $text);
 	}
 
-	public static function chars($string) {
-		return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+	public static function chars($string, $double_encode = true) {
+		return htmlspecialchars($string, ENT_QUOTES, 'UTF-8', $double_encode);
 	}
 	public static function unchars($string) {
 		return htmlspecialchars_decode($string, ENT_QUOTES);
@@ -208,6 +208,27 @@ class Text {
 			if ($elm == $v) { return $v; }
 		}
 		return $default;
+	}
+
+	public static function params_arr($str) {
+		$params = array();
+		foreach (explode(',', $str) as $p) {
+			$p = explode('=', $p);
+			if (isset($p[0]) && isset($p[1])
+				&& !empty($p[0]) && !empty($p[1])
+			) {
+				$params[$p[0]] = $p[1];
+			}
+		}
+		return $params;
+	}
+
+	public static function params_str($arr) {
+		$p = array();
+		foreach ($arr as $k => $v) {
+			$p[] = $k.'='.$v;
+		}
+		return implode(',', $p);
 	}
 
 }

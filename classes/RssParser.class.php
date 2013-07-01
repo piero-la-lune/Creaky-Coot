@@ -277,11 +277,24 @@ class RssParser {
 		if (!$d->loadXML($data)) { return false; }
 
 		foreach ($d->getElementsByTagName('outline') as $o) {
-			$urls[] = array(
-				'title' => $o->getAttribute('text'),
-				'url' => $o->getAttribute('xmlUrl'),
-				'link' => $o->getAttribute('htmlUrl')
-			);
+			if ($o->getAttribute('type') == 'rss') {
+				$urls[] = array(
+					'type' => 'rss',
+					'title' => $o->getAttribute('text'),
+					'url' => $o->getAttribute('xmlUrl'),
+					'link' => $o->getAttribute('htmlUrl'),
+					'params' => array()
+				);
+			}
+			if ($o->getAttribute('type') == 'twitter') {
+				$urls[] = array(
+					'type' => 'twitter',
+					'title' => $o->getAttribute('text'),
+					'url' => $o->getAttribute('xmlUrl'),
+					'link' => $o->getAttribute('htmlUrl'),
+					'params' => Text::params_arr($o->getAttribute('params'))
+				);
+			}
 		}
 
 			# Reset old configuration
@@ -298,6 +311,7 @@ class RssParser {
 
 			# Load document
 		$d = new DOMDocument();
+		$d->formatOutput = true;
 
 		$opml = $d->appendChild($d->createElement('opml'));
 		$opml->setAttribute('version', '2.0');
@@ -310,9 +324,12 @@ class RssParser {
 		foreach ($urls as $u) {
 			$o = $body->appendChild($d->createElement('outline'));
 			$o->setAttribute('text', $u['title']);
-			$o->setAttribute('type', 'rss');
+			$o->setAttribute('type', $u['type']);
 			$o->setAttribute('xmlUrl', $u['url']);
 			$o->setAttribute('htmlUrl', $u['link']);
+			if ($u['type'] == 'twitter') {
+				$o->setAttribute('params', $u['params']);
+			}
 		}
 
 		$xml = $d->saveXML();

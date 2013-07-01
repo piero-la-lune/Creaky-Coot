@@ -1,5 +1,28 @@
 <?php
 
+# Links model :
+# 	type => (string) 'unread|read|archived'
+#	title => escaped (string)
+#	content => (string)
+#	date => (timestamp)
+#	link => (string)
+#	comment => (string)
+#	tags => (array)
+#
+# Feeds model :
+#	type => (string) 'rss|twitter'
+#	title => escaped (string)
+#	url => (string)
+#	params => (array)
+#	link => (string)
+#	unread => (array)
+#	read => (array)
+#	archived => (array)
+#	deleted => (array)
+#	content => (const) T_RSS|T_DLOA
+#	comment => (const) T_EMPTY|T_RSS|T_DLOAD
+#	filter_html => (string)
+
 class Manager {
 
 	private static $instance;
@@ -18,7 +41,8 @@ class Manager {
 		CURLOPT_MAXREDIRS => 4,
 		CURLOPT_CONNECTTIMEOUT => 8,
 		CURLOPT_TIMEOUT => 8,
-		CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; WOW64) Gecko/20100101 Firefox/19.0'
+		CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 6.1; WOW64) Gecko/20100101 Firefox/19.0',
+		CURLOPT_SSL_VERIFYPEER => false
 	);
 
 	public function __construct() {
@@ -207,15 +231,7 @@ class Manager {
 		if (isset($post['twitter_url']) && isset($post['params'])) {
 			$type = 'twitter';
 			$url = $post['twitter_url'];
-			$params = array();
-			foreach (explode(',', $post['params']) as $p) {
-				$p = explode('=', $p);
-				if (isset($p[0]) && isset($p[1])
-					&& !empty($p[0]) && !empty($p[1])
-				) {
-					$params[$p[0]] = $p[1];
-				}
-			}
+			$params = Text::params_arr($post['params']);
 		}
 		elseif (isset($post['url'])) {
 			if (!filter_var($post['url'], FILTER_VALIDATE_URL)) {
@@ -689,7 +705,8 @@ class Manager {
 		}
 		$ids = array();
 		foreach ($feeds as $k => $f) {
-			if (($id = $this->createNewFeed($f['url'])) !== false) {
+			$id = $this->createNewFeed($f['url'], $f['type'], $f['params']);
+			if ($id !== false) {
 				$ids[$k] = $id;
 			}
 			else {
@@ -706,7 +723,7 @@ class Manager {
 			}
 			$this->feeds[$ids[$k]]['url'] = $this->done[$ids[$k]]['url'];
 			if (!empty($f['title'])) {
-				$this->feeds[$ids[$k]]['title'] = Text::chars($f['title']);
+				$this->feeds[$ids[$k]]['title'] = Text::chars($f['title'], false);
 			}
 			else {
 				$this->feeds[$ids[$k]]['title'] = $this->done[$ids[$k]]['title'];
@@ -728,11 +745,12 @@ class Manager {
 	public function export() {
 		$urls = array();
 		foreach ($this->feeds as $f) {
-			if ($f['type'] != 'rss') { continue; }
 			$urls[] = array(
-				'title' => $f['title'],
+				'title' => Text::unchars($f['title']),
 				'url' => $f['url'],
-				'link' => $f['link']
+				'link' => $f['link'],
+				'type' => $f['type'],
+				'params' => Text::params_str($f['params'])
 			);
 		}
 		$xml = RssParser::exportOPML($urls);
