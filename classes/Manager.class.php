@@ -335,6 +335,7 @@ class Manager {
 					else {
 						$content = $this->done[$id2]['content'];
 					}
+					unset($this->done[$id2]);
 				}
 				$comment = '';
 				if ($this->feeds[$id]['comment'] == self::T_RSS) {
