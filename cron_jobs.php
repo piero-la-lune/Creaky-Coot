@@ -11,12 +11,19 @@ define('D_MONTH', 2419200);
 
 	# When turned to “true”, feeds will be automatically updated.
 $auto_update = false;
-	# When a duration is specified, read links (but not archived one's) older
-	# than this duration be automatically deleted. Turn to “false” to disable
-	# this behaviour.
-	# Possible durations are : “D_HOUR”, “D_DAY”, “D_WEEK”, “D_MONTH”
+	# When a duration is specified, the read articles (not the archived ones)
+	# older than this duration will be automatically deleted. This will help
+	# you keeping your database small. When turned to “false”, read articles
+	# are never deleted.
+	# Allowed durations are : “D_HOUR”, “D_DAY”, “D_WEEK”, “D_MONTH”
 	# Example : “4*D_DAY+12*D_HOUR”.
 $auto_delete = false;
+	# Only the given number of deleted article IDs (the last ones) will be kept
+	# in order not to show them again when the feed is updated. This will
+	# help you keeping your database small. When turned to “false”, all deleted
+	# artcile IDs will be kept.
+	# Example : “50” should be a correct number.
+$auto_clean = false;
 
 ### END CONFIG ###
 
@@ -27,7 +34,7 @@ if (PHP_SAPI != 'cli'
 	&& (strncmp(PHP_SAPI, 'cgi', 3) || !empty($remote_addr))
 ) {
 	# executed from a browser
-	exit;
+	die('Can\'t be executed from a browser...');
 }
 
 

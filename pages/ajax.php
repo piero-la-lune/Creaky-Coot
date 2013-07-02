@@ -29,7 +29,7 @@ if (isset($_POST['action']) && isset($_POST['page'])) {
 	if ($_POST['action'] == 'refresh') {
 		$manager = Manager::getInstance();
 		$feed = (isset($_POST['feed'])) ? intval($_POST['feed']) : NULL;
-		$ans = $manager->refreshFeed($feed);
+		list(, $ans) = $manager->refreshFeed($feed);
 		if (!empty($ans)) {
 			$ans = Manager::sort($ans);
 			$html = Manager::previewList($ans, $_POST['page']);

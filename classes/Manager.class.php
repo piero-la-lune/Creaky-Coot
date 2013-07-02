@@ -248,6 +248,7 @@ class Manager {
 	}
 
 	public function refreshFeed($feed = NULL) {
+		$done = array();
 		$added = array();
 		$ids = array($feed);
 		if ($feed === NULL || !isset($this->feeds[$feed])) {
@@ -256,14 +257,17 @@ class Manager {
 		$this->update($ids);
 		foreach ($this->done as $d) {
 			if ($d !== false) {
+				$nb = 0;
 				foreach ($d['added'] as $id) {
 					$added[$id] = $this->links[$id];
+					$nb++;
 				}
+				$done[] = array('title' => $d['title'], 'nb' => $nb);
 			}
 		}
 		$this->save();
 		$this->done = array();
-		return $added;
+		return array($done, $added);
 	}
 
 	public function clearFeed($id) {
@@ -677,18 +681,41 @@ class Manager {
 	}
 
 	public function autoDelete($duration) {
+		$duration = intval($duration);
+		if ($duration === false) { return false; }
 		$date = time()-$duration;
 		foreach ($this->feeds as $k => $f) {
+			$nb = 0;
 			foreach ($f['read'] as $key => $id) {
 				if ($this->links[$id]['date'] < $date) {
 					unset($this->feeds[$k]['read'][$key]);
 					unset($this->links[$id]);
 					$this->feeds[$k]['deleted'][] = $id;
+					$nb++;
 				}
+			}
+			$done[] = array('title' => $f['title'], 'nb' => $nb);
+		}
+		$this->save();
+		return $done;
+	}
+
+	public function autoClean($nb) {
+		$nb = intval($nb);
+		if ($nb === false) { return false; }
+		$done = array();
+		foreach ($this->feeds as $k => $f) {
+			$start = count($f['deleted'])-$nb;
+			if ($start > 0) {
+				$this->feeds[$k]['deleted'] = array_slice($f['deleted'], $start);
+				$done[] = array('title' => $f['title'], 'nb' => $start);
+			}
+			else {
+				$done[] = array('title' => $f['title'], 'nb' => 0);
 			}
 		}
 		$this->save();
-		return true;
+		return $done;
 	}
 
 	public function import($file) {

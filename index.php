@@ -232,13 +232,41 @@ check_file('.htaccess', "Allow from none\nDeny from all\n");
 ### Cron jobs
 if (isset($cron_job) && $cron_job == true) {
 	$manager = Manager::getInstance();
-	if (isset($auto_update) && $auto_update == true) {
-		$manager->refreshFeed();
-		echo 'Feeds were updated.'."\n";
+	echo 'Cron jobs for Creaky Coot ('.date('r').')'."\n";
+	echo '==========================================================='."\n\n";
+	if (isset($auto_update) && $auto_update === true) {
+		echo 'Updating feeds...'."\n";
+		list($done, ) = $manager->refreshFeed();
+		foreach ($done as $d) {
+			echo "\t".$d['nb'].' articles taken from '.$d['title']."\n";
+		}
+		echo "\n";
 	}
-	if (isset($auto_delete) && $auto_delete == true) {
-		$manager->autoDelete($auto_delete);
-		echo 'Old links were deleted.'."\n";
+	if (isset($auto_delete) && $auto_delete !== false) {
+		echo 'Deleting read articles...'."\n";
+		$done = $manager->autoDelete($auto_delete);
+		if ($done !== false) {
+			foreach ($done as $d) {
+				echo "\t".$d['nb'].' articles deleted from '.$d['title']."\n";
+			}
+		}
+		else {
+			echo "\t".'An error occurred.'."\n";
+		}
+		echo "\n";
+	}
+	if (isset($auto_clean) && $auto_clean !== false) {
+		echo 'Cleaning old deleted articles...'."\n";
+		$done = $manager->autoClean($auto_clean);
+		if ($done !== false) {
+			foreach ($done as $d) {
+				echo "\t".$d['nb'].' article IDs deleted from '.$d['title']."\n";
+			}
+		}
+		else {
+			echo "\t".'An error occurred.'."\n";
+		}
+		echo "\n";
 	}
 	echo 'Done.'."\n";
 	exit;
