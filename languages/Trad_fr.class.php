@@ -126,7 +126,7 @@ class Trad {
 		# Titres
 
 	const T_404 = 'Erreur 404 – Page non trouvée';
-	const T_LOGIN = 'Log in';
+	const T_LOGIN = 'Connexion';
 	const T_INSTALLATION = 'Installation';
 	const T_UNREAD = 'Non lus';
 	const T_ALL = 'Tous';
