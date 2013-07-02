@@ -14,9 +14,8 @@ $auto_update = false;
 	# When a duration is specified, read links (but not archived one's) older
 	# than this duration be automatically deleted. Turn to “false” to disable
 	# this behaviour.
-	# Possible durations are : “Manager::D_HOUR”, “Manager::D_DAY”,
-	# “Manager::D_WEEK”, “Manager::D_MONTH”, or even
-	# “4*Manager::D_DAY+12*Manager::D_HOUR”.
+	# Possible durations are : “D_HOUR”, “D_DAY”, “D_WEEK”, “D_MONTH”
+	# Example : “4*D_DAY+12*D_HOUR”.
 $auto_delete = false;
 
 ### END CONFIG ###
