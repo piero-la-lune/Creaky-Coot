@@ -17,8 +17,11 @@ Features:
 - various languages supported (french and english for now)
 - …
 
-[![Capture 1](http://uploads.derivoile.fr/1_ln33h)](http://uploads.derivoile.fr/1_pl261)
-[![Capture 2](http://uploads.derivoile.fr/1_d6toz)](http://uploads.derivoile.fr/1_dyi14)
+[![Capture 1](http://piero-la-lune.github.io/Creaky-Coot/img/capture1_bis.png)](http://piero-la-lune.github.io/Creaky-Coot/img/capture1.png)
+[![Capture 2](http://piero-la-lune.github.io/Creaky-Coot/img/capture2_bis.png)](http://piero-la-lune.github.io/Creaky-Coot/img/capture2.png)
+[![Capture 5](http://piero-la-lune.github.io/Creaky-Coot/img/capture5_bis.png)](http://piero-la-lune.github.io/Creaky-Coot/img/capture5.png)
+[![Capture 3](http://piero-la-lune.github.io/Creaky-Coot/img/capture3_bis.png)](http://piero-la-lune.github.io/Creaky-Coot/img/capture3.png)
+[![Capture 4](http://piero-la-lune.github.io/Creaky-Coot/img/capture4_bis.png)](http://piero-la-lune.github.io/Creaky-Coot/img/capture4.png)
 
 [![flattr](http://api.flattr.com/button/flattr-badge-large.png)](http://flattr.com/thing/1592631/)
 
