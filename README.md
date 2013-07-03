@@ -17,6 +17,8 @@ Features:
 - various languages supported (french and english for now)
 - …
 
+Report issues at <http://bugs.derivoile.fr/Creaky-Coot/dashboard>.
+
 [![flattr](http://api.flattr.com/button/flattr-badge-large.png)](http://flattr.com/thing/1592631/)
 
 ## Screenshots
@@ -51,7 +53,7 @@ Creaky Coot doesn't old browser. It requires JavaScript to work properly.
 ## About Creaky Coot
 
 Creaky Coot was created and is actually maintained by Pierre Monchalin. Please
-report bugs at <http://bugs.derivoile.fr/creaky-coot/>.
+report bugs at <http://bugs.derivoile.fr/Creaky-Coot/dashboard>.
 
 Creaky Coot is distributed under the MIT License. See `./COPYING` for more
 information.
