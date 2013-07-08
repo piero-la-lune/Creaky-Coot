@@ -7,6 +7,7 @@ pre,blockquote{border-left:3px solid #444;margin-left:12px;padding-left:8px;back
 pre{overflow:auto;}
 img{display:block;max-width:100%;margin:auto;}
 .img-tweet{float:left;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;margin:2px 6px 2px 0;max-width:48px;max-height:48px;}
+object{display:block;max-width:100%;margin:auto;}
 label{display:block;margin:12px 0 0 8px;}
 input,select,textarea,button{font-size:16px;font-weight:normal;font-family:"Source Sans Pro",sans-serif;border:3px solid #DDD;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;}input:focus,select:focus,textarea:focus,button:focus{border-color:#444;}
 input,select,textarea{display:block;margin:0;padding:4px;width:100%;max-width:400px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}

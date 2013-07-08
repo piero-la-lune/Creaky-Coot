@@ -32,6 +32,9 @@ class Filter {
 		'h6' => array('align'),
 		'strong' => array(),
 		'em' => array(),
+		'b' => array(),
+		'i' => array(),
+		'u' => array(),
 		'code' => array(),
 		'pre' => array(),
 		'blockquote' => array(),
@@ -47,7 +50,11 @@ class Filter {
 		'figcaption' => array(),
 		'cite' => array(),
 		'time' => array('datetime'),
-		'abbr' => array('title')
+		'abbr' => array('title'),
+		'video' => array('width', 'height', 'controls', 'src'),
+		'source' => array('src', 'type'),
+		'object' => array('data', 'type', 'width', 'height'),
+		'param' => array('name', 'value')
 	);
 
 	protected $forbidden_tags = array(
@@ -61,8 +68,6 @@ class Filter {
 		'button',
 		'textarea',
 		'menu',
-		'object',
-		'iframe',
 		'h1'
 	);
 
@@ -149,9 +154,18 @@ class Filter {
 		'www.gstatic.com/images/icons/gplus-64.png'
 	);
 
+	protected $allowed_iframe_videos = array(
+		'youtube',
+		'vimeo',
+		'dailymotion'
+	);
+
 	protected $required_attrs = array(
 		'a' => array('href'),
-		'img' => array('src')
+		'img' => array('src'),
+		'source' => array('src'),
+		'object' => array('data', 'type'),
+		'param' => array('name', 'value')
 	);
 
 	protected $allowed_css = array(
@@ -263,6 +277,19 @@ class Filter {
 
 		# Useless tags
 		if (end($this->empty_tag) || $this->isForbiddenTag($name)) {
+			array_push($this->removed_tag, false);
+			array_push($this->empty_tag, true);
+			return true;
+		}
+
+		# Iframes are useless except when they contain a video
+		if ($name == 'iframe') {
+			if ($this->isAllowedIframeVideos($attributes)) {
+				list($url, $style) = $this->getIframeVideosAttrs($attributes);
+				$this->data .= '<object data="'.$url.'"';
+				if ($style) { $this->data .= ' style="'.$style.'"'; }
+				$this->data .= ' type="text/html"></object>';
+			}
 			array_push($this->removed_tag, false);
 			array_push($this->empty_tag, true);
 			return true;
@@ -449,6 +476,31 @@ class Filter {
 			return preg_match($check, $value);
 		}
 	}
+
+	public function isAllowedIframeVideos($attributes) {
+		foreach ($attributes as $k => $v) {
+			if ($k == 'src') {
+				foreach ($this->allowed_iframe_videos as $src) {
+					if (strpos($v, $src) !== false) { return true; }
+				}
+			}
+		}
+		return false;
+	}
+
+	public function getIframeVideosAttrs($attributes) {
+		$width = (isset($attributes['width'])) ?
+			intval($attributes['width']):
+			false;
+		$height = (isset($attributes['height'])) ?
+			intval($attributes['height']):
+			false;
+		$style =  ($width && $height) ?
+			'width:'.$width.'px;height:'.$height.'px;':
+			false;
+		return array($attributes['src'], $style);
+	}
+
 }
 
 ?>
