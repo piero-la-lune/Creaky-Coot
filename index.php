@@ -57,7 +57,7 @@ define('PHPSUFFIX', ' */ ?>'); # Suffix to encapsulate data in php code.
 mb_internal_encoding('UTF-8');
 
 ### Load classes
-function loadclass($classe) { require './classes/'.$classe.'.class.php'; }
+function loadclass($classe) { require dirname(__FILE__).'/classes/'.$classe.'.class.php'; }
 spl_autoload_register('loadClass');
 
 ### Default settings
