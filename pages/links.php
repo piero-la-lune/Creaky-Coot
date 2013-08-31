@@ -40,6 +40,22 @@ if (!isset($_GET['feed']) || $feed = $manager->getFeed($_GET['feed'])) {
 		.'</p>';
 		$filter['q'] = $words;
 	}
+	if (isset($_GET['type'])) {
+		$type = false;
+		if ($_GET['type'] == 'unread') { $type = Trad::W_UNREAD; }
+		elseif ($_GET['type'] == 'read') { $type = Trad::W_READ; }
+		elseif ($_GET['type'] == 'archived') { $type = Trad::W_ARCHIVED; }
+		if ($type !== false) {
+			$content .= '<p>'
+				.str_replace(
+					'%type%',
+					'<span class="feed-title">'.$type.'</span>',
+					Trad::S_FILTER_TYPE
+				)
+			.'</p>';
+			$filter['type'] = $_GET['type'];
+		}
+	}
 
 	$content .= '
 

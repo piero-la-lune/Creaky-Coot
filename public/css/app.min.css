@@ -25,6 +25,7 @@ article{text-align:justify;word-wrap:break-word;}article p{margin:1em 0;}
 .div-hr-light{border-bottom:3px solid #DDD;margin:6px -6px;}
 .tag{display:inline-block;padding:0 3px;margin:2px;font-weight:900;font-size:0.9em;color:#444;background:#eee;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;}.tag:hover{color:#fff;background:#000;text-decoration:none;}
 .p-list-tags{text-align:center;}.p-list-tags .tag{font-size:1.2em;padding:2px 6px;margin:6px;}
+.p-list-type{text-align:center;}.p-list-type a{display:inline-block;margin:2px 6px;}
 .feed-title{font-weight:900;font-size:1.2em;}
 .div-feed,.div-link{margin-top:24px;text-align:justify;word-wrap:break-word;}.div-feed h2,.div-link h2{margin:0;padding:0;line-height:1em;}.div-feed h2 a:before,.div-link h2 a:before{content:"";display:inline-block;vertical-align:middle;margin-right:4px;width:12px;height:12px;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;}
 .div-feed h2.unread a:before,.div-link h2.unread a:before{background:#3366cc;}

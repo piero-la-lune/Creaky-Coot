@@ -64,6 +64,10 @@ class Url {
 			'redirect' => 'index.php?page=links&q=$1'
 		),
 		array(
+			'rule' => '^type/(.*)$',
+			'redirect' => 'index.php?page=links&type=$1'
+		),
+		array(
 			'rule' => '^settings$',
 			'redirect' => 'index.php?page=settings'
 		),

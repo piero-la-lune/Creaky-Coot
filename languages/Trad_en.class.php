@@ -4,6 +4,10 @@ class Trad {
 
 		# Mots
 
+	const W_UNREAD = 'unread';
+	const W_READ = 'read';
+	const W_ARCHIVED = 'archived';
+
 	const W_SECONDE = 'second';
 	const W_MINUTE = 'minute';
 	const W_HOUR = 'hour';
@@ -57,6 +61,7 @@ class Trad {
 	const S_ADD_POPUP = 'Bookmark to save articles…';
 	const S_FILTER_TAG = 'Tag filtering : %tag%.';
 	const S_FILTER_FEED = 'Feed filtering : %feed%.';
+	const S_FILTER_TYPE = 'Only %type% articles.';
 	const S_FILTER_SEARCH = 'Search results : %q%.';
 
 		# Verbes
@@ -139,6 +144,7 @@ class Trad {
 	const T_ADD = 'Save this page';
 	const T_TAGS = 'Tags';
 	const T_SEARCH = 'Search';
+	const T_ARTICLES = 'Articles';
 	const T_FILTER = 'Filters';
 	const T_TWITTER = 'Twitter';
 	const T_NEW = 'New';

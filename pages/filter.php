@@ -26,6 +26,13 @@ $content = '
 		<input type="hidden" name="action" value="search" />
 	</form>
 
+	<h1>'.Trad::T_ARTICLES.'</h1>
+	<p class="p-list-type">
+		<a href="'.Url::parse('type/unread').'">'.Trad::W_UNREAD.'</a>
+		<a href="'.Url::parse('type/read').'">'.Trad::W_READ.'</a>
+		<a href="'.Url::parse('type/archived').'">'.Trad::W_ARCHIVED.'</a>
+	</p>
+
 ';
 
 ?>
