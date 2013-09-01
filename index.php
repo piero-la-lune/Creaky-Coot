@@ -24,7 +24,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 define('NAME', 'Creaky Coot');
-define('VERSION', '2.0');
+define('VERSION', '2.1');
 define('AUTHOR', 'Pierre Monchalin');
 define('URL', 'http://creaky-coot.derivoile.fr');
 
@@ -48,6 +48,7 @@ define('DIR_LANGUAGES', dirname(__FILE__).'/languages/');
 define('FILE_CONFIG', 'config.php');
 define('FILE_FEEDS', 'feeds.php');
 define('FILE_LINKS', 'links.php');
+define('FILE_TAGS', 'tags.php');
 
 ### Thanks to Sebsauvage and Shaarli for the way I store data
 define('PHPPREFIX', '<?php /* '); # Prefix to encapsulate data in php code.
@@ -227,6 +228,7 @@ function check_file($filename, $content = '') {
 check_dir('');
 check_file(FILE_FEEDS, Text::hash(array()));
 check_file(FILE_LINKS, Text::hash(array()));
+check_file(FILE_TAGS, Text::hash(array()));
 check_file('.htaccess', "Allow from none\nDeny from all\n");
 
 ### Cron jobs

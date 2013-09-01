@@ -61,6 +61,19 @@ if (strict_lower($config['version'], '1.3')) {
 
 }
 
+if (strict_lower($config['version'], '2.1')) {
+
+	$tags = array();
+	$links = Text::unhash(get_file(FILE_LINKS));
+	foreach ($links as $id => $l) {
+		foreach ($l['tags'] as $t) {
+			$tags[$t][] = $id;
+		}
+	}
+	update_file(FILE_TAGS, Text::hash($tags));
+
+}
+
 $settings = new Settings();
 if ($config['url_rewriting']) { $settings->url_rewriting(); }
 $settings->save();

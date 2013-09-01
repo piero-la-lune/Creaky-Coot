@@ -28,6 +28,7 @@ class Manager {
 	private static $instance;
 	protected $feeds = array();
 	protected $links = array();
+	protected $tags = array();
 	protected $done = array();
 	protected $last_insert;
 
@@ -49,6 +50,7 @@ class Manager {
 		global $config;
 		$this->feeds = Text::unhash(get_file(FILE_FEEDS));
 		$this->links = Text::unhash(get_file(FILE_LINKS));
+		$this->tags = Text::unhash(get_file(FILE_TAGS));
 	}
 
 	public static function getInstance($project = NULL) {
@@ -61,6 +63,7 @@ class Manager {
 	protected function save() {
 		update_file(FILE_FEEDS, Text::hash($this->feeds));
 		update_file(FILE_LINKS, Text::hash($this->links));
+		update_file(FILE_TAGS, Text::hash($this->tags));
 	}
 
 	protected function createNewFeed($url = '', $type = 'rss', $params = array()) {
@@ -108,6 +111,7 @@ class Manager {
 			$links = $this->links;
 		}
 		if (isset($filter['tag'])) {
+			# On doit pouvoir faire plus efficace...
 			foreach ($links as $id => $l) {
 				if (!in_array($filter['tag'], $l['tags'])) {
 					unset($links[$id]);
@@ -148,13 +152,20 @@ class Manager {
 	}
 
 	public function getTags() {
-		$tags = array();
-		foreach ($this->links as $l) {
-			foreach ($l['tags'] as $t) {
-				if (!in_array($t, $tags)) { $tags[] = $t; }
+		return array_keys($this->tags);
+	}
+	public function addTags($id, $tags) {
+		foreach ($tags as $t) {
+			$this->tags[$t][] = $id;
+		}
+	}
+	public function removeTags($id, $tags) {
+		foreach ($tags as $t) {
+			$key = array_search($id, $this->tags[$t]);
+			if ($key !== false) {
+				array_splice($this->tags[$t], $key, 1);
 			}
 		}
-		return $tags;
 	}
 
 	public function lastInsert() {
@@ -370,6 +381,7 @@ class Manager {
 					'comment' => $comment,
 					'tags' => $tags
 				);
+				$this->addTags($id2, $tags);
 				$added[] = $id2;
 			}
 		}
@@ -433,6 +445,7 @@ class Manager {
 				'tags' => $tags,
 				'tweet' => array('user_img' => $t['user_img'])
 			);
+			$this->addTags($id2, $tags);
 			$added[] = $id2;
 		}
 		$this->done[$id] = array(
@@ -532,6 +545,7 @@ class Manager {
 			'comment' => $filter->execute($post['comment'], $config['url']),
 			'tags' => $tags
 		);
+		$this->addTags($id, $tags);
 		$this->last_insert = $id;
 		$this->save();
 		return true;
@@ -554,11 +568,18 @@ class Manager {
 			$post['comment'],
 			$config['url']
 		);
+		$old_tags = $this->links[$id]['tags'];
+		$added = array();
 		$this->links[$id]['tags'] = array();
 		foreach (explode(',', $post['tags']) as $t) {
 			$t = Text::purge($t);
-			if (!empty($t)) { $this->links[$id]['tags'][] = $t; }
+			if (!empty($t)) {
+				$this->links[$id]['tags'][] = $t;
+				if (!in_array($t, $old_tags)) { $added[] = $t; }
+			}
 		}
+		$this->addTags($id, $added);
+		$this->removeTags($id, array_diff($old_tags, $this->links[$id]['tags']));
 		$this->links[$id]['content'] = $parser->execute(
 			$post['content'],
 			$this->links[$id]['link']
