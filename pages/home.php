@@ -35,4 +35,20 @@
 		.'</p>';
 	}
 
+	$content .= '
+
+<div class="div-actions-bottom">
+	<a href="#" '.Text::click('refresh').'>'
+		.mb_strtolower(Trad::V_REFRESH)
+	.'</a>
+	<a href="#" '.Text::click('allRead').'>'
+		.mb_strtolower(Trad::V_MARK_READ_ALL)
+	.'</a>
+	<a href="#" '.Text::click('allClear').'>'
+		.mb_strtolower(Trad::V_CLEAR)
+	.'</a>
+</div>
+
+	';
+
 ?>

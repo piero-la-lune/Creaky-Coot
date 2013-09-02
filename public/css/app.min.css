@@ -36,8 +36,9 @@ article{text-align:justify;word-wrap:break-word;}article p{margin:1em 0;}
 .div-feed .twitter-img,.div-link .twitter-img{display:none;}
 .div-actions{margin:2px 0 0 16px;}
 .div-actions-top{padding:4px 0px 8px 4px;border-top:3px solid #444;text-align:right;}
-.div-actions .loading,.div-actions-top .loading{margin-right:12px;}
-.div-actions a,.div-actions-top a{display:inline-block;margin-right:12px;color:#cc4d33;}.div-actions a:hover,.div-actions-top a:hover{color:#d6705c;}
+.div-actions-bottom{padding:8px 0px 4px 4px;border-bottom:3px solid #444;text-align:right;}
+.div-actions .loading,.div-actions-top .loading,.div-actions-bottom .loading{margin-right:12px;}
+.div-actions a,.div-actions-top a,.div-actions-bottom a{display:inline-block;margin-right:12px;color:#cc4d33;}.div-actions a:hover,.div-actions-top a:hover,.div-actions-bottom a:hover{color:#d6705c;}
 .p-more{margin:32px 0;text-align:center;}.p-more span{font-style:italic;}
 .div-edit{text-align:center;}.div-edit button{display:inline-block;cursor:pointer;background:#fafafa;padding:2px 4px;margin:4px;text-align:center;min-width:32px;vertical-align:middle;}.div-edit button:hover{border-color:#444;}
 .div-edit button:nth-child(2),.div-edit button:nth-child(9),.div-edit button:nth-child(10){font-weight:900;}
