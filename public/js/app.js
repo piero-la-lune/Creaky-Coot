@@ -271,13 +271,18 @@ function onload_tags() {
 		for (var i=0; i<as.length; i++) { arr.push(as[i].innerHTML); }
 		tags.value = arr.join(',');
 	}
+	function remove_tags(e) {
+		e.target.parentNode.removeChild(e.target);
+		update_tags_input();
+		return false;
+	}
 	function append_tag(tag) {
 		var a = document.createElement('a');
 		a.href = '#';
 		a.className = 'tag';
 		a.innerHTML = tag;
-		a.onclick = remove_tags;
 		list.appendChild(a);
+		a.onclick = remove_tags;
 	}
 	function add_tag() {
 		if (addTag.value !== '') {
@@ -285,11 +290,6 @@ function onload_tags() {
 			addTag.value = '';
 			update_tags_input();
 		}
-	}
-	function remove_tags(e) {
-		e.srcElement.parentNode.removeChild(e.srcElement);
-		update_tags_input();
-		return false;
 	}
 	function update_tags() {
 		if (tags.value !== '') {
@@ -299,10 +299,10 @@ function onload_tags() {
 	}
 	var keepFocus = false;
 	pick.onmousedown = function(e) {
-		if (e.srcElement.className == 'visible') {
+		if (e.target.className == 'visible') {
 			// on n'a pas cliqué sur la barre de défilemenent ni sur la bordure
 			// mais bien sur un nom de tag
-			addTag.value = e.srcElement.innerHTML;
+			addTag.value = e.target.innerHTML;
 			add_tag();
 			keepFocus = true; // on veut que addTag garde le focus
 		}
@@ -334,14 +334,15 @@ function onload_tags() {
 		pick.style.top = pos.bottom+'px';
 		addTag.onkeyup(); // On initialise la liste en fonction de addTag
 	};
-	addTag.onblur = function() {
+	addTag.onblur = function(e) {
 		if (!keepFocus) {
 			pick.style.left = '-9999px';
 			pick.style.top = '-9999px';
 		}
 		else {
 			keepFocus = false;
-			addTag.focus();
+			// pour Firefox qui ne doit pas apprécier qu'on empêche cette action
+			setTimeout("document.getElementById('addTag').focus()", 10);
 		}
 	};
 	addTag.onkeyup = function() {
