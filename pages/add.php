@@ -1,7 +1,8 @@
 <?php
 
+	$manager = Manager::getInstance();
+
 	if (isset($_POST['action']) && $_POST['action'] == 'add') {
-		$manager = Manager::getInstance();
 		$ans = $manager->add($_POST);
 		if ($ans === true) {
 			$_SESSION['alert'] = array(
@@ -48,8 +49,12 @@
 
 	<label for="comment">'.Trad::F_COMMENT.'</label>
 	<textarea name="comment" id="comment">'.$comment.'</textarea>
-	<label for="tags">'.Trad::F_TAGS.'</label>
-	<input type="text" name="tags" id="tags" value="'.$tags.'" />
+	<label for="addTag">'.Trad::F_TAGS.'</label>
+	<div class="editTags">
+		<span></span>
+		<input type="text" name="addTag" id="addTag" placeholder="'.Trad::F_ADD.'" />
+		<input type="hidden" name="tags" id="tags" value="'.$tags.'" />
+	</span>
 
 	<p class="p-submit"><input type="submit" value="'.Trad::V_ADD.'" /></p>
 	<input type="hidden" name="action" value="add" />
@@ -57,5 +62,7 @@
 </form>
 
 	';
+
+	$content .= Manager::tagsPick($manager->getTags());
 
 ?>

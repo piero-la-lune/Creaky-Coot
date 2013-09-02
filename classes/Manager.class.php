@@ -164,6 +164,7 @@ class Manager {
 			$key = array_search($id, $this->tags[$t]);
 			if ($key !== false) {
 				array_splice($this->tags[$t], $key, 1);
+				if (empty($this->tags[$t])) { unset($this->tags[$t]); }
 			}
 		}
 	}
@@ -885,6 +886,15 @@ class Manager {
 		}
 		if ($empty && empty($html)) { $html = '<i>'.Trad::W_EMPTY.'</i>'; }
 		return $html;
+	}
+
+	public static function tagsPick($tags) {
+		$list = '';
+		sort($tags);
+		foreach ($tags as $t) {
+			$list .= '<span class="visible">'.$t.'</span>';
+		}
+		return '<div class="pick-tag">'.$list.'</div>';
 	}
 
 	public static function sort($a) {

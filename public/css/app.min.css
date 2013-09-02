@@ -15,6 +15,7 @@ input{-webkit-appearance:none;}
 input[type="submit"]{display:inline;width:auto;background:#fafafa;cursor:pointer;}input[type="submit"]:hover{border-color:#444;}
 .p-submit{text-align:center;margin-top:24px;max-width:400px;}
 .p-tip{max-width:400px;font-style:italic;color:#888;font-size:0.9em;}
+#addTag{display:inline-block;max-width:120px;font-size:0.9em;padding:2px 4px;margin-left:6px;}
 header{max-width:800px;margin:8px auto;text-align:center;}header a{color:#444;border-bottom:3px solid transparent;display:inline-block;margin:0 6px;}header a:hover{color:#000;text-decoration:none;border-color:#444;}
 header a.selected{font-weight:bold;}
 .inner{max-width:800px;margin:auto;padding:12px;}
@@ -24,6 +25,8 @@ article{text-align:justify;word-wrap:break-word;}article p{margin:1em 0;}
 .div-comment p:last-child{margin-bottom:0;}
 .div-hr-light{border-bottom:3px solid #DDD;margin:6px -6px;}
 .tag{display:inline-block;padding:0 3px;margin:2px;font-weight:900;font-size:0.9em;color:#444;background:#eee;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;}.tag:hover{color:#fff;background:#000;text-decoration:none;}
+.pick-tag{position:absolute;left:-9999px;top:-9999px;width:114px;max-width:114px;max-height:120px;overflow-x:hidden;overflow-y:auto;background:#fff;border:solid #DDD;border-width:0 3px 3px 3px;-webkit-border-radius:0 0 2px 2px;-moz-border-radius:0 0 2px 2px;border-radius:0 0 2px 2px;font-size:0.9em;}.pick-tag span{display:none;padding:2px 4px;cursor:pointer;}.pick-tag span.visible{display:block;}
+.pick-tag span:hover{background:#f2f2f2;}
 .p-list-tags{text-align:center;}.p-list-tags .tag{font-size:1.2em;padding:2px 6px;margin:6px;}
 .p-list-type{text-align:center;}.p-list-type a{display:inline-block;margin:2px 6px;}
 .feed-title{font-weight:900;font-size:1.2em;}

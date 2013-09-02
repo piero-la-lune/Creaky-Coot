@@ -50,9 +50,14 @@ if (isset($_GET['id']) && $link = $manager->getLink($_GET['id'])) {
 				.'<p class="p">'
 					.Trad::F_TAGS.' '
 					.'<span class="tags">'.Manager::tagsList($link['tags']).'</span>'
-					.'<input type="text" name="tags" id="tags" value="'
-						.implode(', ', $link['tags'])
-						.'" style="display:none" />'
+					.'<span class="editTags" style="display:none">'
+						.'<span></span>'
+						.'<input type="text" name="addTag" id="addTag" '
+							.'placeholder="'.Trad::F_ADD.'" />'
+						.'<input type="hidden" name="tags" id="tags" value="'
+							.implode(',', $link['tags'])
+						.'" />'
+					.'</span>'
 				.'</p>'
 				.'<div class="div-actions">'
 					.'<a href="#" '.Text::click('read', array('id' => $id))
@@ -163,6 +168,8 @@ if (isset($_GET['id']) && $link = $manager->getLink($_GET['id'])) {
 		.'</article>'
 
 	.'';
+
+	$content .= Manager::tagsPick($manager->getTags());
 
 }
 

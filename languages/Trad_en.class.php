@@ -113,6 +113,7 @@ class Trad {
 	const F_PARAMS = 'Parameters:';
 	const F_OPEN_NEW_TAB = 'Open the articles in a new tab:';
 	const F_LANGUAGE = 'Language:';
+	const F_ADD = 'add…';
 
 	const F_TIP_PASSWORD = 'Leave it empty if you don\'t want to change it.';
 	const F_TIP_URL_REWRITING = 'Leave this field empty to disable URL rewriting. Otherwise, it should contain the path to the Creaky Coot folder (started and ended with a "/"), relative to the domain name.';

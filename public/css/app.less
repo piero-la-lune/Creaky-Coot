@@ -154,6 +154,13 @@ input[type="submit"] {
 	color: #888;
 	font-size: 0.9em;
 }
+#addTag {
+	display: inline-block;
+	max-width: 120px;
+	font-size: 0.9em;
+	padding: 2px 4px;
+	margin-left: 6px;
+}
 
 header {
 	max-width: @max-width;
@@ -219,6 +226,30 @@ article {
 		color: #fff;
 		background: #000;
 		text-decoration: none;
+	}
+}
+.pick-tag {
+	position: absolute;
+	left: -9999px;
+	top: -9999px;
+	width: 114px;
+	max-width: 114px;
+	max-height: 120px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	background: #fff;
+	border: solid #DDD;
+	border-width: 0 3px 3px 3px;
+	.border-radius(0 0 2px 2px);
+	font-size: 0.9em;
+	span {
+		display: none;
+		&.visible { display: block; }
+		padding: 2px 4px;
+		cursor: pointer;
+		&:hover {
+			background: darken(#fff, 5%);
+		}
 	}
 }
 .p-list-tags {

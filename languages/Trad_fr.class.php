@@ -113,6 +113,7 @@ class Trad {
 	const F_PARAMS = 'Paramètres :';
 	const F_OPEN_NEW_TAB = 'Ouvrir les articles dans un nouvel onglet :';
 	const F_LANGUAGE = 'Langue :';
+	const F_ADD = 'ajouter…';
 
 	const F_TIP_PASSWORD = 'Laissez vide pour ne pas le changer.';
 	const F_TIP_URL_REWRITING = 'Laissez vide pour désactiver l\'URL rewriting. Sinon, indiquez le chemin du dossier de Creaky Coot (en commençant et terminant par un "/") par rapport au nom de domaine.';
