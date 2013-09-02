@@ -55,7 +55,8 @@ class Trad {
 	const S_AGO = 'il y a %duration% %pediod%';
 	const S_PUBLISHED = 'Sauvegardé %time% depuis %url%.';
 	const S_NOTFOUND = 'La page que vous recherchez n\'existe pas…';
-	const S_NO_LINK = 'Aucun article non lu…';
+	const S_NO_LINK_UNREAD = 'Aucun article non lu…';
+	const S_NO_LINK = 'Aucun article…';
 	const S_LOAD_MORE = 'Charger plus d\'articles…';
 	const S_NO_MORE_LINK = 'Il n\'y a plus d\'articles à afficher…';
 	const S_ADD_POPUP = 'Favori pour sauvegarder des articles…';

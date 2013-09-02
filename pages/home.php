@@ -24,7 +24,7 @@
 	$html = Manager::previewList($links, 'unread');
 
 	if (empty($html)) {
-		$content .= '<p class="p-more"><span>'.Trad::S_NO_LINK.'</span></p>';
+		$content .= '<p class="p-more"><span>'.Trad::S_NO_LINK_UNREAD.'</span></p>';
 	}
 	else {
 		$content .= $html

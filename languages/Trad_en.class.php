@@ -55,7 +55,8 @@ class Trad {
 	const S_AGO = '%duration% %pediod% ago';
 	const S_PUBLISHED = 'Taken from %url% %time%.';
 	const S_NOTFOUND = 'The page you are looking for does not exist…';
-	const S_NO_LINK = 'No unread article…';
+	const S_NO_LINK_UNREAD = 'No unread article…';
+	const S_NO_LINK = 'No article…';
 	const S_LOAD_MORE = 'Load more articles…';
 	const S_NO_MORE_LINK = 'There are no more article…';
 	const S_ADD_POPUP = 'Bookmark to save articles…';
