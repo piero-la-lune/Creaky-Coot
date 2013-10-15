@@ -2,7 +2,7 @@
 
 # Creaky Coot
 # Copyright (c) 2013 Pierre Monchalin
-# <http://creaky-coot.derivoile.fr>
+# <http://bugs.derivoile.fr/Creaky-Coot/dashboard>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -26,7 +26,7 @@
 define('NAME', 'Creaky Coot');
 define('VERSION', '2.1');
 define('AUTHOR', 'Pierre Monchalin');
-define('URL', 'http://creaky-coot.derivoile.fr');
+define('URL', 'http://bugs.derivoile.fr/Creaky-Coot/dashboard');
 
 ### Languages
 define('LANGUAGES', 'fr,en'); # Separated by a comma
@@ -368,7 +368,7 @@ echo  "var m_confirm_clear_f = '".Text::js_str(Trad::A_CONFIRM_CLEAR_FEED)."';";
 echo "var m_confirm_delete_f = '".Text::js_str(Trad::A_CONFIRM_DELETE_FEED)."';";
 echo        "var m_add_popup = '".Text::js_str(Trad::A_ADD_POPUP)."';";
 echo        "var m_enter_url = '".Text::js_str(Trad::A_ENTER_URL)."';";
-echo             "var page = '".Text::js_str($_GET['page'])."';";
+echo             "var page = '".Text::js_str($page->getPageName())."';";
 if (isset($_GET['feed'])) { echo "var feed = ".intval($_GET['feed']).";"; }
 if (isset($_GET['tag'])) { echo "var tag = '".Text::js_str($_GET['tag'])."';"; }
 if (isset($_GET['q'])) { echo "var q = '".Text::js_str($_GET['q'])."';"; }

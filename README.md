@@ -48,7 +48,7 @@ save folder `./database/`.
 
 ### Requirements
 
-Creaky Coot doesn't old browser. It requires JavaScript to work properly.
+Creaky Coot doesn't work in old browsers. It requires JavaScript.
 
 ## About Creaky Coot
 
