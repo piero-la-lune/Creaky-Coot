@@ -1,4 +1,4 @@
-# Creaky Coot 2.0
+# Creaky Coot 2.2
 
 Creaky Coot is a minimalist and responsive RSS reader and links saver.
 

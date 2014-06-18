@@ -1,7 +1,7 @@
 <?php
 
 # Creaky Coot
-# Copyright (c) 2013 Pierre Monchalin
+# Copyright (c) 2013-2014 Pierre Monchalin
 # <http://bugs.derivoile.fr/Creaky-Coot/dashboard>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining
@@ -24,7 +24,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 define('NAME', 'Creaky Coot');
-define('VERSION', '2.1');
+define('VERSION', '2.2');
 define('AUTHOR', 'Pierre Monchalin');
 define('URL', 'http://bugs.derivoile.fr/Creaky-Coot/dashboard');
 
